@@ -19,26 +19,15 @@ package plugins;
 import back.HotKeyManager;
 import back.Process;
 import back.Slider;
-import com.sun.deploy.panel.ExceptionListDialog;
 import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigFactory;
 import org.aeonbits.owner.Mutable;
-import org.sikuli.script.App;
-import org.sikuli.script.KeyModifier;
-import org.sikuli.script.Region;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
 import java.io.*;
-import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.Properties;
 import java.util.Scanner;
 
 /**
@@ -60,7 +49,7 @@ public class Volume implements Process {
 
     ThisConfig cfg;
 
-    public Volume(){
+    public Volume() {
         loadConfiguration();
     }
 
@@ -71,22 +60,22 @@ public class Volume implements Process {
 
     @Override
     public String[] getProcessNames() {
-        String[] hotKey2 = {"Alt", "0"};
-        String[] list = {Arrays.toString(hotKey2)};
+        String[] hotKey2 = { "Alt", "0" };
+        String[] list = { Arrays.toString(hotKey2) };
         return list;
     }
 
-    private boolean loadConfiguration(){
+    private boolean loadConfiguration() {
         cfg = ConfigFactory.create(ThisConfig.class);
         HKM.addKey("0");
         return true;
     }
 
-    public JFrame getConfigWindow(){
+    public JFrame getConfigWindow() {
         return null;
     }
 
-    @Config.Sources({"classpath:configs/Volume.properties" })
+    @Config.Sources({ "classpath:configs/Volume.properties" })
     private interface ThisConfig extends Accessible, Mutable {
 
     }
@@ -94,8 +83,7 @@ public class Volume implements Process {
     public int getVolume() {
         String Volume = "0";
         try {
-            Runtime.getRuntime().exec("src/ahk_scripts/AudioToFile.exe", null,
-                    new File("src/ahk_scripts/"));
+            Runtime.getRuntime().exec("src/ahk_scripts/AudioToFile.exe", null, new File("src/ahk_scripts/"));
         } catch (IOException e) {
 
         }
@@ -110,9 +98,9 @@ public class Volume implements Process {
             Scanner s = new Scanner(f);
             if (s.hasNext()) {
                 Volume = s.next();
-                Volume = (int) (Double.parseDouble(Volume))+"";
+                Volume = (int) (Double.parseDouble(Volume)) + "";
                 s.close();
-//				System.out.println(Integer.parseInt(Volume));
+                // System.out.println(Integer.parseInt(Volume));
                 return Integer.parseInt(Volume);
             }
             s.close();
@@ -132,25 +120,23 @@ public class Volume implements Process {
         int index = slide.getPartIndex(101);
         index = 100 - index;
         while (PartLatch[index] == true) {
-            for (int i = 0; i < PartLatch.length; i++){
+            for (int i = 0; i < PartLatch.length; i++) {
                 PartLatch[i] = true;
             }
-            System.out.println("Setting Volume to: " + index/5*5);
-            setVolume(index/5*5);
+            System.out.println("Setting Volume to: " + index / 5 * 5);
+            setVolume(index / 5 * 5);
             PartLatch[index] = false;
         }
     }
 
-    public void setVolume(int value){
+    public void setVolume(int value) {
         try {
-            Runtime.getRuntime().exec("src/ahk_scripts/AHKvolumeexes/"+value+".exe", null,
-                    new File("src/ahk_scripts/AHKvolumeexes/"));
+            Runtime.getRuntime().exec("src/ahk_scripts/AHKvolumeexes/" + value + ".exe", null, new File("src/ahk_scripts/AHKvolumeexes/"));
             System.out.println("it ran");
         } catch (IOException e) {
             System.out.println("no file found");
         }
     }
-
 
     @Override
     public void run(String process) {
@@ -158,8 +144,8 @@ public class Volume implements Process {
     }
 
     private void writeValues() {
-        slide.goToPartComplete(100-getVolume(), 101);
-        for (int i = 0; i < PartLatch.length; i++){
+        slide.goToPartComplete(100 - getVolume(), 101);
+        for (int i = 0; i < PartLatch.length; i++) {
             PartLatch[i] = true;
         }
     }
