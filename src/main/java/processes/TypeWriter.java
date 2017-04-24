@@ -17,8 +17,6 @@
 package processes;
 
 import back.AlphaKeyManager;
-import back.HotKeyManager;
-import back.PartDetector;
 import back.Process;
 import back.Slider;
 import front.ProcessListSelector;
@@ -34,21 +32,21 @@ import java.io.IOException;
 
 public class TypeWriter implements Process {
 
-	AlphaKeyManager AKM = new AlphaKeyManager();
+    AlphaKeyManager AKM = new AlphaKeyManager();
 
-	Slider slide = new Slider();
-	
-	String previous = "";
+    Slider slide = new Slider();
 
-	ThisConfig cfg;
+    String previous = "";
 
-	ProcessListSelector pls = new ProcessListSelector("TypeWriter.properties", getLabelName());
+    ThisConfig cfg;
 
-	public TypeWriter(){
-		loadConfiguration();
-		AKM.addKey("Enter");
-		AKM.addKey("Space");
-	}
+    ProcessListSelector pls = new ProcessListSelector("TypeWriter.properties", getLabelName());
+
+    public TypeWriter() {
+        loadConfiguration();
+        AKM.addKey("Enter");
+        AKM.addKey("Space");
+    }
 
     @Override
     public int getPriority() {
@@ -56,105 +54,106 @@ public class TypeWriter implements Process {
     }
 
     @Override
-	public String[] getProcessNames() {
-		if (cfg.processList().length!= 0){
-			return cfg.processList();
-		}
-		return new String[]{"none"};
-	}
+    public String[] getProcessNames() {
+        if (cfg.processList().length != 0) {
+            return cfg.processList();
+        }
+        return new String[] { "none" };
+    }
 
-	/**
-	 * returns the human readable name of this class.
-	 */
-	@Override
-	public String getLabelName() {
-		return "Type Writer";
-	}
+    /**
+     * returns the human readable name of this class.
+     */
+    @Override
+    public String getLabelName() {
+        return "Type Writer";
+    }
 
-	@Override
-	public JFrame getProcessWindow() {
-		return pls.createGUI();
-	}
-	@Override
-	public void reloadPropFile() {
-		try {
-			FileInputStream in = new FileInputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\TypeWriter.properties");
-			cfg.load(in);
-			in.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public JFrame getProcessWindow() {
+        return pls.createGUI();
+    }
 
-	private boolean loadConfiguration(){
-		cfg = ConfigFactory.create(ThisConfig.class);
-		for(String s: cfg.processList()){
-			pls.addToRight(s);
-		}
-		return true;
-	}
+    @Override
+    public void reloadPropFile() {
+        try {
+            FileInputStream in = new FileInputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\TypeWriter.properties");
+            cfg.load(in);
+            in.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Config.Sources({"classpath:configs/TypeWriter.properties" })
-	private interface ThisConfig extends Accessible, Mutable {
-		String[] processList();
-	}
+    private boolean loadConfiguration() {
+        cfg = ConfigFactory.create(ThisConfig.class);
+        for (String s : cfg.processList()) {
+            pls.addToRight(s);
+        }
+        return true;
+    }
 
-	/**
-	 * calls writeValues();
-	 */
-	@Override
-	public void run(String process) {
-	    try {
+    @Config.Sources({ "classpath:configs/TypeWriter.properties" })
+    private interface ThisConfig extends Accessible, Mutable {
+        String[] processList();
+    }
+
+    /**
+     * calls writeValues();
+     */
+    @Override
+    public void run(String process) {
+        try {
             writeValues();
-        } catch (Exception e){
-	        System.out.println("Type Writer Process threw an exception");
+        } catch (Exception e) {
+            System.out.println("Type Writer Process threw an exception");
         }
 
-	}
+    }
 
-	/**
-	 * creates part detector for the run() method. 26 parts for 26 letters in
-	 * the alphabet.
-	 */
-	@Override
-	public void runFirst(String process) {
+    /**
+     * creates part detector for the run() method. 26 parts for 26 letters in
+     * the alphabet.
+     */
+    @Override
+    public void runFirst(String process) {
         slide.write(1010);
-	}
+    }
 
-	/**
-	 * Listens to AKM and runs when there is an alpha key pressed. moves arduino
-	 * to position.
-	 */
-	public void writeValues() {
-	    String[] keys = AKM.getAlphaKeys();
-		if (keys.length > 0) {
-			String key = keys[keys.length - 1];
+    /**
+     * Listens to AKM and runs when there is an alpha key pressed. moves arduino
+     * to position.
+     */
+    public void writeValues() {
+        String[] keys = AKM.getAlphaKeys();
+        if (keys.length > 0) {
+            String key = keys[keys.length - 1];
             if (!key.equals(previous)) {
-				if (!key.equals("Enter")) {
-					slide.bumpLeft(10);
-					previous = key;
-				} else {
-					slide.writeUntilComplete(1010);
-					previous = key;
-				}
+                if (!key.equals("Enter")) {
+                    slide.bumpLeft(10);
+                    previous = key;
+                } else {
+                    slide.writeUntilComplete(1010);
+                    previous = key;
+                }
 
-			}
-		} else {
-		    previous = "";
+            }
+        } else {
+            previous = "";
         }
-	}
+    }
 
-	/**
-	 * not used for the type-writer.
-	 */
-	public void readValues() {
-	}
+    /**
+     * not used for the type-writer.
+     */
+    public void readValues() {
+    }
 
-	@Override
-	public JFrame getConfigWindow() {
-		return null;
-	}
+    @Override
+    public JFrame getConfigWindow() {
+        return null;
+    }
 
 }
