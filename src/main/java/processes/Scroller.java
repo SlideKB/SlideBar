@@ -18,7 +18,6 @@ package processes;
 
 import back.Process;
 import back.Slider;
-import com.sun.jna.WString;
 import front.ProcessListSelector;
 import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
@@ -28,7 +27,6 @@ import org.sikuli.script.App;
 import org.sikuli.script.Location;
 import org.sikuli.script.Mouse;
 import org.sikuli.script.Region;
-import plugins.AltProcess;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -41,9 +39,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
-import static org.sikuli.script.Mouse.WHEEL_DOWN;
-import static org.sikuli.script.Mouse.WHEEL_UP;
 
 /**
  * Created by JackSec on 3/24/2017.
@@ -66,7 +61,7 @@ public class Scroller implements Process {
 
     ProcessListSelector pls = new ProcessListSelector("Scroller.properties", getLabelName());
 
-    public Scroller(){
+    public Scroller() {
         loadConfiguration();
     }
 
@@ -80,14 +75,18 @@ public class Scroller implements Process {
         return cfg.processList();
     }
 
-    private void Sleeper(int delay){
-        for (int i = cfg.speed(); i < delay; i++){
-            try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
+    private void Sleeper(int delay) {
+        for (int i = cfg.speed(); i < delay; i++) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
-    public void reloadPropFile(){
+    public void reloadPropFile() {
         try {
             FileInputStream in = new FileInputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\Scroller.properties");
             cfg.load(in);
@@ -104,42 +103,42 @@ public class Scroller implements Process {
         int slideIndex = s.getVirtualPartIndex(virtualparts);
         Location current = Mouse.at();
 
-        if (virtualIndex < slideIndex){
+        if (virtualIndex < slideIndex) {
             s.scrollDown(2);
             virtualIndex++;
             System.out.println(slideIndex);
         }
-        if (virtualIndex > slideIndex){
+        if (virtualIndex > slideIndex) {
             s.scrollUp(2);
             virtualIndex--;
             System.out.println(slideIndex);
         }
-        if (slideIndex == virtualparts-2){
+        if (slideIndex == virtualparts - 2) {
             s.scrollDown(1);
             Sleeper(11);
         }
-        if (slideIndex == virtualparts-1){
+        if (slideIndex == virtualparts - 1) {
             s.scrollDown(1);
             Sleeper(7);
         }
-        if (slideIndex == 1){
+        if (slideIndex == 1) {
             s.scrollUp(1);
             Sleeper(11);
         }
-        if (slideIndex == 0){
+        if (slideIndex == 0) {
             s.scrollUp(1);
             Sleeper(7);
         }
         if (Math.abs(prev.getX() - current.getX()) > 2 || Math.abs(prev.getY() - current.getY()) > 2) {
-            if (slideIndex != (virtualparts/2) && slideIndex != (virtualparts/2)+1 && slideIndex != (virtualparts/2) -1) {
-                s.writeUntilComplete( 500);
+            if (slideIndex != (virtualparts / 2) && slideIndex != (virtualparts / 2) + 1 && slideIndex != (virtualparts / 2) - 1) {
+                s.writeUntilComplete(500);
                 virtualIndex = s.getVirtualPartIndex(virtualparts);
             }
             prev = current;
         }
     }
 
-    private boolean loadConfiguration(){
+    private boolean loadConfiguration() {
         cfg = ConfigFactory.create(ThisConfig.class);
         return true;
     }
@@ -154,10 +153,10 @@ public class Scroller implements Process {
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         frame.setContentPane(contentPane);
         GridBagLayout gbl_contentPane = new GridBagLayout();
-        gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0};
-        gbl_contentPane.rowHeights = new int[]{29, 0, 0, 0};
-        gbl_contentPane.columnWeights = new double[]{1.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
+        gbl_contentPane.columnWidths = new int[] { 0, 0, 0, 0 };
+        gbl_contentPane.rowHeights = new int[] { 29, 0, 0, 0 };
+        gbl_contentPane.columnWeights = new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
+        gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
         contentPane.setLayout(gbl_contentPane);
 
         JLabel lblScrollSpeed = new JLabel("Scroll Speed");
@@ -195,9 +194,9 @@ public class Scroller implements Process {
         btnSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int temp1 = Integer.parseInt("" +  slider.getValue());
+                int temp1 = Integer.parseInt("" + slider.getValue());
                 boolean reversed = chckbxReversed.isSelected();
-                 try {
+                try {
                     FileInputStream in = new FileInputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\Scroller.properties");
                     Properties props = new Properties();
                     props.load(in);
@@ -238,12 +237,14 @@ public class Scroller implements Process {
         return frame;
     }
 
-    @Config.Sources({"classpath:configs/Scroller.properties" })
+    @Config.Sources({ "classpath:configs/Scroller.properties" })
     private interface ThisConfig extends Accessible, Mutable {
         @DefaultValue("5")
         int speed();
+
         @DefaultValue("0")
         boolean reversed();
+
         @DefaultValue("chrome.exe, idea64.exe")
         String[] processList();
     }
@@ -251,7 +252,7 @@ public class Scroller implements Process {
     @Override
     public void runFirst(String process) {
         System.out.println("Scroller is running!");
-//        s.createParts(50);
+        // s.createParts(50);
         s.writeUntilComplete(512);
         virtualIndex = s.getVirtualPartIndex(virtualparts);
         r = App.focusedWindow();

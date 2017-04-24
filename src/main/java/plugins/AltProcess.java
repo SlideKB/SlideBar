@@ -19,14 +19,10 @@ package plugins;
 import back.HotKeyManager;
 import back.Process;
 import back.Slider;
-import com.sun.deploy.panel.ExceptionListDialog;
 import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigFactory;
 import org.aeonbits.owner.Mutable;
-import org.sikuli.script.App;
-import org.sikuli.script.KeyModifier;
-import org.sikuli.script.Region;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +30,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.NumberFormat;
@@ -59,7 +54,7 @@ public class AltProcess implements Process {
 
     ThisConfig cfg;
 
-    public AltProcess(){
+    public AltProcess() {
         loadConfiguration();
     }
 
@@ -70,28 +65,28 @@ public class AltProcess implements Process {
 
     @Override
     public String[] getProcessNames() {
-        String[] hotKey1 = {"Alt"};
-        String[] hotKey2 = {"Ctrl", "Alt"};
-        String[] hotKey3 = {"Alt", "Ctrl"};
-        String[] list = {Arrays.toString(hotKey1), Arrays.toString(hotKey2) ,Arrays.toString(hotKey3)};
+        String[] hotKey1 = { "Alt" };
+        String[] hotKey2 = { "Ctrl", "Alt" };
+        String[] hotKey3 = { "Alt", "Ctrl" };
+        String[] list = { Arrays.toString(hotKey1), Arrays.toString(hotKey2), Arrays.toString(hotKey3) };
         return list;
     }
 
-    private boolean loadConfiguration(){
+    private boolean loadConfiguration() {
         cfg = ConfigFactory.create(ThisConfig.class);
         return true;
     }
 
-    public JFrame getConfigWindow(){
+    public JFrame getConfigWindow() {
         JFrame frame = new JFrame();
         frame.setSize(320, 140);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setTitle("Alt+Slide Configuration");
         GridBagLayout gridBagLayout = new GridBagLayout();
-        gridBagLayout.columnWidths = new int[]{34, 93, 91, 0, 0};
-        gridBagLayout.rowHeights = new int[]{0, 21, 0, 20, 0, 0, 0, 0};
-        gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-        gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+        gridBagLayout.columnWidths = new int[] { 34, 93, 91, 0, 0 };
+        gridBagLayout.rowHeights = new int[] { 0, 21, 0, 20, 0, 0, 0, 0 };
+        gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+        gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
         frame.setLayout(gridBagLayout);
 
         JLabel lblNumberOfParts = new JLabel("Number of Parts");
@@ -137,29 +132,30 @@ public class AltProcess implements Process {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                int temp1 = Integer.parseInt("" +  formattedTextField.getValue());
-                int temp2 = Integer.parseInt("" +  formattedTextField_1.getValue());
-                if (temp1 > 0 && temp1 < 25){
-                    if (temp2 >=0 && temp2 < temp1-1) try {
+                int temp1 = Integer.parseInt("" + formattedTextField.getValue());
+                int temp2 = Integer.parseInt("" + formattedTextField_1.getValue());
+                if (temp1 > 0 && temp1 < 25) {
+                    if (temp2 >= 0 && temp2 < temp1 - 1)
+                        try {
 
-                        FileInputStream in = new FileInputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\AltProcess.properties");
-                        Properties props = new Properties();
-                        props.load(in);
-                        in.close();
+                            FileInputStream in = new FileInputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\AltProcess.properties");
+                            Properties props = new Properties();
+                            props.load(in);
+                            in.close();
 
-                        FileOutputStream out = new FileOutputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\AltProcess.properties");
-                        props.setProperty("numberOfParts", "" + temp1);
-                        props.setProperty("StartingPart", "" + temp2);
-                        props.store(out, null);
-                        out.close();
-                        System.out.println("Saved");
-                        FileInputStream in2 = new FileInputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\AltProcess.properties");
-                        cfg.load(in2);
-                        in2.close();
-                        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
+                            FileOutputStream out = new FileOutputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\AltProcess.properties");
+                            props.setProperty("numberOfParts", "" + temp1);
+                            props.setProperty("StartingPart", "" + temp2);
+                            props.store(out, null);
+                            out.close();
+                            System.out.println("Saved");
+                            FileInputStream in2 = new FileInputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\AltProcess.properties");
+                            cfg.load(in2);
+                            in2.close();
+                            frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
                 }
             }
         });
@@ -172,7 +168,7 @@ public class AltProcess implements Process {
         JButton btnCancel = new JButton("Cancel");
         btnCancel.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(            ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
         });
@@ -184,27 +180,27 @@ public class AltProcess implements Process {
         return frame;
     }
 
-    @Config.Sources({"classpath:configs/AltProcess.properties" })
+    @Config.Sources({ "classpath:configs/AltProcess.properties" })
     private interface ThisConfig extends Accessible, Mutable {
         @DefaultValue("7")
         int numberOfParts();
+
         @DefaultValue("0")
         int StartingPart();
     }
 
-
     @Override
     public void run(String process) {
         int slideIndex = slide.getPartIndex();
-//        System.out.println(slideIndex);
+        // System.out.println(slideIndex);
 
-        if (virtualIndex < slideIndex){
+        if (virtualIndex < slideIndex) {
             rob.keyPress(KeyEvent.VK_TAB);
             rob.keyRelease(KeyEvent.VK_TAB);
             virtualIndex++;
         }
-        if (virtualIndex > slideIndex){
-//            System.out.println(virtualIndex + " - 1");
+        if (virtualIndex > slideIndex) {
+            // System.out.println(virtualIndex + " - 1");
             rob.keyPress(KeyEvent.VK_SHIFT);
             rob.keyPress(KeyEvent.VK_TAB);
             rob.keyRelease(KeyEvent.VK_TAB);

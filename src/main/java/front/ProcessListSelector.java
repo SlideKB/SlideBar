@@ -49,13 +49,12 @@ public class ProcessListSelector {
 
     private String labelName;
 
-
-    public ProcessListSelector(String configName, String labelName){
+    public ProcessListSelector(String configName, String labelName) {
         this.configName = configName;
         this.labelName = labelName;
     }
 
-    public void readFile(){
+    public void readFile() {
         FileInputStream in = null;
         right.clear();
         tempRight.clear();
@@ -66,45 +65,45 @@ public class ProcessListSelector {
             in.close();
             String list = props.getProperty("processList");
             String[] temp = list.split(", ");
-            for (String s : temp){
+            for (String s : temp) {
                 addToRight(s);
             }
-        }catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void addToRight(String given){
+    public void addToRight(String given) {
         addToTempRight(given);
-        if (right.contains(given)){
+        if (right.contains(given)) {
             right.remove(given);
         }
         right.add(given);
     }
 
-    private void addToTempRight(String given){
-        if (tempRight.contains(given)){
+    private void addToTempRight(String given) {
+        if (tempRight.contains(given)) {
             tempRight.remove(given);
         }
         tempRight.add(given);
     }
 
-    public void removeFromRight(String given){
+    public void removeFromRight(String given) {
         removeFromTempRight(given);
-        if (right.contains(given)){
+        if (right.contains(given)) {
             right.remove(given);
         }
     }
 
-    private void removeFromTempRight(String given){
-        if (tempRight.contains(given)){
+    private void removeFromTempRight(String given) {
+        if (tempRight.contains(given)) {
             tempRight.remove(given);
         }
     }
 
-    public JFrame createGUI(){
+    public JFrame createGUI() {
         readFile();
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -113,12 +112,12 @@ public class ProcessListSelector {
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         frame.setContentPane(contentPane);
         GridBagLayout gbl_contentPane = new GridBagLayout();
-        gbl_contentPane.columnWidths = new int[]{0, 102, 77, 0, 102, 77, 0, 0};
-        gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
-        gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-        gbl_contentPane.rowWeights = new double[]{0.0, 1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
+        gbl_contentPane.columnWidths = new int[] { 0, 102, 77, 0, 102, 77, 0, 0 };
+        gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
+        gbl_contentPane.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+        gbl_contentPane.rowWeights = new double[] { 0.0, 1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
         contentPane.setLayout(gbl_contentPane);
-        JList list = new JList(MainBack.getPrev20());
+        JList<String> list = new JList<>(MainBack.getPrev20());
         JScrollPane pane = new JScrollPane(list);
         GridBagConstraints gbc_list = new GridBagConstraints();
         gbc_list.gridwidth = 2;
@@ -129,7 +128,7 @@ public class ProcessListSelector {
         gbc_list.gridy = 1;
         contentPane.add(pane, gbc_list);
 
-        JList list_1 = new JList(right.toArray(new String[right.size()]));
+        JList<String> list_1 = new JList<>(right.toArray(new String[right.size()]));
         JScrollPane pane_1 = new JScrollPane(list_1);
         GridBagConstraints gbc_list_1 = new GridBagConstraints();
         gbc_list_1.gridwidth = 2;
@@ -151,10 +150,10 @@ public class ProcessListSelector {
                     list_1.setListData(tempRight.toArray(new String[tempRight.size()]));
                     pane_1.revalidate();
                     pane_1.repaint();
-                    for(String s : tempRight){
+                    for (String s : tempRight) {
                         System.out.println("temp list - " + s);
                     }
-                    for(String s : right){
+                    for (String s : right) {
                         System.out.println("real list - " + s);
                     }
                     System.out.println("---");
@@ -178,10 +177,10 @@ public class ProcessListSelector {
                     list_1.setListData(tempRight.toArray(new String[tempRight.size()]));
                     pane_1.revalidate();
                     pane_1.repaint();
-                    for(String s : tempRight){
+                    for (String s : tempRight) {
                         System.out.println("temp list - " + s);
                     }
-                    for(String s : right){
+                    for (String s : right) {
                         System.out.println("real list - " + s);
                     }
                     System.out.println("---");
@@ -207,9 +206,9 @@ public class ProcessListSelector {
 
                     FileOutputStream out = new FileOutputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\" + configName);
                     String temp = "";
-                    for (int i = 0; i < right.size(); i++){
+                    for (int i = 0; i < right.size(); i++) {
                         temp = temp + right.get(i);
-                        if (i!= right.size()-1){
+                        if (i != right.size() - 1) {
                             temp = temp + ", ";
                         }
                     }
@@ -249,12 +248,11 @@ public class ProcessListSelector {
         return frame;
     }
 
-    public void updatePlugin(){
-        for (Process p : MainBack.PM.getProci()){
-            if (p.getLabelName().equals(this.labelName)){
+    public void updatePlugin() {
+        for (Process p : MainBack.PM.getProci()) {
+            if (p.getLabelName().equals(this.labelName)) {
                 p.reloadPropFile();
             }
         }
     }
 }
-

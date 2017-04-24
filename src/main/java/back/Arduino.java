@@ -16,7 +16,6 @@
 
 package back;
 
-
 import gnu.io.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -34,7 +33,7 @@ import java.util.regex.Pattern;
  */
 public class Arduino implements SerialPortEventListener {
 
-    Pattern commaPattern = Pattern.compile("<(\\d+)>") ;
+    Pattern commaPattern = Pattern.compile("<(\\d+)>");
 
     boolean complete;
 
@@ -71,7 +70,7 @@ public class Arduino implements SerialPortEventListener {
 
     protected boolean runWithArduino = true;
 
-    protected Arduino(String portOverride){
+    protected Arduino(String portOverride) {
         this.portOverride = portOverride;
         try {
             robot = new Robot();
@@ -80,7 +79,7 @@ public class Arduino implements SerialPortEventListener {
         }
     }
 
-    protected Arduino(){
+    protected Arduino() {
         this.portOverride = "Auto";
         try {
             robot = new Robot();
@@ -91,13 +90,15 @@ public class Arduino implements SerialPortEventListener {
 
     public void initialize(int index) {
         CommPortIdentifier portId = null;
-        Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 
-        if (!getFirstPort(index).equals("none")){
+        @SuppressWarnings("unchecked")
+        Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
+
+        if (!getFirstPort(index).equals("none")) {
             while (portEnum.hasMoreElements()) {
-                CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
+                CommPortIdentifier currPortId = portEnum.nextElement();
                 if (currPortId.getName().equals(getFirstPort(index))) {
-                    System.out.println(currPortId.getName()  +  " - " +  getPortTypeName(currPortId.getPortType()) );
+                    System.out.println(currPortId.getName() + " - " + getPortTypeName(currPortId.getPortType()));
                     portId = currPortId;
                     break;
                 }
@@ -109,14 +110,10 @@ public class Arduino implements SerialPortEventListener {
         }
         try {
             // open serial port, and use class name for the appName.
-            serialPort = (gnu.io.SerialPort) portId.open(this.getClass().getName(),
-                    TIME_OUT);
+            serialPort = (gnu.io.SerialPort) portId.open(this.getClass().getName(), TIME_OUT);
 
             // set port parameters
-            serialPort.setSerialPortParams(DATA_RATE,
-                    gnu.io.SerialPort.DATABITS_8,
-                    gnu.io.SerialPort.STOPBITS_1,
-                    gnu.io.SerialPort.PARITY_NONE);
+            serialPort.setSerialPortParams(DATA_RATE, gnu.io.SerialPort.DATABITS_8, gnu.io.SerialPort.STOPBITS_1, gnu.io.SerialPort.PARITY_NONE);
 
             // open the streams
             input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
@@ -135,27 +132,23 @@ public class Arduino implements SerialPortEventListener {
             e1.printStackTrace();
         }
         System.out.println("This 'slider' is currently at: " + reading);
-        if (reading == 0){
+        if (reading == 0) {
             System.out.println("[Not a slider!]");
             serialPort.close();
-            initialize(index+1);
+            initialize(index + 1);
         } else {
             System.out.println("[Found a valid slider!]");
         }
     }
 
-
-
-
-
-    public static String getFirstPort(int index){
+    public static String getFirstPort(int index) {
+        @SuppressWarnings("unchecked")
         java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
         int counter = 0;
-        while ( portEnum.hasMoreElements() )
-        {
+        while (portEnum.hasMoreElements()) {
             CommPortIdentifier portIdentifier = portEnum.nextElement();
-            if (getPortTypeName(portIdentifier.getPortType()) == "Serial"){
-                if (counter == index){
+            if (getPortTypeName(portIdentifier.getPortType()) == "Serial") {
+                if (counter == index) {
                     return portIdentifier.getName();
                 } else {
                     counter++;
@@ -167,15 +160,17 @@ public class Arduino implements SerialPortEventListener {
         return "none";
     }
 
-    public static String[] getPortList(int index){
+    public static String[] getPortList(int index) {
         ArrayList<String> temp = new ArrayList<String>();
+
+        @SuppressWarnings("unchecked")
         java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
+
         int counter = 0;
-        while ( portEnum.hasMoreElements() )
-        {
+        while (portEnum.hasMoreElements()) {
             CommPortIdentifier portIdentifier = portEnum.nextElement();
-            if (getPortTypeName(portIdentifier.getPortType()) == "Serial"){
-                if (counter == index){
+            if (getPortTypeName(portIdentifier.getPortType()) == "Serial") {
+                if (counter == index) {
                     temp.add(portIdentifier.getName());
                 } else {
                     counter++;
@@ -187,34 +182,32 @@ public class Arduino implements SerialPortEventListener {
         return temp.toArray(new String[temp.size()]);
     }
 
-    static String getPortTypeName ( int portType )
-    {
-        switch ( portType )
-        {
-            case CommPortIdentifier.PORT_I2C:
-                return "I2C";
-            case CommPortIdentifier.PORT_PARALLEL:
-                return "Parallel";
-            case CommPortIdentifier.PORT_RAW:
-                return "Raw";
-            case CommPortIdentifier.PORT_RS485:
-                return "RS485";
-            case CommPortIdentifier.PORT_SERIAL:
-                return "Serial";
-            default:
-                return "unknown type";
+    static String getPortTypeName(int portType) {
+        switch (portType) {
+        case CommPortIdentifier.PORT_I2C:
+            return "I2C";
+        case CommPortIdentifier.PORT_PARALLEL:
+            return "Parallel";
+        case CommPortIdentifier.PORT_RAW:
+            return "Raw";
+        case CommPortIdentifier.PORT_RS485:
+            return "RS485";
+        case CommPortIdentifier.PORT_SERIAL:
+            return "Serial";
+        default:
+            return "unknown type";
         }
     }
 
-//    static void listPorts()
-//    {
-//        java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
-//        while ( portEnum.hasMoreElements() )
-//        {
-//            CommPortIdentifier portIdentifier = portEnum.nextElement();
-////            System.out.println(portIdentifier.getName()  +  " - " +  getPortTypeName(portIdentifier.getPortType()) );
-//        }
-//    }
+    // static void listPorts()
+    // {
+    // java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
+    // while ( portEnum.hasMoreElements() )
+    // {
+    // CommPortIdentifier portIdentifier = portEnum.nextElement();
+    //// System.out.println(portIdentifier.getName() + " - " + getPortTypeName(portIdentifier.getPortType()) );
+    // }
+    // }
 
     /**
      * Handle an event on the serial port. Read the data and print it.
@@ -222,13 +215,13 @@ public class Arduino implements SerialPortEventListener {
     public synchronized void serialEvent(SerialPortEvent oEvent) {
         if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
             try {
-                while (input.ready ())
-                {
-                    String inputLine=input.readLine();
-//                    System.out.println(inputLine);
+                while (input.ready()) {
+                    String inputLine = input.readLine();
+                    // System.out.println(inputLine);
                     reading = Integer.parseInt(inputLine);
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
         // Ignore all the other eventTypes, but you should consider the other ones.
     }
@@ -237,10 +230,9 @@ public class Arduino implements SerialPortEventListener {
         return reading;
     }
 
-    public void setReading(int value){
+    public void setReading(int value) {
         reading = value;
     }
-
 
     /**
      * This should be called when you stop using the port.
@@ -267,11 +259,13 @@ public class Arduino implements SerialPortEventListener {
     }
 
     /**
-     * writes to Arduino connected and waits for completion. If the arduino is not connected, the method prints out the console likewise.
+     * writes to Arduino connected and waits for completion. If the arduino is not connected, the method prints out the
+     * console likewise.
+     * 
      * @param position
      */
     protected void writeUntilComplete(int position) {
-        if (!(position > 0) && !(position < 1024) ){
+        if (!(position > 0) && !(position < 1024)) {
             System.out.println("Cannot wait for completion for a value that is not in the range 0 < value < 1024");
         } else {
             complete = false;
@@ -279,38 +273,41 @@ public class Arduino implements SerialPortEventListener {
             Instant start = Instant.now();
             System.out.println(" - waiting for completion");
             do {
-                } while (Math.abs(read()-position) > 30 && Duration.between(start, Instant.now()).toMillis() < 1000);
+            } while (Math.abs(read() - position) > 30 && Duration.between(start, Instant.now()).toMillis() < 1000);
             read();
             System.out.println(" - completed");
         }
     }
 
-
-    //Methods for dealing with Parts
+    // Methods for dealing with Parts
     protected void createParts(int numberOfParts) {
-        if (numberOfParts > 102){
+        if (numberOfParts > 102) {
             System.out.println("Cannot create more than 50 parts.");
         }
         this.numberOfParts = numberOfParts;
         write((2000 + numberOfParts));
     }
+
     protected int getPartIndex() {
         return getPartIndex(numberOfParts);
     }
-    protected int getPartIndex(int numberOfParts){
-        if (numberOfParts > 102){
+
+    protected int getPartIndex(int numberOfParts) {
+        if (numberOfParts > 102) {
             System.out.println("Cannot have more than 102 parts.");
         }
         if (numberOfParts != 0) {
             double partSize = (1040.0 / numberOfParts);
             return (int) (reading / partSize);
-            //(int) (((1024.0 / numberOfParts) * index) + ((1024.0 / numberOfParts) / 2));
+            // (int) (((1024.0 / numberOfParts) * index) + ((1024.0 / numberOfParts) / 2));
         }
         return -1;
     }
+
     protected void goToPart(int index) {
         goToPart(index, numberOfParts);
     }
+
     protected void goToPart(int index, int numberOfParts) {
         if (numberOfParts > index && index > 0) {
             double partSize = (1040.0 / numberOfParts);
@@ -320,9 +317,11 @@ public class Arduino implements SerialPortEventListener {
         }
 
     }
-    protected void goToPartComplete(int index){
+
+    protected void goToPartComplete(int index) {
         goToPartComplete(index, numberOfParts);
     }
+
     protected void goToPartComplete(int index, int numberOfParts) {
         if (numberOfParts > index && index >= 0) {
             double partSize = (1040.0 / numberOfParts);
@@ -331,54 +330,57 @@ public class Arduino implements SerialPortEventListener {
             throw new IndexOutOfBoundsException();
         }
     }
+
     protected void removeParts() {
         numberOfParts = 0;
         write(2000);
     }
-    protected int NumberOfParts(){
+
+    protected int NumberOfParts() {
         return numberOfParts;
     }
 
-
-    //Methods for simple writing to arduino.
+    // Methods for simple writing to arduino.
     protected void shiftRight(int distance) {
         reading = reading + distance;
-        reading = Math.min(1023,reading);
-        reading = Math.max(0,reading);
+        reading = Math.min(1023, reading);
+        reading = Math.max(0, reading);
         write(reading);
 
     }
+
     protected void shiftLeft(int distance) {
         shiftRight(distance * -1);
     }
+
     public void bumpRight(int milliseconds) {
         write(3000 + milliseconds);
     }
+
     public void bumpLeft(int milliseconds) {
         write(4000 + milliseconds);
     }
-    public void vibrate(int cycles){
-        if (cycles > 999 || cycles < 0){
+
+    public void vibrate(int cycles) {
+        if (cycles > 999 || cycles < 0) {
             throw new IllegalArgumentException("cycles should be between 0 and 999");
         }
         write(6000 + cycles);
     }
 
-
-
-    public void scrollDown(int amount){
-//        if (amount > 499 || amount < 0){
-//            throw new IllegalArgumentException("amount should be between 0 and 499");
-//        }
-//        write(5500+amount);
+    public void scrollDown(int amount) {
+        // if (amount > 499 || amount < 0){
+        // throw new IllegalArgumentException("amount should be between 0 and 499");
+        // }
+        // write(5500+amount);
         robot.mouseWheel(amount);
     }
 
-    public void scrollUp(int amount){
-//        if (amount > 499 || amount < 0){
-//            throw new IllegalArgumentException("amount should be between 0 and 499");
-//        }
-//        write(5000+amount);
+    public void scrollUp(int amount) {
+        // if (amount > 499 || amount < 0){
+        // throw new IllegalArgumentException("amount should be between 0 and 499");
+        // }
+        // write(5000+amount);
         robot.mouseWheel(amount * -1);
     }
 
