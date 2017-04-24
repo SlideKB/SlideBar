@@ -93,7 +93,7 @@ public class MainFront {
             gbc_label.gridy = 2;
             contentPane.add(status, gbc_label);
 
-            JComboBox comboBox = new JComboBox();
+            JComboBox<String> comboBox = new JComboBox<>();
             comboBox.addItem("Auto");
             for (String s : Arduino.getPortList(0)) {
                 comboBox.addItem(s);
@@ -121,7 +121,7 @@ public class MainFront {
             System.out.println(arrayProcess.toString());
             String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
 
-            JList processList = new JList(proci);
+            JList<String> processList = new JList<>(proci);
             JScrollPane pane = new JScrollPane(processList);
             GridBagConstraints gbc_list = new GridBagConstraints();
             gbc_list.gridwidth = 2;
