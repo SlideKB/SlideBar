@@ -47,20 +47,27 @@
 			<version>2.1.7</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.sikulix/sikulix -->
+		<!-- https://mvnrepository.com/artifact/com.sikulix/sikulixapi -->
 		<dependency>
 			<groupId>com.sikulix</groupId>
-			<artifactId>sikulix</artifactId>
-			<version>1.1.999</version>
+			<artifactId>sikulixapi</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.sikulix/sikulixlibswin -->
+		<dependency>
+			<groupId>com.sikulix</groupId>
+			<artifactId>sikulixlibswin</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.google.auto.service/auto-service -->
+		<dependency>
+			<groupId>com.google.auto.service</groupId>
+			<artifactId>auto-service</artifactId>
+			<version>1.0-rc3</version>
 		</dependency>
 
 	</dependencies>
 
-	<repositories>
-		<repository>
-			<id>Consol</id>
-			<name>Consol Repository</name>
-			<url>https://labs.consol.de/maven/repository/</url>
-		</repository>
-	</repositories>
 </project>
