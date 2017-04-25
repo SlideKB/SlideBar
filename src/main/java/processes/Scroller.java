@@ -28,6 +28,8 @@ import org.sikuli.script.Location;
 import org.sikuli.script.Mouse;
 import org.sikuli.script.Region;
 
+import com.google.auto.service.AutoService;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -43,6 +45,7 @@ import java.util.Properties;
 /**
  * Created by JackSec on 3/24/2017.
  */
+@AutoService(Process.class)
 public class Scroller implements Process {
 
     Slider s = new Slider();

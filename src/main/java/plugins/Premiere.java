@@ -19,6 +19,9 @@ package plugins;
 import back.HotKeyManager;
 import back.Process;
 import back.Slider;
+
+import com.google.auto.service.AutoService;
+
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
@@ -41,6 +44,7 @@ import java.util.Arrays;
 /**
  * Created by JackSec on 4/21/2017.
  */
+@AutoService(Process.class)
 public class Premiere implements Process {
 
     Slider s = new Slider();

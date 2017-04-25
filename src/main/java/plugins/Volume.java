@@ -24,6 +24,8 @@ import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigFactory;
 import org.aeonbits.owner.Mutable;
 
+import com.google.auto.service.AutoService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
@@ -33,6 +35,7 @@ import java.util.Scanner;
 /**
  * Created by JackSB on 4/22/2017.
  */
+@AutoService(Process.class)
 public class Volume implements Process {
 
     HotKeyManager HKM = new HotKeyManager();

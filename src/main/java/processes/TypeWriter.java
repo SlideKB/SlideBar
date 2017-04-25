@@ -25,11 +25,14 @@ import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigFactory;
 import org.aeonbits.owner.Mutable;
 
+import com.google.auto.service.AutoService;
+
 import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+@AutoService(Process.class)
 public class TypeWriter implements Process {
 
     AlphaKeyManager AKM = new AlphaKeyManager();
