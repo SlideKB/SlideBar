@@ -24,6 +24,8 @@ import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigFactory;
 import org.aeonbits.owner.Mutable;
 
+import com.google.auto.service.AutoService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -40,6 +42,7 @@ import java.util.Properties;
 /**
  * Created by JackSB on 3/12/2017.
  */
+@AutoService(Process.class)
 public class AltProcess implements Process {
 
     HotKeyManager HKM = new HotKeyManager();
