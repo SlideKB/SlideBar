@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-package com.github.slidekb.processes;
+package com.github.slidekb.plugins;
 
 import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
