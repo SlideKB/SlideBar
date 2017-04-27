@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-package back;
+package com.github.slidekb.back;
 
 public class Slider {
 	

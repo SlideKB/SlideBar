@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-package back;
+package com.github.slidekb.back;
 
 import gnu.io.*;
 import java.awt.*;

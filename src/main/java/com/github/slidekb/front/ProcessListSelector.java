@@ -14,13 +14,14 @@
  limitations under the License.
  */
 
-package front;
-
-import back.MainBack;
-import back.SlideBarPlugin;
+package com.github.slidekb.front;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import com.github.slidekb.back.MainBack;
+import com.github.slidekb.back.SlideBarPlugin;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

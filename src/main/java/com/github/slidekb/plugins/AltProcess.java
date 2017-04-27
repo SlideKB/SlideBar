@@ -14,16 +14,16 @@
  limitations under the License.
  */
 
-package plugins;
+package com.github.slidekb.plugins;
 
-import back.HotKeyManager;
-import back.SlideBarPlugin;
-import back.Slider;
 import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigFactory;
 import org.aeonbits.owner.Mutable;
 
+import com.github.slidekb.back.HotKeyManager;
+import com.github.slidekb.back.SlideBarPlugin;
+import com.github.slidekb.back.Slider;
 import com.google.auto.service.AutoService;
 
 import javax.swing.*;

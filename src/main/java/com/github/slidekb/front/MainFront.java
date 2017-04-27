@@ -14,11 +14,7 @@
  limitations under the License.
  */
 
-package front;
-
-import back.Arduino;
-import back.MainBack;
-import back.SlideBarPlugin;
+package com.github.slidekb.front;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -35,6 +31,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import com.github.slidekb.back.Arduino;
+import com.github.slidekb.back.MainBack;
+import com.github.slidekb.back.SlideBarPlugin;
 
 public class MainFront {
 

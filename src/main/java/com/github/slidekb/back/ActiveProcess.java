@@ -14,15 +14,15 @@
  limitations under the License.
  */
 
-package back;
+package com.github.slidekb.back;
 
-import static back.ActiveProcess.Kernel32.OpenProcess;
-import static back.ActiveProcess.Kernel32.PROCESS_QUERY_INFORMATION;
-import static back.ActiveProcess.Kernel32.PROCESS_VM_READ;
-import static back.ActiveProcess.Psapi.GetModuleBaseNameW;
-import static back.ActiveProcess.User32DLL.GetForegroundWindow;
-import static back.ActiveProcess.User32DLL.GetWindowTextW;
-import static back.ActiveProcess.User32DLL.GetWindowThreadProcessId;
+import static com.github.slidekb.back.ActiveProcess.Kernel32.OpenProcess;
+import static com.github.slidekb.back.ActiveProcess.Kernel32.PROCESS_QUERY_INFORMATION;
+import static com.github.slidekb.back.ActiveProcess.Kernel32.PROCESS_VM_READ;
+import static com.github.slidekb.back.ActiveProcess.Psapi.GetModuleBaseNameW;
+import static com.github.slidekb.back.ActiveProcess.User32DLL.GetForegroundWindow;
+import static com.github.slidekb.back.ActiveProcess.User32DLL.GetWindowTextW;
+import static com.github.slidekb.back.ActiveProcess.User32DLL.GetWindowThreadProcessId;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;

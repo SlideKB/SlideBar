@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-package front;
+package com.github.slidekb.front;
 
 import javax.swing.*;
 

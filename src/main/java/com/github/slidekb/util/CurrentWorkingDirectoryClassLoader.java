@@ -1,4 +1,4 @@
-package util;
+package com.github.slidekb.util;
 
 import java.io.File;
 import java.net.MalformedURLException;

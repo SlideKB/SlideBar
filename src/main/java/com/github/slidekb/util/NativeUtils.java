@@ -1,4 +1,4 @@
-package util;
+package com.github.slidekb.util;
 
 /*
  * Class NativeUtils is published under the The MIT License:

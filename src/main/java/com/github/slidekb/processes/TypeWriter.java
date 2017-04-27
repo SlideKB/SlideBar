@@ -14,17 +14,17 @@
  limitations under the License.
  */
 
-package processes;
+package com.github.slidekb.processes;
 
-import back.AlphaKeyManager;
-import back.SlideBarPlugin;
-import back.Slider;
-import front.ProcessListSelector;
 import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigFactory;
 import org.aeonbits.owner.Mutable;
 
+import com.github.slidekb.back.AlphaKeyManager;
+import com.github.slidekb.back.SlideBarPlugin;
+import com.github.slidekb.back.Slider;
+import com.github.slidekb.front.ProcessListSelector;
 import com.google.auto.service.AutoService;
 
 import javax.swing.*;

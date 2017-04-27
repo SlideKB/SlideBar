@@ -14,12 +14,12 @@
  limitations under the License.
  */
 
-package back;
+package com.github.slidekb.back;
 
 import java.util.ArrayList;
 import java.util.ServiceLoader;
 
-import util.CurrentWorkingDirectoryClassLoader;
+import com.github.slidekb.util.CurrentWorkingDirectoryClassLoader;
 
 public class ProcessManager {
 

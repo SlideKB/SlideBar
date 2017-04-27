@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-package back;
+package com.github.slidekb.back;
 
 import java.io.IOException;
 import java.security.Policy;
@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
-import util.NativeUtils;
+import com.github.slidekb.util.NativeUtils;
 
 public class MainBack implements Runnable {
 
@@ -34,7 +34,7 @@ public class MainBack implements Runnable {
 
     public static ArrayList<String> prev20List = new ArrayList<String>();
 
-    public static back.ProcessManager PM;
+    public static com.github.slidekb.back.ProcessManager PM;
 
     private static String previous;
 
