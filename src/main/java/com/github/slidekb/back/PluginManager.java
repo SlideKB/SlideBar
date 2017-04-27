@@ -19,8 +19,10 @@ package com.github.slidekb.back;
 import java.util.ArrayList;
 import java.util.ServiceLoader;
 
+import com.github.slidekb.api.PlatformSpecific;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.util.CurrentWorkingDirectoryClassLoader;
+import com.github.slidekb.util.OsHelper;
 
 public class PluginManager {
 
@@ -40,7 +42,18 @@ public class PluginManager {
         proci.clear();
 
         ServiceLoader<SlideBarPlugin> loader = ServiceLoader.load(SlideBarPlugin.class, CurrentWorkingDirectoryClassLoader.getCurrentWorkingDirectoryClassLoader());
-        loader.forEach(entry -> proci.add(entry));
+
+        for (SlideBarPlugin currentImplementation : loader) {
+            PlatformSpecific currentAnnotation = currentImplementation.getClass().getAnnotation(PlatformSpecific.class);
+
+            if (currentAnnotation != null) { // Annotation present -> platform specific plugin
+                if (currentAnnotation.value() == OsHelper.getOS()) {
+                    proci.add(currentImplementation);
+                }
+            } else { // No Annotation -> platform independent plugin
+                proci.add(currentImplementation);
+            }
+        }
 
         return true;
     }
