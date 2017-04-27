@@ -18,7 +18,7 @@ package front;
 
 import back.Arduino;
 import back.MainBack;
-import back.Process;
+import back.SlideBarPlugin;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -115,7 +115,7 @@ public class MainFront {
                     e.printStackTrace();
                 }
             } while (MainBack.PM.getProci() == null);
-            for (Process p : MainBack.PM.getProci()) {
+            for (SlideBarPlugin p : MainBack.PM.getProci()) {
                 arrayProcess.add(p.getLabelName());
             }
             System.out.println(arrayProcess.toString());
@@ -193,8 +193,8 @@ public class MainFront {
                     System.out.println("Selected Elements:  ");
                     for (int i = 0; i < selected.length; i++) {
                         String element = (String) processList.getModel().getElementAt(selected[i]);
-                        ArrayList<Process> temp = MainBack.PM.getProci();
-                        for (Process p : temp) {
+                        ArrayList<SlideBarPlugin> temp = MainBack.PM.getProci();
+                        for (SlideBarPlugin p : temp) {
                             if (p.getLabelName().contentEquals(element)) {
                                 System.out.println(p.getLabelName());
                                 p.getProcessWindow().pack();
@@ -219,8 +219,8 @@ public class MainFront {
                     System.out.println("Selected Elements:  ");
                     for (int i = 0; i < selected.length; i++) {
                         String element = (String) processList.getModel().getElementAt(selected[i]);
-                        ArrayList<Process> temp = MainBack.PM.getProci();
-                        for (Process p : temp) {
+                        ArrayList<SlideBarPlugin> temp = MainBack.PM.getProci();
+                        for (SlideBarPlugin p : temp) {
                             if (p.getLabelName().contentEquals(element)) {
                                 System.out.println(p.getLabelName());
                                 JFrame window = p.getConfigWindow();

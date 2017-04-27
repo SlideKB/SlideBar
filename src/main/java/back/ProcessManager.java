@@ -23,7 +23,7 @@ import util.CurrentWorkingDirectoryClassLoader;
 
 public class ProcessManager {
 
-    private ArrayList<Process> proci = new ArrayList<>();
+    private ArrayList<SlideBarPlugin> proci = new ArrayList<>();
 
     public ProcessManager() {
 
@@ -38,13 +38,13 @@ public class ProcessManager {
     protected boolean loadProcesses() {
         proci.clear();
 
-        ServiceLoader<Process> loader = ServiceLoader.load(Process.class, CurrentWorkingDirectoryClassLoader.getCurrentWorkingDirectoryClassLoader());
+        ServiceLoader<SlideBarPlugin> loader = ServiceLoader.load(SlideBarPlugin.class, CurrentWorkingDirectoryClassLoader.getCurrentWorkingDirectoryClassLoader());
         loader.forEach(entry -> proci.add(entry));
 
         return true;
     }
 
-    public ArrayList<Process> getProci() {
+    public ArrayList<SlideBarPlugin> getProci() {
         return proci;
     }
 

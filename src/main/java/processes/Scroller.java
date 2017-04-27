@@ -16,7 +16,7 @@
 
 package processes;
 
-import back.Process;
+import back.SlideBarPlugin;
 import back.Slider;
 import front.ProcessListSelector;
 import org.aeonbits.owner.Accessible;
@@ -45,8 +45,8 @@ import java.util.Properties;
 /**
  * Created by JackSec on 3/24/2017.
  */
-@AutoService(Process.class)
-public class Scroller implements Process {
+@AutoService(SlideBarPlugin.class)
+public class Scroller implements SlideBarPlugin {
 
     Slider s = new Slider();
 

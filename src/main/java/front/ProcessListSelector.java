@@ -17,7 +17,7 @@
 package front;
 
 import back.MainBack;
-import back.Process;
+import back.SlideBarPlugin;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -249,7 +249,7 @@ public class ProcessListSelector {
     }
 
     public void updatePlugin() {
-        for (Process p : MainBack.PM.getProci()) {
+        for (SlideBarPlugin p : MainBack.PM.getProci()) {
             if (p.getLabelName().equals(this.labelName)) {
                 p.reloadPropFile();
             }

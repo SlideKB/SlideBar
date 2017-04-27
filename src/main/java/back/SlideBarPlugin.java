@@ -23,7 +23,7 @@ import javax.swing.*;
  * @author JackSec
  *
  */
-public interface Process {
+public interface SlideBarPlugin {
 
     /**
      * returns the priority for the plugin

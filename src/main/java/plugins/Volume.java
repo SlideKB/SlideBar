@@ -17,7 +17,7 @@
 package plugins;
 
 import back.HotKeyManager;
-import back.Process;
+import back.SlideBarPlugin;
 import back.Slider;
 import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
@@ -35,8 +35,8 @@ import java.util.Scanner;
 /**
  * Created by JackSB on 4/22/2017.
  */
-@AutoService(Process.class)
-public class Volume implements Process {
+@AutoService(SlideBarPlugin.class)
+public class Volume implements SlideBarPlugin {
 
     HotKeyManager HKM = new HotKeyManager();
 

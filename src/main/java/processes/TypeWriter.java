@@ -17,7 +17,7 @@
 package processes;
 
 import back.AlphaKeyManager;
-import back.Process;
+import back.SlideBarPlugin;
 import back.Slider;
 import front.ProcessListSelector;
 import org.aeonbits.owner.Accessible;
@@ -32,8 +32,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-@AutoService(Process.class)
-public class TypeWriter implements Process {
+@AutoService(SlideBarPlugin.class)
+public class TypeWriter implements SlideBarPlugin {
 
     AlphaKeyManager AKM = new AlphaKeyManager();
 

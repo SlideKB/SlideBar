@@ -123,7 +123,7 @@ public class MainBack implements Runnable {
             String HK = Arrays.toString(KeyHook.getHotKeys());
             // System.out.println(ard.read());
             // System.out.println(AP);
-            for (Process p : PM.getProci()) {
+            for (SlideBarPlugin p : PM.getProci()) {
                 for (String processName : p.getProcessNames()) {
                     if (processName.contentEquals(HK)) {
                         exe = false;
@@ -132,7 +132,7 @@ public class MainBack implements Runnable {
             }
             if (!exe) {
                 if (!previous.equals(HK)) {
-                    for (Process p : PM.getProci()) {
+                    for (SlideBarPlugin p : PM.getProci()) {
                         for (String processName : p.getProcessNames()) {
                             if (processName.contentEquals(HK)) {
                                 System.out.println("process change");
@@ -143,7 +143,7 @@ public class MainBack implements Runnable {
                         }
                     }
                 } else {
-                    for (Process p : PM.getProci()) {
+                    for (SlideBarPlugin p : PM.getProci()) {
                         for (String processName : p.getProcessNames()) {
                             if (processName.contentEquals(HK)) {
                                 previous = processName;
@@ -156,7 +156,7 @@ public class MainBack implements Runnable {
                 if (!previous.equals(AP)) {
                     updatePrevList(AP);
                     arduino.createParts(0);
-                    for (Process p : PM.getProci()) {
+                    for (SlideBarPlugin p : PM.getProci()) {
                         for (String processName : p.getProcessNames()) {
                             if (processName.contentEquals(AP)) {
                                 System.out.println("process change");
@@ -166,7 +166,7 @@ public class MainBack implements Runnable {
                         }
                     }
                 } else {
-                    for (Process p : PM.getProci()) {
+                    for (SlideBarPlugin p : PM.getProci()) {
                         for (String processName : p.getProcessNames()) {
                             if (processName.contentEquals(AP)) {
                                 previous = processName;

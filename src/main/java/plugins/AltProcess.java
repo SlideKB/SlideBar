@@ -17,7 +17,7 @@
 package plugins;
 
 import back.HotKeyManager;
-import back.Process;
+import back.SlideBarPlugin;
 import back.Slider;
 import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
@@ -42,8 +42,8 @@ import java.util.Properties;
 /**
  * Created by JackSB on 3/12/2017.
  */
-@AutoService(Process.class)
-public class AltProcess implements Process {
+@AutoService(SlideBarPlugin.class)
+public class AltProcess implements SlideBarPlugin {
 
     HotKeyManager HKM = new HotKeyManager();
 

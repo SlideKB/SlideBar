@@ -17,7 +17,7 @@
 package plugins;
 
 import back.HotKeyManager;
-import back.Process;
+import back.SlideBarPlugin;
 import back.Slider;
 
 import com.google.auto.service.AutoService;
@@ -44,8 +44,8 @@ import java.util.Arrays;
 /**
  * Created by JackSec on 4/21/2017.
  */
-@AutoService(Process.class)
-public class Premiere implements Process {
+@AutoService(SlideBarPlugin.class)
+public class Premiere implements SlideBarPlugin {
 
     Slider s = new Slider();
 
