@@ -35,7 +35,7 @@ public class MainBack implements Runnable {
 
     public static ArrayList<String> prev20List = new ArrayList<String>();
 
-    public static com.github.slidekb.back.ProcessManager PM;
+    public static com.github.slidekb.back.PluginManager PM;
 
     private static String previous;
 
@@ -220,7 +220,7 @@ public class MainBack implements Runnable {
      * @return
      */
     public static void setupProcesses() {
-        PM = new ProcessManager();
+        PM = new PluginManager();
         Policy.setPolicy(new PluginPolicy());
         System.setSecurityManager(new SecurityManager());
         started = true;

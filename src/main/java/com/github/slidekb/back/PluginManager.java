@@ -22,11 +22,11 @@ import java.util.ServiceLoader;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.util.CurrentWorkingDirectoryClassLoader;
 
-public class ProcessManager {
+public class PluginManager {
 
     private ArrayList<SlideBarPlugin> proci = new ArrayList<>();
 
-    public ProcessManager() {
+    public PluginManager() {
 
     }
 
