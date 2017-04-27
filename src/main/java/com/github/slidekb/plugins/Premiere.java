@@ -16,8 +16,8 @@
 
 package com.github.slidekb.plugins;
 
+import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.HotKeyManager;
-import com.github.slidekb.back.SlideBarPlugin;
 import com.github.slidekb.back.Slider;
 import com.github.slidekb.front.ProcessListSelector;
 import com.google.auto.service.AutoService;

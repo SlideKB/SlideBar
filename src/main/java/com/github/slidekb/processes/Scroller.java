@@ -25,7 +25,7 @@ import org.sikuli.script.Location;
 import org.sikuli.script.Mouse;
 import org.sikuli.script.Region;
 
-import com.github.slidekb.back.SlideBarPlugin;
+import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.Slider;
 import com.github.slidekb.front.ProcessListSelector;
 import com.google.auto.service.AutoService;

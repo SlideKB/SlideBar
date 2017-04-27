@@ -32,9 +32,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.Arduino;
 import com.github.slidekb.back.MainBack;
-import com.github.slidekb.back.SlideBarPlugin;
 
 public class MainFront {
 

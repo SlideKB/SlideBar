@@ -19,6 +19,7 @@ package com.github.slidekb.back;
 import java.util.ArrayList;
 import java.util.ServiceLoader;
 
+import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.util.CurrentWorkingDirectoryClassLoader;
 
 public class ProcessManager {

@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-package com.github.slidekb.back;
+package com.github.slidekb.api;
 
 import javax.swing.*;
 

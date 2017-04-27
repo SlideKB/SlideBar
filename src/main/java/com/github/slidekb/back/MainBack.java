@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
+import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.util.NativeUtils;
 
 public class MainBack implements Runnable {

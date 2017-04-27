@@ -21,8 +21,8 @@ import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigFactory;
 import org.aeonbits.owner.Mutable;
 
+import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.HotKeyManager;
-import com.github.slidekb.back.SlideBarPlugin;
 import com.github.slidekb.back.Slider;
 import com.google.auto.service.AutoService;
 

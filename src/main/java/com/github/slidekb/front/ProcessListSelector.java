@@ -19,8 +19,8 @@ package com.github.slidekb.front;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.MainBack;
-import com.github.slidekb.back.SlideBarPlugin;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
