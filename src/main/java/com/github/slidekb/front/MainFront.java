@@ -35,6 +35,7 @@ import javax.swing.event.ListSelectionListener;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.Arduino;
 import com.github.slidekb.back.MainBack;
+import com.github.slidekb.back.PortManager;
 
 public class MainFront {
 
@@ -95,7 +96,7 @@ public class MainFront {
 
             JComboBox<String> comboBox = new JComboBox<>();
             comboBox.addItem("Auto");
-            for (String s : Arduino.getPortList(0)) {
+            for (String s : PortManager.getPortList(0)) {
                 comboBox.addItem(s);
             }
 
@@ -107,14 +108,15 @@ public class MainFront {
             contentPane.add(comboBox, gbc_comboBox);
 
             ArrayList<String> arrayProcess = new ArrayList<String>();
+            System.out.println(MainBack.PM == null);
             do {
                 System.out.println("waiting for proci");
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            } while (MainBack.PM.getProci() == null);
+            } while (MainBack.PM == null);
             for (SlideBarPlugin p : MainBack.PM.getProci()) {
                 arrayProcess.add(p.getLabelName());
             }

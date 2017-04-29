@@ -37,15 +37,13 @@ public class MainBack implements Runnable {
 
     public static com.github.slidekb.back.PluginManager PM;
 
-    private static String previous;
-
-    private static String previousHotkey;
-
     private static KeyHook x;
 
     private static boolean started = false;
 
     private static boolean keyHookRunning = false;
+
+    private static String previous = "";
 
     public static void main(String[] args) {
         Thread t = new Thread(new MainBack());
@@ -54,14 +52,14 @@ public class MainBack implements Runnable {
 
     @Override
     public void run() {
-        FirstLoad();
+         FirstLoad();
     }
 
     public static void FirstLoad() {
         loadNativeLibraries();
         setupKeyHook();
         startIt("Auto");
-        while (true) {
+        while (started) {
             try {
                 Run();
                 Thread.sleep(10);
@@ -72,7 +70,8 @@ public class MainBack implements Runnable {
     }
 
     public static void testVibrate(int amount) {
-        arduino.vibrate(amount);
+        arduino.vibrate(5);
+
     }
 
     public static boolean isStarted() {
@@ -82,14 +81,19 @@ public class MainBack implements Runnable {
     public static boolean startIt(String port) {
         // connect and write to arduino
         if (started == false) {
-            System.out.println("starting");
-            arduino = new Arduino(port);
-            // arduino.initialize(0);
-            arduino.initialize(0);
-            // arduino.createParts(0);
+            System.out.println("starting plugins");
+            PortManager portMan = new PortManager();
+            portMan.findAndConnect();
+            System.out.println(portMan.getArduinos().length);
+            if (portMan.getArduinos().length != 0){
+                arduino = portMan.getArduinos()[0];
+                started = true;
+            } else {
+                System.out.println("Could not connect to a Slider");
+                started = false;
+            }
             setupProcesses();
         }
-        started = arduino.runWithArduino;
         return started;
     }
 
@@ -223,7 +227,6 @@ public class MainBack implements Runnable {
         PM = new PluginManager();
         Policy.setPolicy(new PluginPolicy());
         System.setSecurityManager(new SecurityManager());
-        started = true;
         PM.loadProcesses();
 
     }
