@@ -27,6 +27,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -74,6 +77,8 @@ public class Scroller implements SlideBarPlugin {
 
     Location prev = null;
 
+    List<String> attachedProcesses = new ArrayList<>();
+
     ProcessListSelector pls = new ProcessListSelector("Scroller.properties", getLabelName());
 
     public Scroller() {
@@ -87,7 +92,7 @@ public class Scroller implements SlideBarPlugin {
 
     @Override
     public String[] getProcessNames() {
-        return cfg.processList();
+        return attachedProcesses.toArray(new String[attachedProcesses.size()]);
     }
 
     private void Sleeper(int delay) {
@@ -106,6 +111,8 @@ public class Scroller implements SlideBarPlugin {
             FileInputStream in = new FileInputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\Scroller.properties");
             cfg.load(in);
             in.close();
+
+            attachedProcesses = new ArrayList<>(Arrays.asList(cfg.processList()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -155,6 +162,7 @@ public class Scroller implements SlideBarPlugin {
 
     private boolean loadConfiguration() {
         cfg = ConfigFactory.create(ThisConfig.class);
+        attachedProcesses = new ArrayList<>(Arrays.asList(cfg.processList()));
         return true;
     }
 
@@ -297,5 +305,15 @@ public class Scroller implements SlideBarPlugin {
     @Override
     public void setSlider(Slider slider) {
         this.slider = slider;
+    }
+
+    @Override
+    public void attachToProcess(String processName) {
+        attachedProcesses.add(processName);
+    }
+
+    @Override
+    public void detachFromProcess(String processName) {
+        attachedProcesses.remove(processName);
     }
 }

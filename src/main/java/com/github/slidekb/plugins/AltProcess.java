@@ -266,4 +266,14 @@ public class AltProcess implements SlideBarPlugin {
     public void setSlider(Slider slider) {
         this.slider = slider;
     }
+
+    @Override
+    public void attachToProcess(String processName) {
+        // NOP
+    }
+
+    @Override
+    public void detachFromProcess(String processName) {
+        // NOP
+    }
 }
