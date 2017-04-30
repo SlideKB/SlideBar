@@ -50,9 +50,17 @@ public class PluginManager {
 
             if (currentAnnotation != null) { // Annotation present -> platform specific plugin
                 if (currentAnnotation.value() == OsHelper.getOS()) {
+                    currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
+                    currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
+                    currentImplementation.setSlider(MainBack.slider);
+
                     proci.add(currentImplementation);
                 }
             } else { // No Annotation -> platform independent plugin
+                currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
+                currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
+                currentImplementation.setSlider(MainBack.slider);
+
                 proci.add(currentImplementation);
             }
         }

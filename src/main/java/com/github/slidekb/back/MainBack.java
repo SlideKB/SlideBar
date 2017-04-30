@@ -17,7 +17,6 @@
 package com.github.slidekb.back;
 
 import java.io.IOException;
-import java.security.Policy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -26,7 +25,10 @@ import java.util.logging.Logger;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
+import com.github.slidekb.api.AlphaKeyManager;
+import com.github.slidekb.api.HotKeyManager;
 import com.github.slidekb.api.SlideBarPlugin;
+import com.github.slidekb.api.Slider;
 import com.github.slidekb.util.NativeUtils;
 
 public class MainBack implements Runnable {
@@ -44,6 +46,12 @@ public class MainBack implements Runnable {
     private static boolean keyHookRunning = false;
 
     private static String previous = "";
+
+    static AlphaKeyManager alphaKeyManager = new AlphaKeyManagerImpl();
+
+    static HotKeyManager hotKeyManager = new HotKeyManagerImpl();
+
+    static Slider slider = new SliderImpl();
 
     public static void main(String[] args) {
         Thread t = new Thread(new MainBack());

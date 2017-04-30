@@ -16,18 +16,20 @@
 
 package com.github.slidekb.back;
 
-public class AlphaKeyManager {
-	
-	public AlphaKeyManager(){
-		
-	}
-	
-	public void addKey(String key){
-		KeyHook.addValidAlphaKey(key);
-	}
-	
-	public String[] getAlphaKeys(){
-		return KeyHook.getAlphaKeys();
-	}
+import com.github.slidekb.api.HotKeyManager;
+
+public class HotKeyManagerImpl implements HotKeyManager {
+
+    public HotKeyManagerImpl() {
+
+    }
+
+    public void addKey(String key) {
+        KeyHook.addValidHotkey(key);
+    }
+
+    public String[] getHotkeys() {
+        return KeyHook.getHotKeys();
+    }
 
 }

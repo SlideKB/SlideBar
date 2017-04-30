@@ -16,21 +16,25 @@
 
 package com.github.slidekb.plugins;
 
+import java.awt.Robot;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Scanner;
+
+import javax.swing.JFrame;
+
 import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigFactory;
 import org.aeonbits.owner.Mutable;
 
+import com.github.slidekb.api.AlphaKeyManager;
+import com.github.slidekb.api.HotKeyManager;
 import com.github.slidekb.api.SlideBarPlugin;
-import com.github.slidekb.back.HotKeyManager;
-import com.github.slidekb.back.Slider;
+import com.github.slidekb.api.Slider;
 import com.google.auto.service.AutoService;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.*;
-import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * Created by JackSB on 4/22/2017.
@@ -38,9 +42,9 @@ import java.util.Scanner;
 @AutoService(SlideBarPlugin.class)
 public class Volume implements SlideBarPlugin {
 
-    HotKeyManager HKM = new HotKeyManager();
+    HotKeyManager hotKeyManager;
 
-    Slider slide = new Slider();
+    Slider slider;
 
     String previous = "";
 
@@ -70,7 +74,7 @@ public class Volume implements SlideBarPlugin {
 
     private boolean loadConfiguration() {
         cfg = ConfigFactory.create(ThisConfig.class);
-        HKM.addKey("0");
+        hotKeyManager.addKey("0");
         return true;
     }
 
@@ -120,7 +124,7 @@ public class Volume implements SlideBarPlugin {
     }
 
     private void readValues() {
-        int index = slide.getPartIndex(101);
+        int index = slider.getPartIndex(101);
         index = 100 - index;
         while (PartLatch[index] == true) {
             for (int i = 0; i < PartLatch.length; i++) {
@@ -147,7 +151,7 @@ public class Volume implements SlideBarPlugin {
     }
 
     private void writeValues() {
-        slide.goToPartComplete(100 - getVolume(), 101);
+        slider.goToPartComplete(100 - getVolume(), 101);
         for (int i = 0; i < PartLatch.length; i++) {
             PartLatch[i] = true;
         }
@@ -171,5 +175,20 @@ public class Volume implements SlideBarPlugin {
     @Override
     public void reloadPropFile() {
 
+    }
+
+    @Override
+    public void setAlphaKeyManager(AlphaKeyManager alphaKeyManager) {
+        // NOP
+    }
+
+    @Override
+    public void setHotKeyManager(HotKeyManager hotKeyManager) {
+        this.hotKeyManager = hotKeyManager;
+    }
+
+    @Override
+    public void setSlider(Slider slider) {
+        this.slider = slider;
     }
 }

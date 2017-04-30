@@ -16,23 +16,10 @@
 
 package com.github.slidekb.plugins;
 
-import org.aeonbits.owner.Accessible;
-import org.aeonbits.owner.Config;
-import org.aeonbits.owner.ConfigFactory;
-import org.aeonbits.owner.Mutable;
-import org.sikuli.script.App;
-import org.sikuli.script.Location;
-import org.sikuli.script.Mouse;
-import org.sikuli.script.Region;
-
-import com.github.slidekb.api.SlideBarPlugin;
-import com.github.slidekb.back.Slider;
-import com.github.slidekb.front.ProcessListSelector;
-import com.google.auto.service.AutoService;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -42,13 +29,38 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
+
+import org.aeonbits.owner.Accessible;
+import org.aeonbits.owner.Config;
+import org.aeonbits.owner.ConfigFactory;
+import org.aeonbits.owner.Mutable;
+import org.sikuli.script.App;
+import org.sikuli.script.Location;
+import org.sikuli.script.Mouse;
+import org.sikuli.script.Region;
+
+import com.github.slidekb.api.AlphaKeyManager;
+import com.github.slidekb.api.HotKeyManager;
+import com.github.slidekb.api.SlideBarPlugin;
+import com.github.slidekb.api.Slider;
+import com.github.slidekb.front.ProcessListSelector;
+import com.google.auto.service.AutoService;
+
 /**
  * Created by JackSec on 3/24/2017.
  */
 @AutoService(SlideBarPlugin.class)
 public class Scroller implements SlideBarPlugin {
 
-    Slider s = new Slider();
+    Slider slider;
 
     ThisConfig cfg;
 
@@ -103,39 +115,39 @@ public class Scroller implements SlideBarPlugin {
 
     @Override
     public void run(String process) {
-        int slideIndex = s.getVirtualPartIndex(virtualparts);
+        int slideIndex = slider.getVirtualPartIndex(virtualparts);
         Location current = Mouse.at();
 
         if (virtualIndex < slideIndex) {
-            s.scrollDown(2);
+            slider.scrollDown(2);
             virtualIndex++;
             System.out.println(slideIndex);
         }
         if (virtualIndex > slideIndex) {
-            s.scrollUp(2);
+            slider.scrollUp(2);
             virtualIndex--;
             System.out.println(slideIndex);
         }
         if (slideIndex == virtualparts - 2) {
-            s.scrollDown(1);
+            slider.scrollDown(1);
             Sleeper(11);
         }
         if (slideIndex == virtualparts - 1) {
-            s.scrollDown(1);
+            slider.scrollDown(1);
             Sleeper(7);
         }
         if (slideIndex == 1) {
-            s.scrollUp(1);
+            slider.scrollUp(1);
             Sleeper(11);
         }
         if (slideIndex == 0) {
-            s.scrollUp(1);
+            slider.scrollUp(1);
             Sleeper(7);
         }
         if (Math.abs(prev.getX() - current.getX()) > 2 || Math.abs(prev.getY() - current.getY()) > 2) {
             if (slideIndex != (virtualparts / 2) && slideIndex != (virtualparts / 2) + 1 && slideIndex != (virtualparts / 2) - 1) {
-                s.writeUntilComplete(500);
-                virtualIndex = s.getVirtualPartIndex(virtualparts);
+                slider.writeUntilComplete(500);
+                virtualIndex = slider.getVirtualPartIndex(virtualparts);
             }
             prev = current;
         }
@@ -256,8 +268,8 @@ public class Scroller implements SlideBarPlugin {
     public void runFirst(String process) {
         System.out.println("Scroller is running!");
         // s.createParts(50);
-        s.writeUntilComplete(512);
-        virtualIndex = s.getVirtualPartIndex(virtualparts);
+        slider.writeUntilComplete(512);
+        virtualIndex = slider.getVirtualPartIndex(virtualparts);
         r = App.focusedWindow();
         prev = Mouse.at();
     }
@@ -270,5 +282,20 @@ public class Scroller implements SlideBarPlugin {
     @Override
     public JFrame getProcessWindow() {
         return pls.createGUI();
+    }
+
+    @Override
+    public void setAlphaKeyManager(AlphaKeyManager alphaKeyManager) {
+        // NOP
+    }
+
+    @Override
+    public void setHotKeyManager(HotKeyManager hotKeyManager) {
+        // NOP
+    }
+
+    @Override
+    public void setSlider(Slider slider) {
+        this.slider = slider;
     }
 }

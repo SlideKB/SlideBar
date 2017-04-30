@@ -16,18 +16,11 @@
 
 package com.github.slidekb.plugins;
 
-import org.aeonbits.owner.Accessible;
-import org.aeonbits.owner.Config;
-import org.aeonbits.owner.ConfigFactory;
-import org.aeonbits.owner.Mutable;
-
-import com.github.slidekb.api.SlideBarPlugin;
-import com.github.slidekb.back.HotKeyManager;
-import com.github.slidekb.back.Slider;
-import com.google.auto.service.AutoService;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -39,15 +32,32 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.WindowConstants;
+
+import org.aeonbits.owner.Accessible;
+import org.aeonbits.owner.Config;
+import org.aeonbits.owner.ConfigFactory;
+import org.aeonbits.owner.Mutable;
+
+import com.github.slidekb.api.AlphaKeyManager;
+import com.github.slidekb.api.HotKeyManager;
+import com.github.slidekb.api.SlideBarPlugin;
+import com.github.slidekb.api.Slider;
+import com.google.auto.service.AutoService;
+
 /**
  * Created by JackSB on 3/12/2017.
  */
 @AutoService(SlideBarPlugin.class)
 public class AltProcess implements SlideBarPlugin {
 
-    HotKeyManager HKM = new HotKeyManager();
+    HotKeyManager hotKeyManager;
 
-    Slider slide = new Slider();
+    Slider slider;
 
     String previous = "";
 
@@ -194,7 +204,7 @@ public class AltProcess implements SlideBarPlugin {
 
     @Override
     public void run(String process) {
-        int slideIndex = slide.getPartIndex();
+        int slideIndex = slider.getPartIndex();
         // System.out.println(slideIndex);
 
         if (virtualIndex < slideIndex) {
@@ -220,10 +230,10 @@ public class AltProcess implements SlideBarPlugin {
             e.printStackTrace();
         }
         virtualIndex = cfg.StartingPart();
-        slide.createParts(cfg.numberOfParts());
-        slide.goToPartComplete(cfg.StartingPart());
-        slide.removeParts();
-        slide.createParts(cfg.numberOfParts());
+        slider.createParts(cfg.numberOfParts());
+        slider.goToPartComplete(cfg.StartingPart());
+        slider.removeParts();
+        slider.createParts(cfg.numberOfParts());
         long start = new Date().getTime();
     }
 
@@ -240,5 +250,20 @@ public class AltProcess implements SlideBarPlugin {
     @Override
     public void reloadPropFile() {
 
+    }
+
+    @Override
+    public void setAlphaKeyManager(AlphaKeyManager alphaKeyManager) {
+        // NOP
+    }
+
+    @Override
+    public void setHotKeyManager(HotKeyManager hotKeyManager) {
+        this.hotKeyManager = hotKeyManager;
+    }
+
+    @Override
+    public void setSlider(Slider slider) {
+        this.slider = slider;
     }
 }
