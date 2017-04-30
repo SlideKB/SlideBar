@@ -35,7 +35,7 @@ public class MainBack implements Runnable {
 
     public static ArrayList<String> prev20List = new ArrayList<String>();
 
-    public static com.github.slidekb.back.PluginManager PM;
+    public static com.github.slidekb.back.PluginManager PM = new PluginManager();
 
     private static KeyHook x;
 
@@ -92,7 +92,7 @@ public class MainBack implements Runnable {
                 System.out.println("Could not connect to a Slider");
                 started = false;
             }
-            setupProcesses();
+            PM.loadProcesses();
         }
         return started;
     }
@@ -215,20 +215,6 @@ public class MainBack implements Runnable {
         } catch (IOException e) {
             System.out.println("Unable to load rxtx native libraries");
         }
-    }
-
-    /**
-     * Connects to arduino serial port, creates policy. loads class files and
-     * adds them to the process list by calling process manager
-     * 
-     * @return
-     */
-    public static void setupProcesses() {
-        PM = new PluginManager();
-        Policy.setPolicy(new PluginPolicy());
-        System.setSecurityManager(new SecurityManager());
-        PM.loadProcesses();
-
     }
 
     /**

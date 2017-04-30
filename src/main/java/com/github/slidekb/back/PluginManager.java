@@ -18,6 +18,7 @@ package com.github.slidekb.back;
 
 import java.util.ArrayList;
 import java.util.ServiceLoader;
+import java.util.concurrent.CountDownLatch;
 
 import com.github.slidekb.api.PlatformSpecific;
 import com.github.slidekb.api.SlideBarPlugin;
@@ -27,6 +28,7 @@ import com.github.slidekb.util.OsHelper;
 public class PluginManager {
 
     private ArrayList<SlideBarPlugin> proci = new ArrayList<>();
+    private CountDownLatch pluginsLoaded = new CountDownLatch(1);
 
     public PluginManager() {
 
@@ -55,7 +57,12 @@ public class PluginManager {
             }
         }
 
+        pluginsLoaded.countDown();
         return true;
+    }
+
+    public void waitUntilProcessesLoaded() throws InterruptedException {
+        pluginsLoaded.await();
     }
 
     public ArrayList<SlideBarPlugin> getProci() {

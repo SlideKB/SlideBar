@@ -108,19 +108,19 @@ public class MainFront {
             contentPane.add(comboBox, gbc_comboBox);
 
             ArrayList<String> arrayProcess = new ArrayList<String>();
-            System.out.println(MainBack.PM == null);
-            do {
-                System.out.println("waiting for proci");
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+
+            try {
+                MainBack.PM.waitUntilProcessesLoaded();
+
+                for (SlideBarPlugin p : MainBack.PM.getProci()) {
+                    arrayProcess.add(p.getLabelName());
                 }
-            } while (MainBack.PM == null);
-            for (SlideBarPlugin p : MainBack.PM.getProci()) {
-                arrayProcess.add(p.getLabelName());
+
+                System.out.println(arrayProcess.toString());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            System.out.println(arrayProcess.toString());
+
             String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
 
             JList<String> processList = new JList<>(proci);
