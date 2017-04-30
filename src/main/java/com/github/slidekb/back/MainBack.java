@@ -52,7 +52,7 @@ public class MainBack implements Runnable {
 
     @Override
     public void run() {
-         FirstLoad();
+        FirstLoad();
     }
 
     public static void FirstLoad() {
@@ -85,7 +85,7 @@ public class MainBack implements Runnable {
             PortManager portMan = new PortManager();
             portMan.findAndConnect();
             System.out.println(portMan.getArduinos().length);
-            if (portMan.getArduinos().length != 0){
+            if (portMan.getArduinos().length != 0) {
                 arduino = portMan.getArduinos()[0];
                 started = true;
             } else {
@@ -124,22 +124,22 @@ public class MainBack implements Runnable {
                 Thread.sleep(1);
             } catch (Exception e) {
             }
-            String AP = ActiveProcess.getProcess();
-            String HK = Arrays.toString(KeyHook.getHotKeys());
+            String activeProcess = ActiveProcess.getProcess();
+            String hotKeys = Arrays.toString(KeyHook.getHotKeys());
             // System.out.println(ard.read());
             // System.out.println(AP);
             for (SlideBarPlugin p : PM.getProci()) {
                 for (String processName : p.getProcessNames()) {
-                    if (processName.contentEquals(HK)) {
+                    if (processName.contentEquals(hotKeys)) {
                         exe = false;
                     }
                 }
             }
             if (!exe) {
-                if (!previous.equals(HK)) {
+                if (!previous.equals(hotKeys)) {
                     for (SlideBarPlugin p : PM.getProci()) {
                         for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(HK)) {
+                            if (processName.contentEquals(hotKeys)) {
                                 System.out.println("process change");
                                 previous = processName;
                                 arduino.createParts(0);
@@ -150,7 +150,7 @@ public class MainBack implements Runnable {
                 } else {
                     for (SlideBarPlugin p : PM.getProci()) {
                         for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(HK)) {
+                            if (processName.contentEquals(hotKeys)) {
                                 previous = processName;
                                 p.run(processName);
                             }
@@ -158,12 +158,12 @@ public class MainBack implements Runnable {
                     }
                 }
             } else {
-                if (!previous.equals(AP)) {
-                    updatePrevList(AP);
+                if (!previous.equals(activeProcess)) {
+                    updatePrevList(activeProcess);
                     arduino.createParts(0);
                     for (SlideBarPlugin p : PM.getProci()) {
                         for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(AP)) {
+                            if (processName.contentEquals(activeProcess)) {
                                 System.out.println("process change");
                                 previous = processName;
                                 p.runFirst(processName);
@@ -173,7 +173,7 @@ public class MainBack implements Runnable {
                 } else {
                     for (SlideBarPlugin p : PM.getProci()) {
                         for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(AP)) {
+                            if (processName.contentEquals(activeProcess)) {
                                 previous = processName;
                                 p.run(processName);
 
@@ -184,9 +184,9 @@ public class MainBack implements Runnable {
             }
 
             if (exe) {
-                previous = AP;
+                previous = activeProcess;
             } else {
-                previous = HK;
+                previous = hotKeys;
             }
 
         }
