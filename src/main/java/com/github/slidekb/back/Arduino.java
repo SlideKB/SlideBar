@@ -16,7 +16,6 @@
 
 package com.github.slidekb.back;
 
-import gnu.io.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,7 +25,15 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
+import javafx.application.Platform;
+import jssc.SerialPort;
+import jssc.SerialPortEvent;
+import jssc.SerialPortEventListener;
+import jssc.SerialPortException;
 
 /**
  * Created by JackSB on 3/12/2017.
@@ -94,111 +101,56 @@ public class Arduino implements SerialPortEventListener {
 
 
     public void initialize() {
-        CommPortIdentifier portId = null;
+    	connectedAndSlider = false;
+		SerialPort serialPort = new SerialPort(portName);
+		try {
+			serialPort.openPort();
+			serialPort.setParams(SerialPort.BAUDRATE_115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
+					SerialPort.PARITY_NONE);
+			serialPort.addEventListener((SerialPortEvent serialPortEvent) -> {
 
-        @SuppressWarnings("unchecked")
-        Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
+				try {
+					String st = serialPort.readString(serialPortEvent.getEventValue());
+					st = st.trim();
+					
+					try {
+						reading = Integer.parseInt(st);
+					} catch (Exception e){
+					}
+				} catch (SerialPortException ex) {
+					ex.printStackTrace();
+				}
 
-        if (true) {
-            while (portEnum.hasMoreElements()) {
-                CommPortIdentifier currPortId = portEnum.nextElement();
-                if (currPortId.getName().equals(portName)) {
-                    System.out.println(currPortId.getName() + " - " + getPortTypeName(currPortId.getPortType()));
-                    portId = currPortId;
-                    break;
-                }
-            }
-        }
-        if (portId == null) {
-            System.out.println("Could not find COM port.");
-            connectedAndSlider = false;
-            return;
-        }
-        try {
-            // open serial port, and use class name for the appName.
-            serialPort = (gnu.io.SerialPort) portId.open(this.getClass().getName(), TIME_OUT);
-
-            // set port parameters
-            serialPort.setSerialPortParams(DATA_RATE, gnu.io.SerialPort.DATABITS_8, gnu.io.SerialPort.STOPBITS_1, gnu.io.SerialPort.PARITY_NONE);
-
-            // open the streams
-            input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-            output = serialPort.getOutputStream();
-            // add event listeners
-            serialPort.addEventListener(this);
-            serialPort.notifyOnDataAvailable(true);
-            Thread.sleep(3000);
-        } catch (gnu.io.PortInUseException e){
-            System.out.println("Port is already in Use!");
-            return;
-        } catch (Exception e) {
-            System.err.println(e.toString());
-            return;
-        }
-        write(2424);
-
-        try {
-            String tempID = input.readLine();
-            if (tempID.startsWith("m") || tempID.startsWith("l")){
-                System.out.println("Slider ID: " + tempID);
-                ID = tempID;
-            }
-        } catch (IOException e) {
-
-        }
-        System.out.println("This 'slider' is currently at: " + reading);
+			});
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			serialPort.readBytes(serialPort.getOutputBufferBytesCount());
+		
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+			serialPort.writeBytes("2424]".getBytes());
+			ID = serialPort.readString(4);
+			this.serialPort = serialPort;
+			
+		} catch (SerialPortException ex) {
+			System.out.println("SerialPortException: " + ex.toString());
+		}
         if (reading == 0) {
-            System.out.println("[Not a slider!]");
-            serialPort.close();
+            System.out.println("[Not a slider at " + portName + "]");
             connectedAndSlider = false;
         } else {
-            System.out.println("[Found a valid slider!]");
+            System.out.println("[Found a valid slider]");
+            System.out.println("Port: " + portName);
+            System.out.println("ID: " + ID);
             connectedAndSlider = true;
         }
-    }
-
-    static String getPortTypeName(int portType) {
-        switch (portType) {
-        case CommPortIdentifier.PORT_I2C:
-            return "I2C";
-        case CommPortIdentifier.PORT_PARALLEL:
-            return "Parallel";
-        case CommPortIdentifier.PORT_RAW:
-            return "Raw";
-        case CommPortIdentifier.PORT_RS485:
-            return "RS485";
-        case CommPortIdentifier.PORT_SERIAL:
-            return "Serial";
-        default:
-            return "unknown type";
-        }
-    }
-
-    // static void listPorts()
-    // {
-    // java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
-    // while ( portEnum.hasMoreElements() )
-    // {
-    // CommPortIdentifier portIdentifier = portEnum.nextElement();
-    //// System.out.println(portIdentifier.getName() + " - " + getPortTypeName(portIdentifier.getPortType()) );
-    // }
-    // }
-
-    /**
-     * Handle an event on the serial port. Read the data and print it.
-     */
-    public synchronized void serialEvent(SerialPortEvent oEvent) {
-        if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
-            try {
-                while (input.ready()) {
-                    String inputLine = input.readLine();
-                    // System.out.println(inputLine);
-                    reading = Integer.parseInt(inputLine);
-                }
-            } catch (Exception e) {
-            }
-        }
-        // Ignore all the other eventTypes, but you should consider the other ones.
     }
 
     public int read() {
@@ -215,8 +167,18 @@ public class Arduino implements SerialPortEventListener {
      */
     public synchronized void close() {
         if (serialPort != null) {
-            serialPort.removeEventListener();
-            serialPort.close();
+            try {
+				serialPort.removeEventListener();
+			} catch (SerialPortException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            try {
+				serialPort.closePort();
+			} catch (SerialPortException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
     }
 
@@ -224,13 +186,20 @@ public class Arduino implements SerialPortEventListener {
         if (send == 2000) {
 
         }
+//        try {
+//            output.flush();
+//            output.write((send + "]").getBytes());
+//            System.out.println("Writing to " + ID + ": " + send);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        String toSend = send + "]";
         try {
-            output.flush();
-            output.write((send + "]").getBytes());
-            System.out.println("Writing to " + ID + ": " + send);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			serialPort.writeString(toSend);
+		} catch (SerialPortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -358,5 +327,11 @@ public class Arduino implements SerialPortEventListener {
         // write(5000+amount);
         robot.mouseWheel(amount * -1);
     }
+
+	@Override
+	public void serialEvent(SerialPortEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

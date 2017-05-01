@@ -19,92 +19,108 @@ package com.github.slidekb.back;
 import com.github.slidekb.api.Slider;
 
 public class SliderImpl implements Slider {
+	
+	int location = 0;
+	
+	Arduino arduino = null;
 
-    public SliderImpl() {
-
+    public SliderImpl(String ID) {
+    	arduino = MainBack.portMan.getArduinoFromID(ID);
+    }
+    
+    public SliderImpl(){
+    	
+    }
+    
+    /**
+	 * defines what slider to read and write from based of slider ID.
+	 * @param ID
+	 */
+    public void defineSlider(String ID){
+    	arduino = MainBack.portMan.getArduinoFromID(ID);
     }
 
     public void bumpRight(int milliseconds) {
-        MainBack.arduino.bumpRight(milliseconds);
+        arduino.bumpRight(milliseconds);
     }
 
     public void bumpLeft(int milliseconds) {
-        MainBack.arduino.bumpLeft(milliseconds);
+        arduino.bumpLeft(milliseconds);
     }
 
     public void writeUntilComplete(int given) {
-        MainBack.arduino.writeUntilComplete(given);
+    	arduino.writeUntilComplete(given);
     }
 
     public void writeUntilComplete(double given) {
-        MainBack.arduino.writeUntilComplete((int) given);
+    	arduino.writeUntilComplete((int) given);
     }
 
     public void writeUntilComplete(String given) {
-        MainBack.arduino.writeUntilComplete(Integer.parseInt(given));
+    	arduino.writeUntilComplete(Integer.parseInt(given));
     }
 
     public void write(int given) {
-        MainBack.arduino.write(given);
+    	arduino.write(given);
     }
 
     public void goToPart(int index) {
-        MainBack.arduino.goToPart(index);
+    	arduino.goToPart(index);
     }
 
     public void goToPartComplete(int index) {
-        MainBack.arduino.goToPartComplete(index);
+    	arduino.goToPartComplete(index);
     }
 
     public void goToPartComplete(int index, int numberOfParts) {
-        MainBack.arduino.goToPartComplete(index, numberOfParts);
+    	arduino.goToPartComplete(index, numberOfParts);
     }
 
     public int readPart(int numberOfParts) {
-        return MainBack.arduino.getPartIndex(numberOfParts);
+        return arduino.getPartIndex(numberOfParts);
     }
 
     public int read() {
-        return MainBack.arduino.read();
+        return arduino.read();
     }
 
     public void createParts(int numberOfParts) {
-        MainBack.arduino.createParts(numberOfParts);
+    	arduino.createParts(numberOfParts);
     }
 
     public int getPartIndex() {
-        return MainBack.arduino.getPartIndex();
+        return arduino.getPartIndex();
     }
 
     public int getPartIndex(int numberOfParts) {
-        return MainBack.arduino.getPartIndex(numberOfParts);
+        return arduino.getPartIndex(numberOfParts);
     }
 
     public void removeParts() {
-        MainBack.arduino.removeParts();
+    	arduino.removeParts();
     }
 
     public void shiftRight(int distance) {
-        MainBack.arduino.shiftRight(distance);
+    	arduino.shiftRight(distance);
     }
 
     public void shiftLeft(int distance) {
-        MainBack.arduino.shiftLeft(distance);
+    	arduino.shiftLeft(distance);
     }
 
     public void vibrate(int amount) {
-        MainBack.arduino.vibrate(amount);
+    	arduino.vibrate(amount);
     }
 
     public void scrollUp(int amount) {
-        MainBack.arduino.scrollUp(amount);
+    	arduino.scrollUp(amount);
     }
 
     public void scrollDown(int amount) {
-        MainBack.arduino.scrollDown(amount);
+    	arduino.scrollDown(amount);
     }
 
     public int getVirtualPartIndex(int parts) {
-        return MainBack.arduino.getPartIndex(parts);
+        return arduino.getPartIndex(parts);
     }
 }

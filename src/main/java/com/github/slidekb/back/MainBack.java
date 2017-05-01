@@ -33,7 +33,7 @@ import com.github.slidekb.util.NativeUtils;
 
 public class MainBack implements Runnable {
 
-    protected static Arduino arduino;
+    protected static Arduino[] arduino;
 
     public static ArrayList<String> prev20List = new ArrayList<String>();
 
@@ -50,6 +50,8 @@ public class MainBack implements Runnable {
     static AlphaKeyManager alphaKeyManager = new AlphaKeyManagerImpl();
 
     static HotKeyManager hotKeyManager = new HotKeyManagerImpl();
+    
+    static PortManager portMan = new PortManager();
 
     static Slider slider = new SliderImpl();
 
@@ -78,8 +80,9 @@ public class MainBack implements Runnable {
     }
 
     public static void testVibrate(int amount) {
-        arduino.vibrate(5);
-
+    	for (Arduino a: arduino){
+    		a.vibrate(5);
+    	}
     }
 
     public static boolean isStarted() {
@@ -90,11 +93,10 @@ public class MainBack implements Runnable {
         // connect and write to arduino
         if (started == false) {
             System.out.println("starting plugins");
-            PortManager portMan = new PortManager();
             portMan.findAndConnect();
             System.out.println(portMan.getArduinos().length);
             if (portMan.getArduinos().length != 0) {
-                arduino = portMan.getArduinos()[0];
+                arduino = portMan.getArduinos();
                 started = true;
             } else {
                 System.out.println("Could not connect to a Slider");
@@ -150,7 +152,6 @@ public class MainBack implements Runnable {
                             if (processName.contentEquals(hotKeys)) {
                                 System.out.println("process change");
                                 previous = processName;
-                                arduino.createParts(0);
                                 p.runFirst(processName);
                             }
                         }
@@ -168,7 +169,6 @@ public class MainBack implements Runnable {
             } else {
                 if (!previous.equals(activeProcess)) {
                     updatePrevList(activeProcess);
-                    arduino.createParts(0);
                     for (SlideBarPlugin p : PM.getProci()) {
                         for (String processName : p.getProcessNames()) {
                             if (processName.contentEquals(activeProcess)) {
@@ -233,7 +233,9 @@ public class MainBack implements Runnable {
      */
     public static Boolean stop() {
         System.out.println("stopping");
-        arduino.close();
+        for(Arduino a: arduino){
+        	a.close();
+        }
         PM.removeProci(true);
         started = false;
         return true;

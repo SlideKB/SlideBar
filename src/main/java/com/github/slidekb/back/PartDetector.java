@@ -18,40 +18,40 @@ package com.github.slidekb.back;
 
 public class PartDetector {
 	
-	private int NumberOfParts;
-	
-	private Arduino arduino;
-	
-	private int LocalPartIndex;
-	
-	public PartDetector(int numberOfParts){
-		this.NumberOfParts = numberOfParts;
-		this.arduino = MainBack.arduino;   
-	}
-	
-	public int getPartIndex(){
-		LocalPartIndex = arduino.getPartIndex(NumberOfParts);
-		return LocalPartIndex;
-	}
-	
-	public void goToPartComplete(int index){
-		arduino.goToPartComplete(index, NumberOfParts);
-		LocalPartIndex = index;
-	}
-
-	public void goToPart(int index){
-		arduino.goToPart(index, NumberOfParts);
-		LocalPartIndex = index;
-	}
-	
-	public void goToPartCompleteIncognito(int index){
-		arduino.goToPartComplete(index, NumberOfParts);
-	}
-	
-	public int difference(){
-		int temp = arduino.getPartIndex(NumberOfParts);
-		int temp2 = LocalPartIndex;
-		LocalPartIndex = arduino.getPartIndex(NumberOfParts);
-		return temp - temp2;
-	}
+//	private int NumberOfParts;
+//	
+//	private Arduino arduino;
+//	
+//	private int LocalPartIndex;
+//	
+//	public PartDetector(int numberOfParts){
+//		this.NumberOfParts = numberOfParts;
+//		this.arduino = MainBack.arduino;   
+//	}
+//	
+//	public int getPartIndex(){
+//		LocalPartIndex = arduino.getPartIndex(NumberOfParts);
+//		return LocalPartIndex;
+//	}
+//	
+//	public void goToPartComplete(int index){
+//		arduino.goToPartComplete(index, NumberOfParts);
+//		LocalPartIndex = index;
+//	}
+//
+//	public void goToPart(int index){
+//		arduino.goToPart(index, NumberOfParts);
+//		LocalPartIndex = index;
+//	}
+//	
+//	public void goToPartCompleteIncognito(int index){
+//		arduino.goToPartComplete(index, NumberOfParts);
+//	}
+//	
+//	public int difference(){
+//		int temp = arduino.getPartIndex(NumberOfParts);
+//		int temp2 = LocalPartIndex;
+//		LocalPartIndex = arduino.getPartIndex(NumberOfParts);
+//		return temp - temp2;
+//	}
 }

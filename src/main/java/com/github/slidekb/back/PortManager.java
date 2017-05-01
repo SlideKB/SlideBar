@@ -1,8 +1,10 @@
 package com.github.slidekb.back;
 
-import gnu.io.CommPortIdentifier;
+import javafx.collections.ObservableList;
+import jssc.SerialPortList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by JackSec on 4/28/2017.
@@ -10,6 +12,10 @@ import java.util.ArrayList;
 public class PortManager {
 
     private ArrayList<Arduino> arduinos = new ArrayList<>();
+    
+	private ObservableList<Object> portList;
+	
+	HashMap<String, Arduino> arduinoHash = new HashMap<String, Arduino>();
 
     public PortManager(){
 
@@ -20,8 +26,24 @@ public class PortManager {
         temp.initialize();
         if (temp.isConnectedAndSlider()){
             arduinos.add(temp);
+            arduinoHash.put(temp.getID(), temp);
+            if (arduinos.size() == 1){
+            	arduinoHash.put("default", temp);
+            }
         }
         return temp.isConnectedAndSlider();
+    }
+    
+    public Arduino getArduinoFromID(String ID){
+		return arduinoHash.get(ID);
+    }
+    
+    public String[] getAllArduinoID(){
+    	String[] temp = new String[arduinos.size()];
+    	for (int i = 0; i < arduinos.size(); i++){
+    		temp[i] = arduinos.get(i).getID();
+    	}
+    	return temp;
     }
 
     public Arduino[] getArduinos(){
@@ -31,46 +53,11 @@ public class PortManager {
     public void findAndConnect(){
         for (String s: getPortList(0)){
             addArduino(s);
-
         }
     }
 
     public static String[] getPortList(int index) {
-        ArrayList<String> temp = new ArrayList<String>();
-
-        @SuppressWarnings("unchecked")
-        java.util.Enumeration<CommPortIdentifier> portEnum = CommPortIdentifier.getPortIdentifiers();
-
-        int counter = 0;
-        while (portEnum.hasMoreElements()) {
-            CommPortIdentifier portIdentifier = portEnum.nextElement();
-            if (getPortTypeName(portIdentifier.getPortType()) == "Serial") {
-                if (counter == index) {
-                    temp.add(portIdentifier.getName());
-                } else {
-                    counter++;
-                }
-
-            }
-
-        }
-        return temp.toArray(new String[temp.size()]);
-    }
-
-    private static String getPortTypeName(int portType) {
-        switch (portType) {
-            case CommPortIdentifier.PORT_I2C:
-                return "I2C";
-            case CommPortIdentifier.PORT_PARALLEL:
-                return "Parallel";
-            case CommPortIdentifier.PORT_RAW:
-                return "Raw";
-            case CommPortIdentifier.PORT_RS485:
-                return "RS485";
-            case CommPortIdentifier.PORT_SERIAL:
-                return "Serial";
-            default:
-                return "unknown type";
-        }
+    	System.out.println("Getting port list");
+    	return SerialPortList.getPortNames();
     }
 }

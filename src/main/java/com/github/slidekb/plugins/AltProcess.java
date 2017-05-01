@@ -87,6 +87,7 @@ public class AltProcess implements SlideBarPlugin {
 
     private boolean loadConfiguration() {
         cfg = ConfigFactory.create(ThisConfig.class);
+        
         return true;
     }
 
@@ -200,6 +201,10 @@ public class AltProcess implements SlideBarPlugin {
 
         @DefaultValue("0")
         int StartingPart();
+        
+        @DefaultValue("default")
+        String SliderID();
+        
     }
 
     @Override
@@ -229,6 +234,7 @@ public class AltProcess implements SlideBarPlugin {
         } catch (AWTException e) {
             e.printStackTrace();
         }
+        slider.defineSlider(cfg.SliderID());
         virtualIndex = cfg.StartingPart();
         slider.createParts(cfg.numberOfParts());
         slider.goToPartComplete(cfg.StartingPart());
