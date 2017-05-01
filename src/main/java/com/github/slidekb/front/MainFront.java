@@ -109,16 +109,8 @@ public class MainFront {
 
             ArrayList<String> arrayProcess = new ArrayList<String>();
 
-            try {
-                MainBack.PM.waitUntilProcessesLoaded();
-
-                for (SlideBarPlugin p : MainBack.PM.getProci()) {
-                    arrayProcess.add(p.getLabelName());
-                }
-
-                System.out.println(arrayProcess.toString());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            for (SlideBarPlugin p : MainBack.PM.getProci()) {
+                arrayProcess.add(p.getLabelName());
             }
 
             String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
@@ -375,9 +367,11 @@ public class MainFront {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Thread back = new Thread(new MainBack());
         back.start();
+        MainBack.PM.waitUntilProcessesLoaded();
+
         createAndShowGUI();
         setupTray();
     }
