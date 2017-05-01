@@ -69,6 +69,7 @@ public class MainBack implements Runnable {
         loadNativeLibraries();
         setupKeyHook();
         startIt("Auto");
+        
         while (started) {
             try {
                 Run();
@@ -92,6 +93,15 @@ public class MainBack implements Runnable {
     public static boolean startIt(String port) {
         // connect and write to arduino
         if (started == false) {
+//        	Arduino fake = new FakeArduino("m1n4", "COM69");
+//            fake.write(400);
+//            fake.bumpLeft(500);
+//            fake.writeUntilComplete(1);
+//            fake.writeUntilComplete(1000);
+//            fake.writeUntilComplete(1);
+//            fake.writeUntilComplete(1000);
+//            fake.writeUntilComplete(1);
+//            fake.writeUntilComplete(1000);
             System.out.println("starting plugins");
             portMan.findAndConnect();
             System.out.println(portMan.getArduinos().length);

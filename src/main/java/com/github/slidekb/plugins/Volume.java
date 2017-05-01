@@ -29,6 +29,7 @@ import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigFactory;
 import org.aeonbits.owner.Mutable;
+import org.aeonbits.owner.Config.DefaultValue;
 
 import com.github.slidekb.api.AlphaKeyManager;
 import com.github.slidekb.api.HotKeyManager;
@@ -83,13 +84,14 @@ public class Volume implements SlideBarPlugin {
 
     @Config.Sources({ "classpath:configs/Volume.properties" })
     private interface ThisConfig extends Accessible, Mutable {
-
+    	@DefaultValue("default")
+        String SliderID();
     }
 
     public int getVolume() {
         String Volume = "0";
         try {
-            Runtime.getRuntime().exec("src/ahk_scripts/AudioToFile.exe", null, new File("src/ahk_scripts/"));
+            Runtime.getRuntime().exec("ahk_scripts/AudioToFile.exe", null, new File("ahk_scripts/"));
         } catch (IOException e) {
 
         }
@@ -99,7 +101,7 @@ public class Volume implements SlideBarPlugin {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        File f = new File("src/ahk_scripts/AudioLevel.txt");
+        File f = new File("ahk_scripts/AudioLevel.txt");
         try {
             Scanner s = new Scanner(f);
             if (s.hasNext()) {
@@ -137,7 +139,7 @@ public class Volume implements SlideBarPlugin {
 
     public void setVolume(int value) {
         try {
-            Runtime.getRuntime().exec("src/ahk_scripts/AHKvolumeexes/" + value + ".exe", null, new File("src/ahk_scripts/AHKvolumeexes/"));
+            Runtime.getRuntime().exec("ahk_scripts/AHKvolumeexes/" + value + ".exe", null, new File("ahk_scripts/AHKvolumeexes/"));
             System.out.println("it ran");
         } catch (IOException e) {
             System.out.println("no file found");
@@ -150,6 +152,8 @@ public class Volume implements SlideBarPlugin {
     }
 
     private void writeValues() {
+    	slider.defineSlider(cfg.SliderID());
+    	slider.removeParts();
         slider.goToPartComplete(100 - getVolume(), 101);
         for (int i = 0; i < PartLatch.length; i++) {
             PartLatch[i] = true;

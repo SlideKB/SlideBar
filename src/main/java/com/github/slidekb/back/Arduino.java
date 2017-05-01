@@ -67,15 +67,17 @@ public class Arduino implements SerialPortEventListener {
     /**
      * current value of the arduino
      **/
-    private int reading = 0;
+    protected int reading = 0;
 
-    private int numberOfParts;
+    protected int numberOfParts;
 
-    private String portName;
+    protected String portName;
 
-    private String ID;
+    protected String ID;
 
-    private boolean connectedAndSlider;
+    protected boolean connectedAndSlider;
+    
+    protected boolean isFakeArduino;
 
     protected Arduino(String Port) {
         portName = Port;
@@ -166,6 +168,10 @@ public class Arduino implements SerialPortEventListener {
      * This will prevent port locking on platforms like Linux.
      */
     public synchronized void close() {
+    	if (isFakeArduino){
+    		System.out.println("Closing Fake port");
+    		return;
+    	}
         if (serialPort != null) {
             try {
 				serialPort.removeEventListener();
@@ -183,16 +189,6 @@ public class Arduino implements SerialPortEventListener {
     }
 
     public void write(int send) {
-        if (send == 2000) {
-
-        }
-//        try {
-//            output.flush();
-//            output.write((send + "]").getBytes());
-//            System.out.println("Writing to " + ID + ": " + send);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         String toSend = send + "]";
         try {
 			serialPort.writeString(toSend);
