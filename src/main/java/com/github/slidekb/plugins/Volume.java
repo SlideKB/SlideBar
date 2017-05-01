@@ -74,7 +74,6 @@ public class Volume implements SlideBarPlugin {
 
     private boolean loadConfiguration() {
         cfg = ConfigFactory.create(ThisConfig.class);
-        hotKeyManager.addKey("0");
         return true;
     }
 
@@ -185,6 +184,7 @@ public class Volume implements SlideBarPlugin {
     @Override
     public void setHotKeyManager(HotKeyManager hotKeyManager) {
         this.hotKeyManager = hotKeyManager;
+        hotKeyManager.addKey("0");
     }
 
     @Override
