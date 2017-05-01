@@ -10,6 +10,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<mainClass>com.github.slidekb.front.MainFront</mainClass>
+		<jarName>${project.artifactId}-${project.version}</jarName>
 	</properties>
 
 	<dependencies>
@@ -78,6 +79,8 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+					<finalName>${jarName}</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 				<executions>
 					<execution>
@@ -103,7 +106,7 @@
 							<executable>java</executable>
 							<arguments>
 								<argument>-jar</argument>
-								<argument>${basedir}/target/${project.artifactId}-${project.version}-jar-with-dependencies.jar</argument>
+								<argument>${project.build.directory}/${jarName}.jar</argument>
 							</arguments>
 						</configuration>
 					</execution>
