@@ -92,6 +92,8 @@ public class MainBack implements Runnable {
     public static boolean startIt(String port) {
         // connect and write to arduino
         if (started == false) {
+            System.out.println("Discovering Arduinos");
+
             // Arduino fake = new FakeArduino("m1n4", "COM69");
             // fake.write(400);
             // fake.bumpLeft(500);
@@ -101,7 +103,6 @@ public class MainBack implements Runnable {
             // fake.writeUntilComplete(1000);
             // fake.writeUntilComplete(1);
             // fake.writeUntilComplete(1000);
-            System.out.println("starting plugins");
 
             portMan.findAndConnect();
             System.out.println(portMan.getArduinos().size());

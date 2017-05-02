@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import jssc.SerialPortList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -36,15 +37,18 @@ public class PortManager {
 
     }
 
-    protected boolean addArduino(String Port) {
-        Arduino temp = new Arduino(Port);
+    protected boolean addArduino(String port) {
+        Arduino temp = new Arduino(port);
+        System.out.println("before initialize()");
         temp.initialize();
+        System.out.println("after initialize()");
         if (temp.isConnectedAndSlider()) {
             arduinoHash.put(temp.getID(), temp);
             if (arduinoHash.size() == 1) {
                 arduinoHash.put("default", temp);
             }
         }
+
         return temp.isConnectedAndSlider();
     }
 
@@ -67,6 +71,11 @@ public class PortManager {
     public void findAndConnect() {
         for (String s : getPortList(0)) {
             addArduino(s);
+        }
+
+        // If it still doesn't have a default, no physical Arduinos are connected - use a fake one then
+        if (arduinoHash.isEmpty()) {
+            arduinoHash.put("default", new FakeArduino("m1n4", "COM69"));
         }
     }
 
