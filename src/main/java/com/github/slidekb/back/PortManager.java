@@ -16,20 +16,15 @@
 
 package com.github.slidekb.back;
 
-import javafx.collections.ObservableList;
-import jssc.SerialPortList;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+
+import jssc.SerialPortList;
 
 /**
  * Created by JackSec on 4/28/2017.
  */
 public class PortManager {
-
-    private ObservableList<Object> portList;
 
     HashMap<String, Arduino> arduinoHash = new HashMap<String, Arduino>();
 
@@ -38,18 +33,20 @@ public class PortManager {
     }
 
     protected boolean addArduino(String port) {
-        Arduino temp = new Arduino(port);
+        Arduino currentArduino = new Arduino(port);
         System.out.println("before initialize()");
-        temp.initialize();
+        currentArduino.initialize();
         System.out.println("after initialize()");
-        if (temp.isConnectedAndSlider()) {
-            arduinoHash.put(temp.getID(), temp);
-            if (arduinoHash.size() == 1) {
-                arduinoHash.put("default", temp);
+
+        if (currentArduino.isConnectedAndSlider()) {
+            if (arduinoHash.isEmpty()) {
+                arduinoHash.put("default", currentArduino);
             }
+
+            arduinoHash.put(currentArduino.getID(), currentArduino);
         }
 
-        return temp.isConnectedAndSlider();
+        return currentArduino.isConnectedAndSlider();
     }
 
     public Arduino getArduinoFromID(String ID) {
@@ -75,7 +72,7 @@ public class PortManager {
 
         // If it still doesn't have a default, no physical Arduinos are connected - use a fake one then
         if (arduinoHash.isEmpty()) {
-        	System.out.println("creating fake arduino");
+            System.out.println("creating fake arduino");
             arduinoHash.put("default", new FakeArduino("m1n4", "COM69"));
         }
     }
