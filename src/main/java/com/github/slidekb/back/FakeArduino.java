@@ -17,49 +17,49 @@
 package com.github.slidekb.back;
 
 public class FakeArduino extends Arduino {
-	
-	private String givenID;
 
-	FakeArduino(String givenID, String portName){
-		super(portName);
-		isFakeArduino = true;
-		this.givenID = givenID;
-	}
-	
-	@Override
-	public void initialize() {
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		ID = givenID;
-		System.out.println("[connecting to FAKE arduino]");
-		System.out.println("Port: " + portName);
-		System.out.println("ID: " + ID);
-		connectedAndSlider = true;
-	}
-    
-    @Override
-    public int read(){
-    	System.out.println(reading);
-    	return reading;
+    private String givenID;
+
+    FakeArduino(String givenID, String portName) {
+        super(portName);
+        isFakeArduino = true;
+        this.givenID = givenID;
     }
-    
+
     @Override
-    public void writeUntilComplete(int send){
-    	try {
-			Thread.sleep(Math.abs(send-reading));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-    	write(send);
+    public void initialize() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        ID = givenID;
+        System.out.println("[connecting to FAKE arduino]");
+        System.out.println("Port: " + portName);
+        System.out.println("ID: " + ID);
+        connectedAndSlider = true;
     }
-    
+
     @Override
-    public void write(int send){
-    	System.out.println("Writing to Fake arduino: " + send);
-    	reading = send;
+    public int read() {
+        System.out.println(reading);
+        return reading;
+    }
+
+    @Override
+    public void writeUntilComplete(int send) {
+        try {
+            Thread.sleep(Math.abs(send - reading));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        write(send);
+    }
+
+    @Override
+    public void write(int send) {
+        System.out.println("Writing to Fake arduino: " + send);
+        reading = send;
     }
 }

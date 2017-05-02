@@ -76,7 +76,7 @@ public class Arduino implements SerialPortEventListener {
     protected String ID;
 
     protected boolean connectedAndSlider;
-    
+
     protected boolean isFakeArduino;
 
     protected Arduino(String Port) {
@@ -89,61 +89,59 @@ public class Arduino implements SerialPortEventListener {
         }
     }
 
-    protected boolean isConnectedAndSlider(){
+    protected boolean isConnectedAndSlider() {
         return connectedAndSlider;
     }
 
-    public String getPortName(){
+    public String getPortName() {
         return portName;
     }
 
-    public String getID(){
+    public String getID() {
         return ID;
     }
 
-
     public void initialize() {
-    	connectedAndSlider = false;
-		SerialPort serialPort = new SerialPort(portName);
-		try {
-			serialPort.openPort();
-			serialPort.setParams(SerialPort.BAUDRATE_115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
-					SerialPort.PARITY_NONE);
-			serialPort.addEventListener((SerialPortEvent serialPortEvent) -> {
+        connectedAndSlider = false;
+        SerialPort serialPort = new SerialPort(portName);
+        try {
+            serialPort.openPort();
+            serialPort.setParams(SerialPort.BAUDRATE_115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+            serialPort.addEventListener((SerialPortEvent serialPortEvent) -> {
 
-				try {
-					String st = serialPort.readString(serialPortEvent.getEventValue());
-					st = st.trim();
-					
-					try {
-						reading = Integer.parseInt(st);
-					} catch (Exception e){
-					}
-				} catch (SerialPortException ex) {
-					ex.printStackTrace();
-				}
+                try {
+                    String st = serialPort.readString(serialPortEvent.getEventValue());
+                    st = st.trim();
 
-			});
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			serialPort.readBytes(serialPort.getOutputBufferBytesCount());
-		
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				
-				e.printStackTrace();
-			}
-			serialPort.writeBytes("2424]".getBytes());
-			ID = serialPort.readString(4);
-			this.serialPort = serialPort;
-			
-		} catch (SerialPortException ex) {
-			System.out.println("SerialPortException: " + ex.toString());
-		}
+                    try {
+                        reading = Integer.parseInt(st);
+                    } catch (Exception e) {
+                    }
+                } catch (SerialPortException ex) {
+                    ex.printStackTrace();
+                }
+
+            });
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            serialPort.readBytes(serialPort.getOutputBufferBytesCount());
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+
+                e.printStackTrace();
+            }
+            serialPort.writeBytes("2424]".getBytes());
+            ID = serialPort.readString(4);
+            this.serialPort = serialPort;
+
+        } catch (SerialPortException ex) {
+            System.out.println("SerialPortException: " + ex.toString());
+        }
         if (reading == 0) {
             System.out.println("[Not a slider at " + portName + "]");
             connectedAndSlider = false;
@@ -168,34 +166,34 @@ public class Arduino implements SerialPortEventListener {
      * This will prevent port locking on platforms like Linux.
      */
     public synchronized void close() {
-    	if (isFakeArduino){
-    		System.out.println("Closing Fake port");
-    		return;
-    	}
+        if (isFakeArduino) {
+            System.out.println("Closing Fake port");
+            return;
+        }
         if (serialPort != null) {
             try {
-				serialPort.removeEventListener();
-			} catch (SerialPortException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+                serialPort.removeEventListener();
+            } catch (SerialPortException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
             try {
-				serialPort.closePort();
-			} catch (SerialPortException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+                serialPort.closePort();
+            } catch (SerialPortException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 
     public void write(int send) {
         String toSend = send + "]";
         try {
-			serialPort.writeString(toSend);
-		} catch (SerialPortException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            serialPort.writeString(toSend);
+        } catch (SerialPortException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -324,10 +322,10 @@ public class Arduino implements SerialPortEventListener {
         robot.mouseWheel(amount * -1);
     }
 
-	@Override
-	public void serialEvent(SerialPortEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void serialEvent(SerialPortEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

@@ -23,20 +23,19 @@ import java.io.InputStreamReader;
  * Created by JackSB on 3/17/2017.
  */
 public class RunningProcess {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         try {
             String line;
-            Process p = Runtime.getRuntime().exec(System.getenv("windir") +"\\system32\\"+"tasklist.exe");
+            Process p = Runtime.getRuntime().exec(System.getenv("windir") + "\\system32\\" + "tasklist.exe");
 
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null) {
-                System.out.println(line); //<-- Parse data here.
+                System.out.println(line); // <-- Parse data here.
             }
             input.close();
         } catch (Exception err) {
             err.printStackTrace();
         }
-
 
     }
 }
