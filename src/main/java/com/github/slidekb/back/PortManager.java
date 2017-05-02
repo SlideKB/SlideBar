@@ -75,6 +75,7 @@ public class PortManager {
 
         // If it still doesn't have a default, no physical Arduinos are connected - use a fake one then
         if (arduinoHash.isEmpty()) {
+        	System.out.println("creating fake arduino");
             arduinoHash.put("default", new FakeArduino("m1n4", "COM69"));
         }
     }
