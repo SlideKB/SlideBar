@@ -17,11 +17,13 @@
 package com.github.slidekb.back;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.concurrent.CountDownLatch;
 
 import com.github.slidekb.api.PlatformSpecific;
 import com.github.slidekb.api.SlideBarPlugin;
+import com.github.slidekb.api.Slider;
 import com.github.slidekb.util.CurrentWorkingDirectoryClassLoader;
 import com.github.slidekb.util.OsHelper;
 
@@ -52,14 +54,14 @@ public class PluginManager {
                 if (currentAnnotation.value() == OsHelper.getOS()) {
                     currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
                     currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
-                    currentImplementation.setSlider(MainBack.slider);
+                    currentImplementation.setSlider(findSliderById(currentImplementation.currentlyUsedSlider()));
 
                     proci.add(currentImplementation);
                 }
             } else { // No Annotation -> platform independent plugin
                 currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
                 currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
-                currentImplementation.setSlider(MainBack.slider);
+                currentImplementation.setSlider(findSliderById(currentImplementation.currentlyUsedSlider()));
 
                 proci.add(currentImplementation);
             }
@@ -67,6 +69,12 @@ public class PluginManager {
 
         pluginsLoaded.countDown();
         return true;
+    }
+
+    private Slider findSliderById(String ID) {
+        return Optional.ofNullable( //
+                MainBack.sliders.get(ID) //
+        ).orElse(MainBack.sliders.get("default"));
     }
 
     public void waitUntilProcessesLoaded() throws InterruptedException {

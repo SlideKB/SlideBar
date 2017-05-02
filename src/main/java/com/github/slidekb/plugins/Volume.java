@@ -84,7 +84,7 @@ public class Volume implements SlideBarPlugin {
 
     @Config.Sources({ "classpath:configs/Volume.properties" })
     private interface ThisConfig extends Accessible, Mutable {
-    	@DefaultValue("default")
+        @DefaultValue("default")
         String SliderID();
     }
 
@@ -152,8 +152,7 @@ public class Volume implements SlideBarPlugin {
     }
 
     private void writeValues() {
-    	slider.defineSlider(cfg.SliderID());
-    	slider.removeParts();
+        slider.removeParts();
         slider.goToPartComplete(100 - getVolume(), 101);
         for (int i = 0; i < PartLatch.length; i++) {
             PartLatch[i] = true;
@@ -204,5 +203,10 @@ public class Volume implements SlideBarPlugin {
     @Override
     public void detachFromProcess(String processName) {
         // NOP
+    }
+
+    @Override
+    public String currentlyUsedSlider() {
+        return cfg.SliderID();
     }
 }

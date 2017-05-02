@@ -19,25 +19,13 @@ package com.github.slidekb.back;
 import com.github.slidekb.api.Slider;
 
 public class SliderImpl implements Slider {
-	
-	int location = 0;
-	
-	Arduino arduino = null;
+
+    int location = 0;
+
+    Arduino arduino = null;
 
     public SliderImpl(String ID) {
-    	arduino = MainBack.portMan.getArduinoFromID(ID);
-    }
-    
-    public SliderImpl(){
-    	
-    }
-    
-    /**
-	 * defines what slider to read and write from based of slider ID.
-	 * @param ID
-	 */
-    public void defineSlider(String ID){
-    	arduino = MainBack.portMan.getArduinoFromID(ID);
+        arduino = MainBack.portMan.getArduinoFromID(ID);
     }
 
     public void bumpRight(int milliseconds) {
@@ -49,31 +37,31 @@ public class SliderImpl implements Slider {
     }
 
     public void writeUntilComplete(int given) {
-    	arduino.writeUntilComplete(given);
+        arduino.writeUntilComplete(given);
     }
 
     public void writeUntilComplete(double given) {
-    	arduino.writeUntilComplete((int) given);
+        arduino.writeUntilComplete((int) given);
     }
 
     public void writeUntilComplete(String given) {
-    	arduino.writeUntilComplete(Integer.parseInt(given));
+        arduino.writeUntilComplete(Integer.parseInt(given));
     }
 
     public void write(int given) {
-    	arduino.write(given);
+        arduino.write(given);
     }
 
     public void goToPart(int index) {
-    	arduino.goToPart(index);
+        arduino.goToPart(index);
     }
 
     public void goToPartComplete(int index) {
-    	arduino.goToPartComplete(index);
+        arduino.goToPartComplete(index);
     }
 
     public void goToPartComplete(int index, int numberOfParts) {
-    	arduino.goToPartComplete(index, numberOfParts);
+        arduino.goToPartComplete(index, numberOfParts);
     }
 
     public int readPart(int numberOfParts) {
@@ -85,7 +73,7 @@ public class SliderImpl implements Slider {
     }
 
     public void createParts(int numberOfParts) {
-    	arduino.createParts(numberOfParts);
+        arduino.createParts(numberOfParts);
     }
 
     public int getPartIndex() {
@@ -97,30 +85,35 @@ public class SliderImpl implements Slider {
     }
 
     public void removeParts() {
-    	arduino.removeParts();
+        arduino.removeParts();
     }
 
     public void shiftRight(int distance) {
-    	arduino.shiftRight(distance);
+        arduino.shiftRight(distance);
     }
 
     public void shiftLeft(int distance) {
-    	arduino.shiftLeft(distance);
+        arduino.shiftLeft(distance);
     }
 
     public void vibrate(int amount) {
-    	arduino.vibrate(amount);
+        arduino.vibrate(amount);
     }
 
     public void scrollUp(int amount) {
-    	arduino.scrollUp(amount);
+        arduino.scrollUp(amount);
     }
 
     public void scrollDown(int amount) {
-    	arduino.scrollDown(amount);
+        arduino.scrollDown(amount);
     }
 
     public int getVirtualPartIndex(int parts) {
         return arduino.getPartIndex(parts);
+    }
+
+    @Override
+    public void close() {
+        arduino.close();
     }
 }

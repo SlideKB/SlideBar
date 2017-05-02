@@ -270,15 +270,14 @@ public class Scroller implements SlideBarPlugin {
 
         @DefaultValue("chrome.exe, idea64.exe")
         String[] processList();
-        
+
         @DefaultValue("default")
         String SliderID();
     }
 
     @Override
     public void runFirst(String process) {
-    	slider.defineSlider(cfg.SliderID());
-    	slider.removeParts();
+        slider.removeParts();
         System.out.println("Scroller is running!");
         // s.createParts(50);
         slider.writeUntilComplete(512);
@@ -320,5 +319,10 @@ public class Scroller implements SlideBarPlugin {
     @Override
     public void detachFromProcess(String processName) {
         attachedProcesses.remove(processName);
+    }
+
+    @Override
+    public String currentlyUsedSlider() {
+        return cfg.SliderID();
     }
 }

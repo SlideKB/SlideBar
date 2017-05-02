@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import jssc.SerialPortList;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -59,8 +60,8 @@ public class PortManager {
                 .toArray(size -> new String[size]); // Collect the entries into an array
     }
 
-    public Arduino[] getArduinos() {
-        return arduinoHash.values().toArray(new Arduino[arduinoHash.size()]);
+    public Collection<Arduino> getArduinos() {
+        return arduinoHash.values();
     }
 
     public void findAndConnect() {

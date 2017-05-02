@@ -19,6 +19,8 @@ package com.github.slidekb.back;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,8 +34,6 @@ import com.github.slidekb.api.Slider;
 import com.github.slidekb.util.NativeUtils;
 
 public class MainBack implements Runnable {
-
-    protected static Arduino[] arduino;
 
     public static ArrayList<String> prev20List = new ArrayList<String>();
 
@@ -50,10 +50,10 @@ public class MainBack implements Runnable {
     static AlphaKeyManager alphaKeyManager = new AlphaKeyManagerImpl();
 
     static HotKeyManager hotKeyManager = new HotKeyManagerImpl();
-    
+
     static PortManager portMan = new PortManager();
 
-    static Slider slider = new SliderImpl();
+    static Map<String, Slider> sliders = new HashMap<>();
 
     public static void main(String[] args) {
         Thread t = new Thread(new MainBack());
@@ -69,7 +69,7 @@ public class MainBack implements Runnable {
         loadNativeLibraries();
         setupKeyHook();
         startIt("Auto");
-        
+
         while (started) {
             try {
                 Run();
@@ -81,9 +81,9 @@ public class MainBack implements Runnable {
     }
 
     public static void testVibrate(int amount) {
-    	for (Arduino a: arduino){
-    		a.vibrate(5);
-    	}
+        for (Slider s : sliders.values()) {
+            s.vibrate(5);
+        }
     }
 
     public static boolean isStarted() {
@@ -93,20 +93,22 @@ public class MainBack implements Runnable {
     public static boolean startIt(String port) {
         // connect and write to arduino
         if (started == false) {
-//        	Arduino fake = new FakeArduino("m1n4", "COM69");
-//            fake.write(400);
-//            fake.bumpLeft(500);
-//            fake.writeUntilComplete(1);
-//            fake.writeUntilComplete(1000);
-//            fake.writeUntilComplete(1);
-//            fake.writeUntilComplete(1000);
-//            fake.writeUntilComplete(1);
-//            fake.writeUntilComplete(1000);
+            // Arduino fake = new FakeArduino("m1n4", "COM69");
+            // fake.write(400);
+            // fake.bumpLeft(500);
+            // fake.writeUntilComplete(1);
+            // fake.writeUntilComplete(1000);
+            // fake.writeUntilComplete(1);
+            // fake.writeUntilComplete(1000);
+            // fake.writeUntilComplete(1);
+            // fake.writeUntilComplete(1000);
             System.out.println("starting plugins");
+
             portMan.findAndConnect();
-            System.out.println(portMan.getArduinos().length);
-            if (portMan.getArduinos().length != 0) {
-                arduino = portMan.getArduinos();
+            System.out.println(portMan.getArduinos().size());
+
+            if (portMan.getArduinos().size() != 0) {
+                portMan.getArduinos().forEach(arduino -> sliders.put(arduino.getID(), new SliderImpl(arduino.getID())));
                 started = true;
             } else {
                 System.out.println("Could not connect to a Slider");
@@ -243,8 +245,8 @@ public class MainBack implements Runnable {
      */
     public static Boolean stop() {
         System.out.println("stopping");
-        for(Arduino a: arduino){
-        	a.close();
+        for (Slider s : sliders.values()) {
+            s.close();
         }
         PM.removeProci(true);
         started = false;
