@@ -18,6 +18,7 @@ package com.github.slidekb.back;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import jssc.SerialPortList;
 
@@ -26,7 +27,7 @@ import jssc.SerialPortList;
  */
 public class PortManager {
 
-    HashMap<String, Arduino> arduinoHash = new HashMap<String, Arduino>();
+    Map<String, Arduino> arduinos = new HashMap<String, Arduino>();
 
     public PortManager() {
 
@@ -39,30 +40,30 @@ public class PortManager {
         System.out.println("after initialize()");
 
         if (currentArduino.isConnectedAndSlider()) {
-            if (arduinoHash.isEmpty()) {
-                arduinoHash.put("default", currentArduino);
+            if (arduinos.isEmpty()) {
+                arduinos.put("default", currentArduino);
             }
 
-            arduinoHash.put(currentArduino.getID(), currentArduino);
+            arduinos.put(currentArduino.getID(), currentArduino);
         }
 
         return currentArduino.isConnectedAndSlider();
     }
 
     public Arduino getArduinoFromID(String ID) {
-        return arduinoHash.get(ID);
+        return arduinos.get(ID);
     }
 
     public String[] getAllArduinoID() {
-        return arduinoHash //
+        return arduinos //
                 .values() // Get the Collection of all values of the Map
                 .stream() // Construct a stream from it
                 .map(entry -> entry.getID()) // Transform all the entries in the stream
                 .toArray(size -> new String[size]); // Collect the entries into an array
     }
 
-    public Collection<Arduino> getArduinos() {
-        return arduinoHash.values();
+    public Map<String, Arduino> getArduinos() {
+        return arduinos;
     }
 
     public void findAndConnect() {
@@ -71,9 +72,9 @@ public class PortManager {
         }
 
         // If it still doesn't have a default, no physical Arduinos are connected - use a fake one then
-        if (arduinoHash.isEmpty()) {
+        if (arduinos.isEmpty()) {
             System.out.println("creating fake arduino");
-            arduinoHash.put("default", new FakeArduino("m1n4", "COM69"));
+            arduinos.put("default", new FakeArduino("f1n1", "COM69"));
         }
     }
 
