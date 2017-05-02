@@ -286,4 +286,9 @@ public class AltProcess implements SlideBarPlugin {
     public String currentlyUsedSlider() {
         return cfg.SliderID();
     }
+
+    @Override
+    public boolean usesProcessNames() {
+        return false;
+    }
 }

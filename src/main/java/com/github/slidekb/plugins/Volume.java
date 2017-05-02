@@ -209,4 +209,9 @@ public class Volume implements SlideBarPlugin {
     public String currentlyUsedSlider() {
         return cfg.SliderID();
     }
+
+    @Override
+    public boolean usesProcessNames() {
+        return false;
+    }
 }
