@@ -34,6 +34,7 @@ import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
+import jssc.SerialPortTimeoutException;
 
 /**
  * Created by JackSB on 3/12/2017.
@@ -136,10 +137,10 @@ public class Arduino implements SerialPortEventListener {
                 e.printStackTrace();
             }
             serialPort.writeBytes("2424]".getBytes());
-            ID = serialPort.readString(4);
+            ID = serialPort.readString(4, 100);
             this.serialPort = serialPort;
 
-        } catch (SerialPortException ex) {
+        } catch (SerialPortException | SerialPortTimeoutException ex) {
             System.out.println("SerialPortException: " + ex.toString());
         }
         if (reading == 0) {
