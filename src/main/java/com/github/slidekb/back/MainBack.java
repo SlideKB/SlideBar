@@ -108,7 +108,7 @@ public class MainBack implements Runnable {
             System.out.println(portMan.getArduinos().size());
 
             if (portMan.getArduinos().size() != 0) {
-                portMan.getArduinos().forEach((String, arduino) -> sliders.put(String, new SliderImpl(arduino.getID())));
+                portMan.getArduinos().forEach((String, arduino) -> sliders.put(String, new SliderImpl(arduino)));
                 started = true;
             } else {
                 System.out.println("Could not connect to a Slider");

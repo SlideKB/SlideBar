@@ -24,8 +24,8 @@ public class SliderImpl implements Slider {
 
     Arduino arduino = null;
 
-    public SliderImpl(String ID) {
-        arduino = MainBack.portMan.getArduinoFromID(ID);
+    public SliderImpl(Arduino arduino) {
+        this.arduino = arduino;
     }
 
     public void bumpRight(int milliseconds) {
