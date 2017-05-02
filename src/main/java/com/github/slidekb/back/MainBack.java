@@ -66,7 +66,6 @@ public class MainBack implements Runnable {
     }
 
     public static void FirstLoad() {
-        loadNativeLibraries();
         setupKeyHook();
         startIt("Auto");
 
@@ -226,15 +225,6 @@ public class MainBack implements Runnable {
         }
         x = new KeyHook();
         GlobalScreen.addNativeKeyListener(x);
-    }
-
-    public static void loadNativeLibraries() {
-        try {
-            NativeUtils.loadLibraryFromJar("/util/rxtxParallel.dll");
-            NativeUtils.loadLibraryFromJar("/util/rxtxSerial.dll");
-        } catch (IOException e) {
-            System.out.println("Unable to load rxtx native libraries");
-        }
     }
 
     /**
