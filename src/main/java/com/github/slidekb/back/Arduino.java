@@ -249,7 +249,7 @@ public class Arduino implements SerialPortEventListener {
 
     protected void goToPart(int index, int numberOfParts) {
         if (numberOfParts > index && index > 0) {
-            double partSize = (1040.0 / numberOfParts);
+            double partSize = (1024.0 / numberOfParts);
             write((int) ((index * partSize) + (partSize / 2)));
         } else {
             throw new IndexOutOfBoundsException();

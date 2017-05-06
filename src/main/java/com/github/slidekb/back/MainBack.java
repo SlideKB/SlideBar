@@ -31,216 +31,245 @@ import com.github.slidekb.api.AlphaKeyManager;
 import com.github.slidekb.api.HotKeyManager;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.api.Slider;
-import com.github.slidekb.util.NativeUtils;
 
 public class MainBack implements Runnable {
 
-    public static ArrayList<String> prev20List = new ArrayList<String>();
+	// TODO decide if this and relating operations on it should be moved to a
+	// different class.
+	/**
+	 * The previous 20 unique executables that have been visited. TODO move this
+	 * to a different class that makes more sense.
+	 */
+	public static ArrayList<String> prev20List = new ArrayList<String>();
 
-    public static com.github.slidekb.back.PluginManager PM = new PluginManager();
+	public static PluginManager PM = new PluginManager();
 
-    private static KeyHook x;
+	// TODO rename to a more meaningful name
+	private static KeyHook x;
 
-    private static boolean started = false;
+	/**
+	 * boolean that expresses whether the backend has been started or not / is
+	 * currently running.
+	 */
+	private static boolean started = false;
 
-    private static boolean keyHookRunning = false;
+	static AlphaKeyManager alphaKeyManager = new AlphaKeyManagerImpl();
 
-    private static String previous = "";
+	static HotKeyManager hotKeyManager = new HotKeyManagerImpl();
 
-    static AlphaKeyManager alphaKeyManager = new AlphaKeyManagerImpl();
+	static PortManager portMan = new PortManager();
 
-    static HotKeyManager hotKeyManager = new HotKeyManagerImpl();
+	static SliderManagerImpl slideMan = new SliderManagerImpl();
 
-    static PortManager portMan = new PortManager();
+	// TODO remove this
+	public static Map<String, Slider> sliders = new HashMap<>();
 
-    static Map<String, Slider> sliders = new HashMap<>();
+	/**
+	 * For running without an Interface. creates a new thread and starts it
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Thread t = new Thread(new MainBack());
+		t.start();
+	}
 
-    public static void main(String[] args) {
-        Thread t = new Thread(new MainBack());
-        t.start();
-    }
+	@Override
+	public void run() {
+		FirstLoad();
+	}
 
-    @Override
-    public void run() {
-        FirstLoad();
-    }
+	/**
+	 * runs when MainBack and MainFront are first loaded. (I think, TODO double
+	 * check that)
+	 */
+	public static void FirstLoad() {
+		setupKeyHook();
+		startIt();
+		while (started) {
+			try {
+				Run();
+				Thread.sleep(10);
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    public static void FirstLoad() {
-        setupKeyHook();
-        startIt("Auto");
+	// TODO move this to a class that makes more sense
+	/**
+	 * vibrates each connected SlideBar
+	 * 
+	 * @param amount
+	 */
+	public static void testVibrate(int amount) {
+		sliders.forEach((String, Arduino) -> Arduino.vibrate(5));
+	}
 
-        while (started) {
-            try {
-                Run();
-                Thread.sleep(10);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	/**
+	 * Is the backend running?
+	 * 
+	 * @return started
+	 */
+	public static boolean isStarted() {
+		return started;
+	}
 
-    public static void testVibrate(int amount) {
-        for (Slider s : sliders.values()) {
-            s.vibrate(5);
-        }
-    }
+	// TODO rename to something more meaningful than StartIt()
+	/**
+	 * Finds and connects to all connected SlideBars, adds them all to the
+	 * slider hash map, creates the defaults in the slider hash map, prints out
+	 * the number of connected SlideBars, and loads the plugins.
+	 * 
+	 * @return
+	 */
+	public static boolean startIt() {
+		// connect and write to arduino
+		if (started == false) {
+			System.out.println("Discovering Arduinos");
+			// find and connect to all the SlideBars
+			portMan.findAndConnect();
+			// Add the SlideBars to the Hash map.
+			slideMan.hashTheSlideBars();
+			// TODO this should be moved to the portManager class
+			System.out.println("Number of sliders connected: " + portMan.getArduinos().size());
+			started = true;
+			PM.loadProcesses();
+		}
+		return started;
+	}
 
-    public static boolean isStarted() {
-        return started;
-    }
+	// TODO can this be moved to a different class?
+	private static void updatePrevList(String given) {
+		if (prev20List.contains(given)) {
+			prev20List.remove(given);
+		}
+		prev20List.add(given);
+	}
 
-    public static boolean startIt(String port) {
-        // connect and write to arduino
-        if (started == false) {
-            System.out.println("Discovering Arduinos");
+	//TODO can this be moved to a different class?
+	public static String[] getPrev20() {
+		return prev20List.toArray(new String[prev20List.size()]);
+	}
 
-            // Arduino fake = new FakeArduino("m1n4", "COM69");
-            // fake.write(400);
-            // fake.bumpLeft(500);
-            // fake.writeUntilComplete(1);
-            // fake.writeUntilComplete(1000);
-            // fake.writeUntilComplete(1);
-            // fake.writeUntilComplete(1000);
-            // fake.writeUntilComplete(1);
-            // fake.writeUntilComplete(1000);
+	// TODO rename Run() to something other than Run to avoid confusion
+	// TODO this is a cluster fuck
+	/**
+	 * Starts the process of reading the active process and choosing which
+	 * process in the proci list to run
+	 *
+	 * @throws Throwable
+	 */
+	public static void Run() throws Throwable {
+		int counter = 0;
+		String previous = "";
+		while (started) {
+			boolean exe = true;
+			try {
+				Thread.sleep(1);
+			} catch (Exception e) {
+			}
+			String activeProcess = ActiveProcess.getProcess();
+			String hotKeys = Arrays.toString(KeyHook.getHotKeys());
+			// System.out.println(ard.read());
+			// System.out.println(AP);
+			for (SlideBarPlugin p : PM.getProci()) {
+				for (String processName : p.getProcessNames()) {
+					if (processName.contentEquals(hotKeys)) {
+						exe = false;
+					}
+				}
+			}
+			if (!exe) {
+				if (!previous.equals(hotKeys)) {
+					for (SlideBarPlugin p : PM.getProci()) {
+						for (String processName : p.getProcessNames()) {
+							if (processName.contentEquals(hotKeys)) {
+								System.out.println("process change");
+								previous = processName;
+								p.runFirst(processName);
+							}
+						}
+					}
+				} else {
+					for (SlideBarPlugin p : PM.getProci()) {
+						for (String processName : p.getProcessNames()) {
+							if (processName.contentEquals(hotKeys)) {
+								previous = processName;
+								p.run(processName);
+							}
+						}
+					}
+				}
+			} else {
+				if (!previous.equals(activeProcess)) {
+					updatePrevList(activeProcess);
+					for (SlideBarPlugin p : PM.getProci()) {
+						for (String processName : p.getProcessNames()) {
+							if (processName.contentEquals(activeProcess)) {
+								System.out.println("process change");
+								previous = processName;
+								p.runFirst(processName);
+							}
+						}
+					}
+				} else {
+					for (SlideBarPlugin p : PM.getProci()) {
+						for (String processName : p.getProcessNames()) {
+							if (processName.contentEquals(activeProcess)) {
+								previous = processName;
+								p.run(processName);
 
-            portMan.findAndConnect();
-            System.out.println(portMan.getArduinos().size());
+							}
+						}
+					}
+				}
+			}
 
-            if (portMan.getArduinos().size() != 0) {
-                portMan.getArduinos().forEach((String, arduino) -> sliders.put(String, new SliderImpl(arduino)));
-                started = true;
-            } else {
-                System.out.println("Could not connect to a Slider");
-                started = false;
-            }
-            PM.loadProcesses();
-        }
-        return started;
-    }
+			if (exe) {
+				previous = activeProcess;
+			} else {
+				previous = hotKeys;
+			}
 
-    private static void updatePrevList(String given) {
-        if (prev20List.contains(given)) {
-            prev20List.remove(given);
+		}
+	}
 
-        }
-        prev20List.add(given);
-    }
+	//TODO add Mac OS support
+	/**
+	 * sets up the keyhook.
+	 *
+	 */
+	public static void setupKeyHook() {
+		// setup keyhook
+		try {
+			Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+			logger.setLevel(Level.OFF);
+			GlobalScreen.registerNativeHook();
+		} catch (NativeHookException ex) {
+			System.err.println("There was a problem registering the native hook.");
+			System.err.println(ex.getMessage());
+			System.exit(1);
+		}
+		x = new KeyHook();
+		GlobalScreen.addNativeKeyListener(x);
+	}
 
-    public static String[] getPrev20() {
-        return prev20List.toArray(new String[prev20List.size()]);
-    }
-
-    /**
-     * Starts the process of reading the active process and choosing which
-     * process in the proci list to run
-     *
-     * @throws Throwable
-     */
-    public static void Run() throws Throwable {
-        int counter = 0;
-        String previous = "";
-        while (started) {
-            boolean exe = true;
-            try {
-                Thread.sleep(1);
-            } catch (Exception e) {
-            }
-            String activeProcess = ActiveProcess.getProcess();
-            String hotKeys = Arrays.toString(KeyHook.getHotKeys());
-            // System.out.println(ard.read());
-            // System.out.println(AP);
-            for (SlideBarPlugin p : PM.getProci()) {
-                for (String processName : p.getProcessNames()) {
-                    if (processName.contentEquals(hotKeys)) {
-                        exe = false;
-                    }
-                }
-            }
-            if (!exe) {
-                if (!previous.equals(hotKeys)) {
-                    for (SlideBarPlugin p : PM.getProci()) {
-                        for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(hotKeys)) {
-                                System.out.println("process change");
-                                previous = processName;
-                                p.runFirst(processName);
-                            }
-                        }
-                    }
-                } else {
-                    for (SlideBarPlugin p : PM.getProci()) {
-                        for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(hotKeys)) {
-                                previous = processName;
-                                p.run(processName);
-                            }
-                        }
-                    }
-                }
-            } else {
-                if (!previous.equals(activeProcess)) {
-                    updatePrevList(activeProcess);
-                    for (SlideBarPlugin p : PM.getProci()) {
-                        for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(activeProcess)) {
-                                System.out.println("process change");
-                                previous = processName;
-                                p.runFirst(processName);
-                            }
-                        }
-                    }
-                } else {
-                    for (SlideBarPlugin p : PM.getProci()) {
-                        for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(activeProcess)) {
-                                previous = processName;
-                                p.run(processName);
-
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (exe) {
-                previous = activeProcess;
-            } else {
-                previous = hotKeys;
-            }
-
-        }
-    }
-
-    public static void setupKeyHook() {
-        // setup keyhook
-        try {
-            Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-            logger.setLevel(Level.OFF);
-            GlobalScreen.registerNativeHook();
-            keyHookRunning = true;
-        } catch (NativeHookException ex) {
-            System.err.println("There was a problem registering the native hook.");
-            System.err.println(ex.getMessage());
-            System.exit(1);
-        }
-        x = new KeyHook();
-        GlobalScreen.addNativeKeyListener(x);
-    }
-
-    /**
-     * stops the run() function disconnects arduino removes all process from the
-     * process list.
-     * 
-     * @return
-     */
-    public static Boolean stop() {
-        System.out.println("stopping");
-        for (Slider s : sliders.values()) {
-            s.close();
-        }
-        PM.removeProci(true);
-        started = false;
-        return true;
-    }
+	/**
+	 * stops the run() function disconnects arduino removes all process from the
+	 * process list.
+	 * 
+	 * @return
+	 */
+	public static Boolean stop() {
+		System.out.println("stopping");
+		// for (Slider s : sliders.values()) {
+		// s.close();
+		// }
+		slideMan.closeAll();
+		// TODO Move this to the SliderManager class
+		PM.removeProci(true);
+		started = false;
+		return true;
+	}
 }

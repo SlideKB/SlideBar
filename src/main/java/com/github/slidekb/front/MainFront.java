@@ -150,7 +150,7 @@ public class MainFront {
                 public void actionPerformed(ActionEvent e) {
                     status.setText("Stopping");
                     MainBack.stop();
-                    if (MainBack.startIt((String) comboBox.getSelectedItem())) {
+                    if (MainBack.startIt()) {
                         status.setText("Connected");
                     } else {
                         status.setText("Not Connected");

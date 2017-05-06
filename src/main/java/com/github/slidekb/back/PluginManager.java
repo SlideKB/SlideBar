@@ -36,6 +36,7 @@ public class PluginManager {
 
     }
 
+    //TODO rename loadProcess() to something more meaningful
     /**
      * calls listFilesForFolder("\\src\\plugins").
      * adds internal process into the list and instances each.
@@ -54,14 +55,15 @@ public class PluginManager {
                 if (currentAnnotation.value() == OsHelper.getOS()) {
                     currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
                     currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
-                    currentImplementation.setSlider(findSliderById(currentImplementation.currentlyUsedSlider()));
-
+                    currentImplementation.setSliderManager(MainBack.slideMan);
+//                    currentImplementation.setSlider(findSliderById(currentImplementation.currentlyUsedSlider()));
                     proci.add(currentImplementation);
                 }
             } else { // No Annotation -> platform independent plugin
                 currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
                 currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
-                currentImplementation.setSlider(findSliderById(currentImplementation.currentlyUsedSlider()));
+                currentImplementation.setSliderManager(MainBack.slideMan);
+//                currentImplementation.setSlider(findSliderById(currentImplementation.currentlyUsedSlider()));
 
                 proci.add(currentImplementation);
             }
@@ -71,11 +73,12 @@ public class PluginManager {
         return true;
     }
 
-    private Slider findSliderById(String ID) {
-        return Optional.ofNullable( //
-                MainBack.sliders.get(ID) //
-        ).orElse(MainBack.sliders.get("default"));
-    }
+    //TODO move this to the the SliderManager class
+//    private Slider findSliderById(String ID) {
+//        return Optional.ofNullable( //
+//                MainBack.sliders.get(ID) //
+//        ).orElse(MainBack.sliders.get("default"));
+//    }
 
     public void waitUntilProcessesLoaded() throws InterruptedException {
         pluginsLoaded.await();

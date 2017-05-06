@@ -47,6 +47,7 @@ import com.github.slidekb.api.AlphaKeyManager;
 import com.github.slidekb.api.HotKeyManager;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.api.Slider;
+import com.github.slidekb.api.SliderManager;
 import com.google.auto.service.AutoService;
 
 /**
@@ -56,6 +57,8 @@ import com.google.auto.service.AutoService;
 public class AltProcess implements SlideBarPlugin {
 
     HotKeyManager hotKeyManager;
+    
+    SliderManager sliderManager;
 
     Slider slider;
 
@@ -234,6 +237,7 @@ public class AltProcess implements SlideBarPlugin {
         } catch (AWTException e) {
             e.printStackTrace();
         }
+        slider = sliderManager.getSliderByID("m1n2");
         virtualIndex = cfg.StartingPart();
         slider.createParts(cfg.numberOfParts());
         slider.goToPartComplete(cfg.StartingPart());
@@ -291,4 +295,10 @@ public class AltProcess implements SlideBarPlugin {
     public boolean usesProcessNames() {
         return false;
     }
+
+	@Override
+	public void setSliderManager(SliderManager sliderManager) {
+		this.sliderManager = sliderManager;
+		
+	}
 }

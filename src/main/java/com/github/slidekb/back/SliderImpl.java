@@ -20,8 +20,6 @@ import com.github.slidekb.api.Slider;
 
 public class SliderImpl implements Slider {
 
-    int location = 0;
-
     Arduino arduino = null;
 
     public SliderImpl(Arduino arduino) {
@@ -64,10 +62,11 @@ public class SliderImpl implements Slider {
         arduino.goToPartComplete(index, numberOfParts);
     }
 
+    //TODO remove this. (been replaced by getPartIndex(numberOfParts))
     public int readPart(int numberOfParts) {
         return arduino.getPartIndex(numberOfParts);
     }
-
+    
     public int read() {
         return arduino.read();
     }
@@ -75,7 +74,7 @@ public class SliderImpl implements Slider {
     public void createParts(int numberOfParts) {
         arduino.createParts(numberOfParts);
     }
-
+    
     public int getPartIndex() {
         return arduino.getPartIndex();
     }
@@ -108,6 +107,7 @@ public class SliderImpl implements Slider {
         arduino.scrollDown(amount);
     }
 
+    //TODO remove (replace uses with getPartIndex(numberOfParts))
     public int getVirtualPartIndex(int parts) {
         return arduino.getPartIndex(parts);
     }
