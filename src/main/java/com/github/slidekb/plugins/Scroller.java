@@ -23,6 +23,7 @@ import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -51,6 +52,7 @@ import org.sikuli.script.Mouse;
 import org.sikuli.script.Region;
 
 import com.github.slidekb.api.AlphaKeyManager;
+import com.github.slidekb.api.BasePluginConfig;
 import com.github.slidekb.api.HotKeyManager;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.api.Slider;
@@ -65,8 +67,8 @@ import com.google.auto.service.AutoService;
 public class Scroller implements SlideBarPlugin {
 
     Slider slider;
-
-    ThisConfig cfg;
+    
+    BasePluginConfig baseConfig;
 
     Region r;
 
@@ -82,8 +84,14 @@ public class Scroller implements SlideBarPlugin {
 
     ProcessListSelector pls = new ProcessListSelector("Scroller.properties", getLabelName());
 
+	private SliderManager sliderManager;
+
     public Scroller() {
         loadConfiguration();
+    }
+    
+    public boolean enabled(){
+    	return baseConfig.isEnabled();
     }
 
     @Override
@@ -97,7 +105,7 @@ public class Scroller implements SlideBarPlugin {
     }
 
     private void Sleeper(int delay) {
-        for (int i = cfg.speed(); i < delay; i++) {
+        for (int i = 5; i < delay; i++) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -109,16 +117,10 @@ public class Scroller implements SlideBarPlugin {
     @Override
     public void reloadPropFile() {
         try {
-            FileInputStream in = new FileInputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\Scroller.properties");
-            cfg.load(in);
-            in.close();
-
-            attachedProcesses = new ArrayList<>(Arrays.asList(cfg.processList()));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			baseConfig.reloadConfig();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     @Override
@@ -154,7 +156,7 @@ public class Scroller implements SlideBarPlugin {
         }
         if (Math.abs(prev.getX() - current.getX()) > 2 || Math.abs(prev.getY() - current.getY()) > 2) {
             if (slideIndex != (virtualparts / 2) && slideIndex != (virtualparts / 2) + 1 && slideIndex != (virtualparts / 2) - 1) {
-                slider.writeUntilComplete(500);
+                slider.writeUntilComplete(512);
                 virtualIndex = slider.getVirtualPartIndex(virtualparts);
             }
             prev = current;
@@ -162,118 +164,18 @@ public class Scroller implements SlideBarPlugin {
     }
 
     private boolean loadConfiguration() {
-        cfg = ConfigFactory.create(ThisConfig.class);
-        attachedProcesses = new ArrayList<>(Arrays.asList(cfg.processList()));
+    	try {
+			baseConfig = new BasePluginConfig(new File(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\Scroller.properties"),"process");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	System.out.println(baseConfig.getSlider1ID());
         return true;
     }
 
     @Override
     public JFrame getConfigWindow() {
-        JFrame frame = new JFrame();
-        frame.setTitle("Scroller Configuration");
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setBounds(100, 100, 314, 142);
-        JPanel contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        frame.setContentPane(contentPane);
-        GridBagLayout gbl_contentPane = new GridBagLayout();
-        gbl_contentPane.columnWidths = new int[] { 0, 0, 0, 0 };
-        gbl_contentPane.rowHeights = new int[] { 29, 0, 0, 0 };
-        gbl_contentPane.columnWeights = new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
-        gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
-        contentPane.setLayout(gbl_contentPane);
-
-        JLabel lblScrollSpeed = new JLabel("Scroll Speed");
-        GridBagConstraints gbc_lblScrollSpeed = new GridBagConstraints();
-        gbc_lblScrollSpeed.anchor = GridBagConstraints.SOUTH;
-        gbc_lblScrollSpeed.gridwidth = 2;
-        gbc_lblScrollSpeed.insets = new Insets(0, 0, 5, 5);
-        gbc_lblScrollSpeed.gridx = 0;
-        gbc_lblScrollSpeed.gridy = 0;
-        contentPane.add(lblScrollSpeed, gbc_lblScrollSpeed);
-
-        JSlider slider = new JSlider();
-        slider.setPaintTicks(true);
-        slider.setMajorTickSpacing(5);
-        slider.setMinorTickSpacing(1);
-        slider.setValue(cfg.speed());
-        slider.setMaximum(10);
-        GridBagConstraints gbc_slider = new GridBagConstraints();
-        gbc_slider.fill = GridBagConstraints.HORIZONTAL;
-        gbc_slider.gridwidth = 2;
-        gbc_slider.insets = new Insets(0, 0, 5, 5);
-        gbc_slider.gridx = 0;
-        gbc_slider.gridy = 1;
-        contentPane.add(slider, gbc_slider);
-
-        JCheckBox chckbxReversed = new JCheckBox("Reversed");
-        chckbxReversed.setSelected(cfg.reversed());
-        GridBagConstraints gbc_chckbxReversed = new GridBagConstraints();
-        gbc_chckbxReversed.insets = new Insets(0, 0, 5, 0);
-        gbc_chckbxReversed.gridx = 2;
-        gbc_chckbxReversed.gridy = 1;
-        contentPane.add(chckbxReversed, gbc_chckbxReversed);
-
-        JButton btnSave = new JButton("Save");
-        btnSave.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int temp1 = Integer.parseInt("" + slider.getValue());
-                boolean reversed = chckbxReversed.isSelected();
-                try {
-                    FileInputStream in = new FileInputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\Scroller.properties");
-                    Properties props = new Properties();
-                    props.load(in);
-                    in.close();
-                    FileOutputStream out = new FileOutputStream(ClassLoader.getSystemClassLoader().getResource(".").getPath() + "\\configs\\Scroller.properties");
-                    props.setProperty("speed", "" + temp1);
-                    props.setProperty("reversed", "" + reversed);
-                    props.store(out, null);
-                    out.close();
-                    System.out.println("Saved");
-                    reloadPropFile();
-                    frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-
-            }
-        });
-        GridBagConstraints gbc_btnSave = new GridBagConstraints();
-        gbc_btnSave.anchor = GridBagConstraints.SOUTH;
-        gbc_btnSave.insets = new Insets(0, 0, 0, 5);
-        gbc_btnSave.gridx = 1;
-        gbc_btnSave.gridy = 2;
-        contentPane.add(btnSave, gbc_btnSave);
-
-        JButton btnCancel = new JButton("Cancel");
-        btnCancel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
-            }
-        });
-        GridBagConstraints gbc_btnCancel = new GridBagConstraints();
-        gbc_btnCancel.anchor = GridBagConstraints.SOUTH;
-        gbc_btnCancel.gridx = 2;
-        gbc_btnCancel.gridy = 2;
-        contentPane.add(btnCancel, gbc_btnCancel);
-        return frame;
-    }
-
-    @Config.Sources({ "classpath:configs/Scroller.properties" })
-    private interface ThisConfig extends Accessible, Mutable {
-        @DefaultValue("5")
-        int speed();
-
-        @DefaultValue("0")
-        boolean reversed();
-
-        @DefaultValue("chrome.exe, idea64.exe")
-        String[] processList();
-
-        @DefaultValue("default")
-        String SliderID();
+        return baseConfig.displayBaseConfigs();
     }
 
     @Override
@@ -308,11 +210,6 @@ public class Scroller implements SlideBarPlugin {
     }
 
     @Override
-    public void setSlider(Slider slider) {
-        this.slider = slider;
-    }
-
-    @Override
     public void attachToProcess(String processName) {
         attachedProcesses.add(processName);
     }
@@ -322,10 +219,10 @@ public class Scroller implements SlideBarPlugin {
         attachedProcesses.remove(processName);
     }
 
-    @Override
-    public String currentlyUsedSlider() {
-        return cfg.SliderID();
-    }
+//    @Override
+//    public String currentlyUsedSlider() {
+//        return baseConfig.getSlider1ID();
+//    }
 
     @Override
     public boolean usesProcessNames() {
@@ -334,7 +231,14 @@ public class Scroller implements SlideBarPlugin {
 
 	@Override
 	public void setSliderManager(SliderManager sliderManager) {
+		this.sliderManager = sliderManager;
+		this.slider = sliderManager.getSliderByID(baseConfig.getSlider1ID());
+		this.slider.setReversed(baseConfig.isSlider1Reversed());
+	}
+
+	@Override
+	public String currentlyUsedSlider() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 }

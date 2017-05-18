@@ -35,8 +35,7 @@ public class PluginManager {
     public PluginManager() {
 
     }
-
-    //TODO rename loadProcess() to something more meaningful
+    
     /**
      * calls listFilesForFolder("\\src\\plugins").
      * adds internal process into the list and instances each.
@@ -72,13 +71,12 @@ public class PluginManager {
         pluginsLoaded.countDown();
         return true;
     }
-
-    //TODO move this to the the SliderManager class
-//    private Slider findSliderById(String ID) {
-//        return Optional.ofNullable( //
-//                MainBack.sliders.get(ID) //
-//        ).orElse(MainBack.sliders.get("default"));
-//    }
+    
+    public void reloadAllPluginBaseConfigs() {
+    	for (SlideBarPlugin p: proci){
+    		p.reloadPropFile();
+    	}
+    }
 
     public void waitUntilProcessesLoaded() throws InterruptedException {
         pluginsLoaded.await();

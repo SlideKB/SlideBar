@@ -73,6 +73,8 @@ public class VSCode implements SlideBarPlugin {
 	private Slider slider;
 	
 	private Slider slider2;
+
+	private SliderManager sliderManager;
 	
 	
 	@Config.Sources({ "classpath:configs/Slider.properties" })
@@ -269,14 +271,9 @@ public class VSCode implements SlideBarPlugin {
 	}
 
 	@Override
-	public void setSlider(Slider slider) {
-		this.slider = slider;
-	}
-
-	@Override
 	public void setSliderManager(SliderManager sliderManager) {
-		// TODO Auto-generated method stub
-		
+		this.sliderManager = sliderManager;
+		this.slider = this.sliderManager.getSliderByID("default");
 	}
 
 }

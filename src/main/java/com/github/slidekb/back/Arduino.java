@@ -137,10 +137,10 @@ public class Arduino implements SerialPortEventListener {
                 e.printStackTrace();
             }
             serialPort.writeBytes("2424]".getBytes());
-            ID = serialPort.readString(4, 100);
+            ID = serialPort.readString(4);
             this.serialPort = serialPort;
 
-        } catch (SerialPortException | SerialPortTimeoutException ex) {
+        } catch (SerialPortException ex) {
             System.out.println("SerialPortException: " + ex.toString());
         }
         if (reading == 0) {

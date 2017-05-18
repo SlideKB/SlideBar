@@ -116,4 +116,9 @@ public class SliderImpl implements Slider {
     public void close() {
         arduino.close();
     }
+
+	@Override
+	public void setReversed(boolean slider1Reversed) {
+		// TODO allow slider to be reversed
+	}
 }

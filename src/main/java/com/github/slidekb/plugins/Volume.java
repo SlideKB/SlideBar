@@ -58,6 +58,8 @@ public class Volume implements SlideBarPlugin {
 
     ThisConfig cfg;
 
+	private SliderManager sliderManager;
+
     public Volume() {
         loadConfiguration();
     }
@@ -192,11 +194,6 @@ public class Volume implements SlideBarPlugin {
     }
 
     @Override
-    public void setSlider(Slider slider) {
-        this.slider = slider;
-    }
-
-    @Override
     public void attachToProcess(String processName) {
         // NOP
     }
@@ -216,9 +213,9 @@ public class Volume implements SlideBarPlugin {
         return false;
     }
 
-	@Override
+    @Override
 	public void setSliderManager(SliderManager sliderManager) {
-		// TODO Auto-generated method stub
-		
+		this.sliderManager = sliderManager;
+		this.slider = this.sliderManager.getSliderByID("default");
 	}
 }

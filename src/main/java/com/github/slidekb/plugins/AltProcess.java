@@ -237,7 +237,6 @@ public class AltProcess implements SlideBarPlugin {
         } catch (AWTException e) {
             e.printStackTrace();
         }
-        slider = sliderManager.getSliderByID("m1n2");
         virtualIndex = cfg.StartingPart();
         slider.createParts(cfg.numberOfParts());
         slider.goToPartComplete(cfg.StartingPart());
@@ -272,11 +271,6 @@ public class AltProcess implements SlideBarPlugin {
     }
 
     @Override
-    public void setSlider(Slider slider) {
-        this.slider = slider;
-    }
-
-    @Override
     public void attachToProcess(String processName) {
         // NOP
     }
@@ -299,6 +293,6 @@ public class AltProcess implements SlideBarPlugin {
 	@Override
 	public void setSliderManager(SliderManager sliderManager) {
 		this.sliderManager = sliderManager;
-		
+		this.slider = sliderManager.getSliderByID("default");		
 	}
 }

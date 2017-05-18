@@ -103,7 +103,9 @@ public class MainBack implements Runnable {
 	 * @param amount
 	 */
 	public static void testVibrate(int amount) {
-		sliders.forEach((String, Arduino) -> Arduino.vibrate(5));
+		slideMan.sliders.forEach((String, Arduino) -> Arduino.vibrate(5));
+		//test
+		PM.reloadAllPluginBaseConfigs();
 	}
 
 	/**
@@ -117,7 +119,7 @@ public class MainBack implements Runnable {
 
 	// TODO rename to something more meaningful than StartIt()
 	/**
-	 * Finds and connects to all connected SlideBars, adds them all to the
+	 * Finds and connects to all connected SlideBarsx, adds them all to the
 	 * slider hash map, creates the defaults in the slider hash map, prints out
 	 * the number of connected SlideBars, and loads the plugins.
 	 * 
@@ -182,11 +184,13 @@ public class MainBack implements Runnable {
 			}
 			if (!exe) {
 				if (!previous.equals(hotKeys)) {
+					slideMan.sliders.forEach((String, Arduino) -> Arduino.removeParts());
 					for (SlideBarPlugin p : PM.getProci()) {
 						for (String processName : p.getProcessNames()) {
 							if (processName.contentEquals(hotKeys)) {
 								System.out.println("process change");
 								previous = processName;
+								
 								p.runFirst(processName);
 							}
 						}
@@ -203,12 +207,14 @@ public class MainBack implements Runnable {
 				}
 			} else {
 				if (!previous.equals(activeProcess)) {
+					slideMan.sliders.forEach((String, Arduino) -> Arduino.removeParts());
 					updatePrevList(activeProcess);
 					for (SlideBarPlugin p : PM.getProci()) {
 						for (String processName : p.getProcessNames()) {
 							if (processName.contentEquals(activeProcess)) {
 								System.out.println("process change");
 								previous = processName;
+								
 								p.runFirst(processName);
 							}
 						}
