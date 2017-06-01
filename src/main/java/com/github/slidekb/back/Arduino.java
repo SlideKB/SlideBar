@@ -68,7 +68,7 @@ public class Arduino implements SerialPortEventListener {
     /**
      * current value of the arduino
      **/
-    protected int reading = 0;
+    protected int reading = -1;
 
     protected int numberOfParts;
 
@@ -108,27 +108,40 @@ public class Arduino implements SerialPortEventListener {
         try {
             serialPort.openPort();
             serialPort.setParams(SerialPort.BAUDRATE_115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+            serialPort.writeBytes("2424]".getBytes());
+            System.out.println("here");
+            System.out.println(serialPort.readString());
             serialPort.addEventListener((SerialPortEvent serialPortEvent) -> {
 
                 try {
-                    String st = serialPort.readString(serialPortEvent.getEventValue());
+                    String st = "";
+//					try {
+						st = serialPort.readString(serialPortEvent.getEventValue());
+//					} catch (SerialPortTimeoutException e1) {
+//						System.out.println("readString() timed out");
+//						e1.printStackTrace();
+//					}
                     st = st.trim();
-
-                    try {
-                        reading = Integer.parseInt(st);
-                    } catch (Exception e) {
+                    if (st.length() != 0){
+                    	try {
+                            reading = Integer.parseInt(st);
+                            System.out.println(Integer.parseInt(st));
+                        } catch (Exception e) {
+                        	System.out.println("failed to parse Int");
+                        }
                     }
                 } catch (SerialPortException ex) {
+                	System.out.println("failed to readString()");
                     ex.printStackTrace();
                 }
 
             });
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            serialPort.readBytes(serialPort.getOutputBufferBytesCount());
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            serialPort.readBytes(serialPort.getOutputBufferBytesCount());
 
             try {
                 Thread.sleep(3000);
@@ -137,13 +150,15 @@ public class Arduino implements SerialPortEventListener {
                 e.printStackTrace();
             }
             serialPort.writeBytes("2424]".getBytes());
-            ID = serialPort.readString(4);
+            
+			ID = serialPort.readString(4);
+			
             this.serialPort = serialPort;
 
         } catch (SerialPortException ex) {
             System.out.println("SerialPortException: " + ex.toString());
         }
-        if (reading == 0) {
+        if (reading == -1) {
             System.out.println("[Not a slider at " + portName + "]");
             connectedAndSlider = false;
         } else {
