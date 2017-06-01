@@ -115,33 +115,33 @@ public class Arduino implements SerialPortEventListener {
 
                 try {
                     String st = "";
-//					try {
-						st = serialPort.readString(serialPortEvent.getEventValue());
-//					} catch (SerialPortTimeoutException e1) {
-//						System.out.println("readString() timed out");
-//						e1.printStackTrace();
-//					}
+                    // try {
+                    st = serialPort.readString(serialPortEvent.getEventValue());
+                    // } catch (SerialPortTimeoutException e1) {
+                    // System.out.println("readString() timed out");
+                    // e1.printStackTrace();
+                    // }
                     st = st.trim();
-                    if (st.length() != 0){
-                    	try {
+                    if (st.length() != 0) {
+                        try {
                             reading = Integer.parseInt(st);
                             System.out.println(Integer.parseInt(st));
                         } catch (Exception e) {
-                        	System.out.println("failed to parse Int");
+                            System.out.println("failed to parse Int");
                         }
                     }
                 } catch (SerialPortException ex) {
-                	System.out.println("failed to readString()");
+                    System.out.println("failed to readString()");
                     ex.printStackTrace();
                 }
 
             });
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            serialPort.readBytes(serialPort.getOutputBufferBytesCount());
+            // try {
+            // Thread.sleep(1000);
+            // } catch (InterruptedException e) {
+            // e.printStackTrace();
+            // }
+            // serialPort.readBytes(serialPort.getOutputBufferBytesCount());
 
             try {
                 Thread.sleep(3000);
