@@ -108,9 +108,9 @@ public class Arduino implements SerialPortEventListener {
         try {
             serialPort.openPort();
             serialPort.setParams(SerialPort.BAUDRATE_115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+
             serialPort.writeBytes("2424]".getBytes());
-            System.out.println("here");
-            System.out.println(serialPort.readString());
+
             serialPort.addEventListener((SerialPortEvent serialPortEvent) -> {
 
                 try {
@@ -150,13 +150,15 @@ public class Arduino implements SerialPortEventListener {
                 e.printStackTrace();
             }
             serialPort.writeBytes("2424]".getBytes());
-            
-			ID = serialPort.readString(4);
-			
+
+            ID = serialPort.readString(4, 5000);
+
             this.serialPort = serialPort;
 
         } catch (SerialPortException ex) {
             System.out.println("SerialPortException: " + ex.toString());
+        } catch (SerialPortTimeoutException ex) {
+            System.out.println("SerialPortTimeoutException: " + ex.toString());
         }
         if (reading == -1) {
             System.out.println("[Not a slider at " + portName + "]");
