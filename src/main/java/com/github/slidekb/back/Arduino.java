@@ -109,8 +109,6 @@ public class Arduino implements SerialPortEventListener {
             serialPort.openPort();
             serialPort.setParams(SerialPort.BAUDRATE_115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
-            serialPort.writeBytes("2424]".getBytes());
-
             serialPort.addEventListener((SerialPortEvent serialPortEvent) -> {
 
                 try {
