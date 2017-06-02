@@ -165,7 +165,7 @@ public class MainBack implements Runnable {
 	public static void Run() throws Throwable {
 		int counter = 0;
 		String previous = "";
-		while (started) {
+		while (started && PM.getProci().size() != 0) {
 			boolean exe = true;
 			try {
 				Thread.sleep(1);
