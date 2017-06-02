@@ -25,6 +25,13 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -108,17 +115,11 @@ public class Arduino implements SerialPortEventListener {
         try {
             serialPort.openPort();
             serialPort.setParams(SerialPort.BAUDRATE_115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-
             serialPort.addEventListener((SerialPortEvent serialPortEvent) -> {
 
                 try {
                     String st = "";
-                    // try {
                     st = serialPort.readString(serialPortEvent.getEventValue());
-                    // } catch (SerialPortTimeoutException e1) {
-                    // System.out.println("readString() timed out");
-                    // e1.printStackTrace();
-                    // }
                     st = st.trim();
                     if (st.length() != 0) {
                         try {
@@ -134,23 +135,31 @@ public class Arduino implements SerialPortEventListener {
                 }
 
             });
-            // try {
-            // Thread.sleep(1000);
-            // } catch (InterruptedException e) {
-            // e.printStackTrace();
-            // }
-            // serialPort.readBytes(serialPort.getOutputBufferBytesCount());
-
+            // Timeout for serialPort.writeBytes("2424]".getBytes()
+            ExecutorService executor = Executors.newCachedThreadPool();
+            Callable<Object> task = new Callable<Object>() {
+               public Object call() {
+                  try {
+					return serialPort.writeBytes("2424]".getBytes());
+				} catch (SerialPortException e) {
+					return true;
+				}
+               }
+            };
+            Future<Object> future = executor.submit(task);
             try {
-                Thread.sleep(3000);
+               Object result = future.get(5, TimeUnit.SECONDS); 
+            } catch (TimeoutException ex) {
+               System.out.println("serialPort.writeBytes('2424]'.getBytes() - timed out");
+               serialPort.closePort();
             } catch (InterruptedException e) {
-
-                e.printStackTrace();
+               // handle the interrupts
+            } catch (ExecutionException e) {
+               // handle other exceptions
+            } finally {
+               future.cancel(true); 
             }
-            serialPort.writeBytes("2424]".getBytes());
-
             ID = serialPort.readString(4, 5000);
-
             this.serialPort = serialPort;
 
         } catch (SerialPortException ex) {
