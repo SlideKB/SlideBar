@@ -80,7 +80,7 @@ public class Arduino implements SerialPortEventListener {
 
     protected boolean isFakeArduino;
 
-    protected Arduino(String Port) {
+    public Arduino(String Port) {
         portName = Port;
         connectedAndSlider = false;
         try {
@@ -110,6 +110,22 @@ public class Arduino implements SerialPortEventListener {
             serialPort.setParams(SerialPort.BAUDRATE_115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
             serialPort.writeBytes("2424]".getBytes());
+            serialPort.writeBytes("6007]".getBytes());
+            ID = serialPort.readString(4, 5000);
+
+            
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+
+                e.printStackTrace();
+            }
+            serialPort.writeBytes("2424]".getBytes());
+            ID = serialPort.readString();
+            serialPort.writeBytes("2007]".getBytes());
+            serialPort.writeBytes("6007]".getBytes());
+
+            ID = serialPort.readString(4, 5000);
 
             serialPort.addEventListener((SerialPortEvent serialPortEvent) -> {
 
@@ -131,16 +147,7 @@ public class Arduino implements SerialPortEventListener {
                 }
 
             });
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-
-                e.printStackTrace();
-            }
-            serialPort.writeBytes("2424]".getBytes());
-
-            ID = serialPort.readString(4, 5000);
-
+            
             this.serialPort = serialPort;
 
         } catch (SerialPortException ex) {
