@@ -371,7 +371,6 @@ public class MainFront {
         Thread back = new Thread(new MainBack());
         back.start();
         MainBack.PM.waitUntilProcessesLoaded();
-
         createAndShowGUI();
         setupTray();
     }
