@@ -101,7 +101,6 @@ public class Volume implements SlideBarPlugin {
         try {
             Thread.sleep(100);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         File f = new File("ahk_scripts/AudioLevel.txt");
@@ -156,7 +155,12 @@ public class Volume implements SlideBarPlugin {
 
     private void writeValues() {
         slider.removeParts();
-        slider.goToPartComplete(100 - getVolume(), 101);
+        int volume = getVolume();
+        if (volume < 5) {
+        	slider.write(1022);
+        } else {
+        	slider.goToPartComplete(100 - getVolume(), 101);
+        }
         for (int i = 0; i < PartLatch.length; i++) {
             PartLatch[i] = true;
         }

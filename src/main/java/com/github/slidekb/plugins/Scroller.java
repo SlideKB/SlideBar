@@ -101,7 +101,8 @@ public class Scroller implements SlideBarPlugin {
 
     @Override
     public String[] getProcessNames() {
-        return attachedProcesses.toArray(new String[attachedProcesses.size()]);
+//        return attachedProcesses.toArray(new String[attachedProcesses.size()]);
+    	return baseConfig.getProcessNames();
     }
 
     private void Sleeper(int delay) {
