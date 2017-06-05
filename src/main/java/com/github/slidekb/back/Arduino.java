@@ -133,7 +133,7 @@ public class Arduino implements SerialPortEventListener {
                             reading = Integer.parseInt(st);
                             System.out.println(Integer.parseInt(st));
                         } catch (Exception e) {
-                        	System.out.println("failed to parse Int");
+                        	//do nothing
                         }
                     }
                 } catch (SerialPortException ex) {
