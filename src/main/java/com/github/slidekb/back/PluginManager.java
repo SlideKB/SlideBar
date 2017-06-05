@@ -54,14 +54,14 @@ public class PluginManager {
                 if (currentAnnotation.value() == OsHelper.getOS()) {
                     currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
                     currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
-                    currentImplementation.setSliderManager(MainBack.slideMan);
+                    currentImplementation.setSliderManager(MainBack.getSlideMan());
 //                    currentImplementation.setSlider(findSliderById(currentImplementation.currentlyUsedSlider()));
                     proci.add(currentImplementation);
                 }
             } else { // No Annotation -> platform independent plugin
                 currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
                 currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
-                currentImplementation.setSliderManager(MainBack.slideMan);
+                currentImplementation.setSliderManager(MainBack.getSlideMan());
 //                currentImplementation.setSlider(findSliderById(currentImplementation.currentlyUsedSlider()));
 
                 proci.add(currentImplementation);

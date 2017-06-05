@@ -59,7 +59,7 @@ public class MainBack implements Runnable {
 
 	static PortManager portMan = new PortManager();
 
-	static SliderManagerImpl slideMan = new SliderManagerImpl();
+	private static SliderManagerImpl slideMan = new SliderManagerImpl();
 
 	// TODO remove this
 	public static Map<String, Slider> sliders = new HashMap<>();
@@ -103,7 +103,7 @@ public class MainBack implements Runnable {
 	 * @param amount
 	 */
 	public static void testVibrate(int amount) {
-		slideMan.sliders.forEach((String, Arduino) -> Arduino.vibrate(5));
+		getSlideMan().sliders.forEach((String, Arduino) -> Arduino.vibrate(5));
 		//test
 		PM.reloadAllPluginBaseConfigs();
 	}
@@ -132,7 +132,7 @@ public class MainBack implements Runnable {
 			// find and connect to all the SlideBars
 			portMan.findAndConnect();
 			// Add the SlideBars to the Hash map.
-			slideMan.hashTheSlideBars();
+			getSlideMan().hashTheSlideBars();
 			// TODO this should be moved to the portManager class
 			System.out.println("Number of sliders connected: " + portMan.getArduinos().size());
 			started = true;
@@ -152,6 +152,14 @@ public class MainBack implements Runnable {
 	//TODO can this be moved to a different class?
 	public static String[] getPrev20() {
 		return prev20List.toArray(new String[prev20List.size()]);
+	}
+
+	public static SliderManagerImpl getSlideMan() {
+		return slideMan;
+	}
+
+	public static void setSlideMan(SliderManagerImpl slideMan) {
+		MainBack.slideMan = slideMan;
 	}
 
 	// TODO rename Run() to something other than Run to avoid confusion
@@ -184,7 +192,7 @@ public class MainBack implements Runnable {
 			}
 			if (!exe) {
 				if (!previous.equals(hotKeys)) {
-					slideMan.sliders.forEach((String, Arduino) -> Arduino.removeParts());
+					getSlideMan().sliders.forEach((String, Arduino) -> Arduino.removeParts());
 					for (SlideBarPlugin p : PM.getProci()) {
 						for (String processName : p.getProcessNames()) {
 							if (processName.contentEquals(hotKeys)) {
@@ -207,7 +215,7 @@ public class MainBack implements Runnable {
 				}
 			} else {
 				if (!previous.equals(activeProcess)) {
-					slideMan.sliders.forEach((String, Arduino) -> Arduino.removeParts());
+					getSlideMan().sliders.forEach((String, Arduino) -> Arduino.removeParts());
 					updatePrevList(activeProcess);
 					for (SlideBarPlugin p : PM.getProci()) {
 						for (String processName : p.getProcessNames()) {
@@ -260,6 +268,18 @@ public class MainBack implements Runnable {
 		x = new KeyHook();
 		GlobalScreen.addNativeKeyListener(x);
 	}
+	
+	//TODO
+	/**
+	 * TODO move to sliderManager class
+	 * reconnect to the sliders without reloading plugins. maybe make plugins not run while reconnecting to prevent issues
+	 * @return
+	 */
+	public static Boolean reconnect() {
+		//TODO
+		
+		return true;
+	}
 
 	/**
 	 * stops the run() function disconnects arduino removes all process from the
@@ -269,11 +289,8 @@ public class MainBack implements Runnable {
 	 */
 	public static Boolean stop() {
 		System.out.println("stopping");
-		// for (Slider s : sliders.values()) {
-		// s.close();
-		// }
-		slideMan.closeAll();
-		// TODO Move this to the SliderManager class
+		getSlideMan().closeAll();
+		// TODO decide if this needs to move to the Move this to the SliderManager class
 		PM.removeProci(true);
 		started = false;
 		return true;
