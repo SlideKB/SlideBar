@@ -28,18 +28,25 @@ owner-1.0.9
 
 0. navigate to run configurations (Run -> Run configurations)
 1. Create a new Maven build by right clicking on **maven build** and selecting new
-2. - give it a unique name. example "mavenSlideBar". base directory -> "${workspace_loc:/slidebar}". goals -> "clean package exec:exec"
+2. 
+  - give it a unique name. example "mavenSlideBar".
+  - base directory -> "${workspace_loc:/slidebar}".
+  - goals -> "clean package -DskipTests"
 3. Apply
 4. setup the slidebar-API project
 5. Create a new Maven build by right clicking on **maven build** and selecting new
-6. - give it a unique name. example "mavenSlideBarAPI". base directory -> "${workspace_loc:/slidebar-api}". goals -> "clean compile install"
+6. 
+  - give it a unique name. example "mavenSlideBarAPI".
+  - base directory -> "${workspace_loc:/slidebar-api}".
+  - goals -> "clean compile install"
 7. apply and run
 8. after completetion, run the first maven build (example mavenSlideBar) created in step 1
 
 # Running
 
-either run the first maven build (example mavenSlideBar) created earlier
-
-or
-
 run "MainFront.java" as a java application after building the slidebar-api and the slidebar repo
+
+or 
+
+
+run "UI.java" as a java application after building the slidebar-api and the slidebar repo
