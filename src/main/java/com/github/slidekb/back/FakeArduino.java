@@ -31,7 +31,6 @@ public class FakeArduino extends Arduino {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         ID = givenID;

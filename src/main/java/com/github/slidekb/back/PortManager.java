@@ -73,7 +73,7 @@ public class PortManager {
 	}
 
 	/**
-	 * not sure what this does TODO pureSpider
+	 * not sure what this does TODO pureSpider add doc please
 	 */
 	public String[] getAllArduinoID() {
 		return arduinos //
