@@ -119,6 +119,8 @@ public class MainBack implements Runnable {
         beanConfig.setVersion("1.0.0");
         beanConfig.setTitle("SlideBar REST Interface");
         beanConfig.setResourcePackage(RootResource.class.getPackage().getName());
+        beanConfig.setSchemes(new String[] { "http" });
+        beanConfig.setHost("localhost:5055");
         beanConfig.setScan(true);
 
         final ResourceConfig rc = new ResourceConfig();
