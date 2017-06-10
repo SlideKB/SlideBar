@@ -51,7 +51,7 @@ public class SliderManagerImpl implements SliderManager {
 	 * default3, and forth slider is default4)
 	 */
 	public void hashTheSlideBars() {
-		MainBack.portMan.getArduinos().forEach((String, arduino) -> sliders.put(String, new SliderImpl(arduino)));
+		MainBack.portMan.getArduinos().forEach((id, arduino) -> sliders.put(id, new SliderImpl(arduino)));
 		// TODO remove use of arraylist (don't know how I would do that though)
 		ArrayList<Arduino> tempArduinos = new ArrayList<>();
 		MainBack.portMan.getArduinos().forEach((String, arduino) -> {
