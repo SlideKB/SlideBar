@@ -45,6 +45,7 @@ import org.aeonbits.owner.Mutable;
 
 import com.github.slidekb.api.AlphaKeyManager;
 import com.github.slidekb.api.HotKeyManager;
+import com.github.slidekb.api.PluginVersion;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.api.Slider;
 import com.github.slidekb.api.SliderManager;
@@ -53,11 +54,12 @@ import com.google.auto.service.AutoService;
 /**
  * Created by JackSB on 3/12/2017.
  */
+@PluginVersion(1)
 @AutoService(SlideBarPlugin.class)
 public class AltProcess implements SlideBarPlugin {
 
     HotKeyManager hotKeyManager;
-    
+
     SliderManager sliderManager;
 
     Slider slider;
@@ -275,9 +277,9 @@ public class AltProcess implements SlideBarPlugin {
         return false;
     }
 
-	@Override
-	public void setSliderManager(SliderManager sliderManager) {
-		this.sliderManager = sliderManager;
-		this.slider = sliderManager.getSliderByID("default");		
-	}
+    @Override
+    public void setSliderManager(SliderManager sliderManager) {
+        this.sliderManager = sliderManager;
+        this.slider = sliderManager.getSliderByID("default");
+    }
 }

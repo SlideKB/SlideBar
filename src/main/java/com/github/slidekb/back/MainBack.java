@@ -186,7 +186,7 @@ public class MainBack implements Runnable {
             // TODO this should be moved to the portManager class
             System.out.println("Number of sliders connected: " + portMan.getArduinos().size());
             started = true;
-            PM.loadProcesses();
+            PM.loadProcesses(1);
         }
         return started;
     }

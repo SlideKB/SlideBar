@@ -17,13 +17,12 @@
 package com.github.slidekb.back;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.concurrent.CountDownLatch;
 
 import com.github.slidekb.api.PlatformSpecific;
+import com.github.slidekb.api.PluginVersion;
 import com.github.slidekb.api.SlideBarPlugin;
-import com.github.slidekb.api.Slider;
 import com.github.slidekb.util.CurrentWorkingDirectoryClassLoader;
 import com.github.slidekb.util.OsHelper;
 
@@ -35,47 +34,56 @@ public class PluginManager {
     public PluginManager() {
 
     }
-    
+
     /**
-     * calls listFilesForFolder("\\src\\plugins").
-     * adds internal process into the list and instances each.
+     * Adds plugins into the list and instances each.
      * 
      * @return true if successful.
      */
-    protected boolean loadProcesses() {
+    protected boolean loadProcesses(int programVersion) {
         proci.clear();
 
         ServiceLoader<SlideBarPlugin> loader = ServiceLoader.load(SlideBarPlugin.class, CurrentWorkingDirectoryClassLoader.getCurrentWorkingDirectoryClassLoader());
 
         for (SlideBarPlugin currentImplementation : loader) {
-            PlatformSpecific currentAnnotation = currentImplementation.getClass().getAnnotation(PlatformSpecific.class);
+            PluginVersion currentVersion = currentImplementation.getClass().getAnnotation(PluginVersion.class);
 
-            if (currentAnnotation != null) { // Annotation present -> platform specific plugin
-                if (currentAnnotation.value() == OsHelper.getOS()) {
+            if (currentVersion == null) {
+                System.out.println("Found plugin " + currentImplementation.getClass().getCanonicalName() + " but it has no version annotation! Skipping.");
+                continue;
+            } else if (currentVersion.value() != programVersion) {
+                System.out.println("Found plugin " + currentImplementation.getClass().getCanonicalName() + " but its version " + currentVersion.value() + " doesn't match program version " + programVersion + "! Skipping.");
+                continue;
+            } else {
+                PlatformSpecific currentAnnotation = currentImplementation.getClass().getAnnotation(PlatformSpecific.class);
+
+                if (currentAnnotation != null) { // Annotation present -> platform specific plugin
+                    if (currentAnnotation.value() == OsHelper.getOS()) {
+                        System.out.println("Loading platform dependant plugin " + currentImplementation.getClass().getCanonicalName() + " for platform " + OsHelper.getOS());
+                        currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
+                        currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
+                        currentImplementation.setSliderManager(MainBack.getSlideMan());
+                        proci.add(currentImplementation);
+                    }
+                } else { // No Annotation -> platform independent plugin
+                    System.out.println("Loading platform independant plugin " + currentImplementation.getClass().getCanonicalName());
                     currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
                     currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
                     currentImplementation.setSliderManager(MainBack.getSlideMan());
-//                    currentImplementation.setSlider(findSliderById(currentImplementation.currentlyUsedSlider()));
+
                     proci.add(currentImplementation);
                 }
-            } else { // No Annotation -> platform independent plugin
-                currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
-                currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
-                currentImplementation.setSliderManager(MainBack.getSlideMan());
-//                currentImplementation.setSlider(findSliderById(currentImplementation.currentlyUsedSlider()));
-
-                proci.add(currentImplementation);
             }
         }
 
         pluginsLoaded.countDown();
         return true;
     }
-    
+
     public void reloadAllPluginBaseConfigs() {
-    	for (SlideBarPlugin p: proci){
-    		p.reloadPropFile();
-    	}
+        for (SlideBarPlugin p : proci) {
+            p.reloadPropFile();
+        }
     }
 
     public void waitUntilProcessesLoaded() throws InterruptedException {

@@ -33,6 +33,7 @@ import org.aeonbits.owner.Config.DefaultValue;
 
 import com.github.slidekb.api.AlphaKeyManager;
 import com.github.slidekb.api.HotKeyManager;
+import com.github.slidekb.api.PluginVersion;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.api.Slider;
 import com.github.slidekb.api.SliderManager;
@@ -41,6 +42,7 @@ import com.google.auto.service.AutoService;
 /**
  * Created by JackSB on 4/22/2017.
  */
+@PluginVersion(1)
 @AutoService(SlideBarPlugin.class)
 public class Volume implements SlideBarPlugin {
 
@@ -58,7 +60,7 @@ public class Volume implements SlideBarPlugin {
 
     ThisConfig cfg;
 
-	private SliderManager sliderManager;
+    private SliderManager sliderManager;
 
     public Volume() {
         loadConfiguration();
@@ -157,9 +159,9 @@ public class Volume implements SlideBarPlugin {
         slider.removeParts();
         int volume = getVolume();
         if (volume < 5) {
-        	slider.write(1022);
+            slider.write(1022);
         } else {
-        	slider.goToPartComplete(100 - getVolume(), 101);
+            slider.goToPartComplete(100 - getVolume(), 101);
         }
         for (int i = 0; i < PartLatch.length; i++) {
             PartLatch[i] = true;
@@ -203,8 +205,8 @@ public class Volume implements SlideBarPlugin {
     }
 
     @Override
-	public void setSliderManager(SliderManager sliderManager) {
-		this.sliderManager = sliderManager;
-		this.slider = this.sliderManager.getSliderByID("default");
-	}
+    public void setSliderManager(SliderManager sliderManager) {
+        this.sliderManager = sliderManager;
+        this.slider = this.sliderManager.getSliderByID("default");
+    }
 }
