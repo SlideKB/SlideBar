@@ -20,10 +20,6 @@ public class PluginResource {
     public List<IfcPlugin> getAllPlugins() {
         List<IfcPlugin> plugins = new ArrayList<>();
 
-        MainBack.PM.getProci().forEach(plugin -> {
-            plugins.add(new IfcPlugin(plugin.getLabelName(), plugin.currentlyUsedSlider()));
-        });
-
         return plugins;
     }
 
