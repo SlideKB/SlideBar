@@ -198,21 +198,6 @@ public class Volume implements SlideBarPlugin {
     }
 
     @Override
-    public void attachToProcess(String processName) {
-        // NOP
-    }
-
-    @Override
-    public void detachFromProcess(String processName) {
-        // NOP
-    }
-
-    @Override
-    public String currentlyUsedSlider() {
-        return cfg.SliderID();
-    }
-
-    @Override
     public boolean usesProcessNames() {
         return false;
     }
