@@ -80,6 +80,8 @@ public class Arduino implements SerialPortEventListener {
 
     protected boolean isFakeArduino;
 
+	private boolean reversed;
+
     /**
      * sets up slider/arduino but does not connect. 
      * @param Port
@@ -149,12 +151,12 @@ public class Arduino implements SerialPortEventListener {
 					st = serialPort.readString(serialPortEvent.getEventValue());
                     st = st.trim();
                     if (st.length() != 0){
-                    	try {
-                            reading = Integer.parseInt(st);
-                            System.out.println(Integer.parseInt(st));
-                        } catch (Exception e) {
-                        	//do nothing
-                        }
+	            		try {
+	                        reading = Integer.parseInt(st);
+	                        System.out.println(read());
+	                    } catch (Exception e) {
+	                    	//do nothing
+	                    }
                     }
                 } catch (SerialPortException ex) {
                 	System.out.println("failed to readString()");
@@ -186,7 +188,11 @@ public class Arduino implements SerialPortEventListener {
      * @return
      */
     public int read() {
+    	if (reversed){
+    		return 1022 - reading;
+    	}
         return reading;
+        
     }
 
     /**
@@ -225,6 +231,9 @@ public class Arduino implements SerialPortEventListener {
      * @param send
      */
     public void write(int send) {
+    	if (send >= 0 && send <= 1024 && reversed){
+    		send = 1024 - send;
+    	}
         String toSend = send + "]";
         try {
             serialPort.writeString(toSend);
@@ -374,8 +383,7 @@ public class Arduino implements SerialPortEventListener {
      * @param reversed
      */
 	public void setReversed(boolean reversed) {
-		// TODO make arudino run in reverse
-		
+		this.reversed = reversed;
 	}
 
 }
