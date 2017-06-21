@@ -16,19 +16,19 @@
 
 package com.github.slidekb.back;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.logging.LoggingFeature;
@@ -40,13 +40,15 @@ import org.jnativehook.NativeHookException;
 import com.github.slidekb.api.AlphaKeyManager;
 import com.github.slidekb.api.HotKeyManager;
 import com.github.slidekb.api.SlideBarPlugin;
-import com.github.slidekb.api.Slider;
+import com.github.slidekb.back.settings.GlobalSettings;
+import com.github.slidekb.back.settings.PluginSettings;
 import com.github.slidekb.ifc.resources.RootResource;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
-import io.swagger.jersey.listing.ApiListingResourceJSON;
 
 public class MainBack implements Runnable {
 
@@ -77,8 +79,7 @@ public class MainBack implements Runnable {
 
     private static SliderManagerImpl slideMan = new SliderManagerImpl();
 
-    // TODO remove this
-    public static Map<String, Slider> sliders = new HashMap<>();
+    private static GlobalSettings settings;
 
     /**
      * For running without an Interface. creates a new thread and starts it
@@ -187,6 +188,31 @@ public class MainBack implements Runnable {
             System.out.println("Number of sliders connected: " + portMan.getArduinos().size());
             started = true;
             PM.loadProcesses(1);
+
+            Gson gson = new GsonBuilder().create();
+            try {
+                File settingsFile = new File("settings.json");
+                settingsFile.createNewFile();
+
+                // try (Writer writer = new FileWriter(settingsFile)) {
+                // PluginSettings sObj = new PluginSettings();
+                // sObj.setUsedSlider("f1n1");
+                // sObj.getProcesses().add("explorer.exe");
+                // sObj.getHotkeys().add("alt");
+                //
+                // GlobalSettings gObj = new GlobalSettings();
+                // gObj.getPlugins().put(AltProcess.class.getCanonicalName(), sObj);
+                // gObj.getSliders().put("f1n1", new SliderSettings());
+                //
+                // gson.toJson(gObj, writer);
+                // }
+
+                try (Reader reader = new FileReader(settingsFile)) {
+                    settings = gson.fromJson(reader, GlobalSettings.class);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return started;
     }
@@ -208,6 +234,10 @@ public class MainBack implements Runnable {
         return slideMan;
     }
 
+    public static GlobalSettings getSettings() {
+        return settings;
+    }
+
     public static void setSlideMan(SliderManagerImpl slideMan) {
         MainBack.slideMan = slideMan;
     }
@@ -221,81 +251,53 @@ public class MainBack implements Runnable {
      * @throws Throwable
      */
     public static void Run() throws Throwable {
-        int counter = 0;
-        String previous = "";
-        while (started && PM.getProci().size() != 0) {
-            boolean exe = true;
+        boolean changed = false;
+        boolean runThisPlugin = false;
+
+        while (started && !PM.getProci().isEmpty()) {
             try {
                 Thread.sleep(1);
             } catch (Exception e) {
             }
+
             String activeProcess = ActiveProcess.getProcess();
             String hotKeys = Arrays.toString(KeyHook.getHotKeys());
-            // System.out.println(ard.read());
-            // System.out.println(AP);
-            for (SlideBarPlugin p : PM.getProci()) {
-                for (String processName : p.getProcessNames()) {
-                    if (processName.contentEquals(hotKeys)) {
-                        exe = false;
-                    }
-                }
+
+            String previousActiveProcess = null;
+            String previousHotKeys = null;
+
+            if ((previousActiveProcess != activeProcess) || (previousHotKeys != hotKeys)) {
+                updatePrevList(activeProcess);
+                getSlideMan().sliders.forEach((String, Arduino) -> Arduino.removeParts());
+
+                changed = true;
             }
-            if (!exe) {
-                if (!previous.equals(hotKeys)) {
-                    getSlideMan().sliders.forEach((String, Arduino) -> Arduino.removeParts());
-                    for (SlideBarPlugin p : PM.getProci()) {
-                        for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(hotKeys)) {
-                                System.out.println("process change");
-                                previous = processName;
 
-                                p.runFirst(processName);
-                            }
-                        }
-                    }
-                } else {
-                    for (SlideBarPlugin p : PM.getProci()) {
-                        for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(hotKeys)) {
-                                previous = processName;
-                                p.run(processName);
-                            }
-                        }
-                    }
-                }
-            } else {
-                if (!previous.equals(activeProcess)) {
-                    getSlideMan().sliders.forEach((String, Arduino) -> Arduino.removeParts());
-                    updatePrevList(activeProcess);
-                    for (SlideBarPlugin p : PM.getProci()) {
-                        for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(activeProcess)) {
-                                System.out.println("process change");
-                                previous = processName;
+            for (SlideBarPlugin plugin : PM.getProci()) {
+                String pluginID = plugin.getClass().getCanonicalName();
 
-                                p.runFirst(processName);
-                            }
-                        }
-                    }
-                } else {
-                    for (SlideBarPlugin p : PM.getProci()) {
-                        for (String processName : p.getProcessNames()) {
-                            if (processName.contentEquals(activeProcess)) {
-                                previous = processName;
-                                p.run(processName);
+                if (settings.getPlugins().containsKey(pluginID)) {
+                    PluginSettings pluginSettings = settings.getPlugins().get(pluginID);
 
-                            }
+                    runThisPlugin = pluginSettings.isAlwaysRun() || ((pluginSettings.getHotkeys().isEmpty() || pluginSettings.getHotkeys().contains(hotKeys)) && (pluginSettings.getProcesses().isEmpty() || pluginSettings.getProcesses().contains(activeProcess)));
+
+                    // If both lists are empty, only run when the "always run" flag is set
+                    if (!pluginSettings.isAlwaysRun() && pluginSettings.getHotkeys().isEmpty() && pluginSettings.getProcesses().isEmpty()) {
+                        runThisPlugin = false;
+                    }
+
+                    if (runThisPlugin) {
+                        if (changed) {
+                            plugin.runFirst(activeProcess);
+                        } else {
+                            plugin.run(activeProcess);
                         }
                     }
                 }
             }
 
-            if (exe) {
-                previous = activeProcess;
-            } else {
-                previous = hotKeys;
-            }
-
+            previousActiveProcess = activeProcess;
+            previousHotKeys = hotKeys;
         }
     }
 
