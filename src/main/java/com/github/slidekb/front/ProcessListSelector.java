@@ -16,13 +16,9 @@
 
 package com.github.slidekb.front;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-import com.github.slidekb.api.SlideBarPlugin;
-import com.github.slidekb.back.MainBack;
-
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -32,6 +28,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
+
+import com.github.slidekb.back.MainBack;
 
 /**
  * Created by JackSec on 4/1/2017.
@@ -250,10 +256,6 @@ public class ProcessListSelector {
     }
 
     public void updatePlugin() {
-        for (SlideBarPlugin p : MainBack.PM.getProci()) {
-            if (p.getLabelName().equals(this.labelName)) {
-                p.reloadPropFile();
-            }
-        }
+
     }
 }

@@ -20,7 +20,6 @@ import java.awt.Robot;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
@@ -29,10 +28,7 @@ import org.aeonbits.owner.Accessible;
 import org.aeonbits.owner.Config;
 import org.aeonbits.owner.ConfigFactory;
 import org.aeonbits.owner.Mutable;
-import org.aeonbits.owner.Config.DefaultValue;
 
-import com.github.slidekb.api.AlphaKeyManager;
-import com.github.slidekb.api.HotKeyManager;
 import com.github.slidekb.api.PluginVersion;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.api.Slider;
@@ -45,8 +41,6 @@ import com.google.auto.service.AutoService;
 @PluginVersion(1)
 @AutoService(SlideBarPlugin.class)
 public class Volume implements SlideBarPlugin {
-
-    HotKeyManager hotKeyManager;
 
     Slider slider;
 
@@ -69,13 +63,6 @@ public class Volume implements SlideBarPlugin {
     @Override
     public int getPriority() {
         return -1;
-    }
-
-    @Override
-    public String[] getProcessNames() {
-        String[] hotKey2 = { "Alt", "0" };
-        String[] list = { Arrays.toString(hotKey2) };
-        return list;
     }
 
     private boolean loadConfiguration() {
@@ -151,7 +138,7 @@ public class Volume implements SlideBarPlugin {
     }
 
     @Override
-    public void run(String process) {
+    public void run() {
         readValues();
     }
 
@@ -169,39 +156,13 @@ public class Volume implements SlideBarPlugin {
     }
 
     @Override
-    public void runFirst(String process) {
+    public void runFirst() {
         writeValues();
     }
 
     @Override
     public String getLabelName() {
         return "Volume";
-    }
-
-    @Override
-    public JFrame getProcessWindow() {
-        return null;
-    }
-
-    @Override
-    public void reloadPropFile() {
-
-    }
-
-    @Override
-    public void setAlphaKeyManager(AlphaKeyManager alphaKeyManager) {
-        // NOP
-    }
-
-    @Override
-    public void setHotKeyManager(HotKeyManager hotKeyManager) {
-        this.hotKeyManager = hotKeyManager;
-        hotKeyManager.addKey("0");
-    }
-
-    @Override
-    public boolean usesProcessNames() {
-        return false;
     }
 
     @Override

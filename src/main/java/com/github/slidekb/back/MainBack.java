@@ -155,8 +155,6 @@ public class MainBack implements Runnable {
      */
     public static void testVibrate(int amount) {
         getSlideMan().sliders.forEach((String, Arduino) -> Arduino.vibrate(5));
-        // test
-        PM.reloadAllPluginBaseConfigs();
     }
 
     /**
@@ -288,9 +286,9 @@ public class MainBack implements Runnable {
 
                     if (runThisPlugin) {
                         if (changed) {
-                            plugin.runFirst(activeProcess);
+                            plugin.runFirst();
                         } else {
-                            plugin.run(activeProcess);
+                            plugin.run();
                         }
                     }
                 }

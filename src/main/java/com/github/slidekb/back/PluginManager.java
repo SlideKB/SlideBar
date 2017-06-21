@@ -60,15 +60,11 @@ public class PluginManager {
                 if (currentAnnotation != null) { // Annotation present -> platform specific plugin
                     if (currentAnnotation.value() == OsHelper.getOS()) {
                         System.out.println("Loading platform dependant plugin " + currentImplementation.getClass().getCanonicalName() + " for platform " + OsHelper.getOS());
-                        currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
-                        currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
                         currentImplementation.setSliderManager(MainBack.getSlideMan());
                         proci.add(currentImplementation);
                     }
                 } else { // No Annotation -> platform independent plugin
                     System.out.println("Loading platform independant plugin " + currentImplementation.getClass().getCanonicalName());
-                    currentImplementation.setAlphaKeyManager(MainBack.alphaKeyManager);
-                    currentImplementation.setHotKeyManager(MainBack.hotKeyManager);
                     currentImplementation.setSliderManager(MainBack.getSlideMan());
 
                     proci.add(currentImplementation);
@@ -78,12 +74,6 @@ public class PluginManager {
 
         pluginsLoaded.countDown();
         return true;
-    }
-
-    public void reloadAllPluginBaseConfigs() {
-        for (SlideBarPlugin p : proci) {
-            p.reloadPropFile();
-        }
     }
 
     public void waitUntilProcessesLoaded() throws InterruptedException {

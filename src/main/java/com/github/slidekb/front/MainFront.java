@@ -16,7 +16,15 @@
 
 package com.github.slidekb.front;
 
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -25,7 +33,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -33,7 +48,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.github.slidekb.api.SlideBarPlugin;
-import com.github.slidekb.back.Arduino;
 import com.github.slidekb.back.MainBack;
 import com.github.slidekb.back.PortManager;
 
@@ -191,8 +205,6 @@ public class MainFront {
                         for (SlideBarPlugin p : temp) {
                             if (p.getLabelName().contentEquals(element)) {
                                 System.out.println(p.getLabelName());
-                                p.getProcessWindow().pack();
-                                p.getProcessWindow().setVisible(true);
                             }
                         }
                     }
@@ -217,9 +229,6 @@ public class MainFront {
                         for (SlideBarPlugin p : temp) {
                             if (p.getLabelName().contentEquals(element)) {
                                 System.out.println(p.getLabelName());
-                                JFrame window = p.getConfigWindow();
-                                window.pack();
-                                window.setVisible(true);
                             }
                         }
                     }
