@@ -192,19 +192,6 @@ public class MainBack implements Runnable {
                 File settingsFile = new File("settings.json");
                 settingsFile.createNewFile();
 
-                // try (Writer writer = new FileWriter(settingsFile)) {
-                // PluginSettings sObj = new PluginSettings();
-                // sObj.setUsedSlider("f1n1");
-                // sObj.getProcesses().add("explorer.exe");
-                // sObj.getHotkeys().add("alt");
-                //
-                // GlobalSettings gObj = new GlobalSettings();
-                // gObj.getPlugins().put(AltProcess.class.getCanonicalName(), sObj);
-                // gObj.getSliders().put("f1n1", new SliderSettings());
-                //
-                // gson.toJson(gObj, writer);
-                // }
-
                 try (Reader reader = new FileReader(settingsFile)) {
                     settings = gson.fromJson(reader, GlobalSettings.class);
                 }
