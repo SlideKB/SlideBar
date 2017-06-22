@@ -1,0 +1,32 @@
+{
+  "plugins": {
+    "com.github.slidekb.plugins.Scroller": {
+      "processes": [
+        "explorer.exe",
+      ],
+      "hotkeys": [
+        "ctrl alt shift 3"
+      ],
+      "alwaysRun": false
+    },
+    "com.github.slidekb.plugins.Volume": {
+      "processes": [
+        "firefox.exe"
+      ],
+      "hotkeys": [
+        "alt"
+      ],
+      "alwaysRun": false
+    },
+    "com.github.slidekb.plugins.TypeWriter": {
+      "processes": [
+        "explorer.exe",
+        "firefox.exe"
+      ],
+      "hotkeys": [
+        "Alt"
+      ],
+      "alwaysRun": false
+    }
+  }
+}

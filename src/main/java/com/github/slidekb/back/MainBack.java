@@ -43,6 +43,7 @@ import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.settings.GlobalSettings;
 import com.github.slidekb.back.settings.PluginSettings;
 import com.github.slidekb.ifc.resources.RootResource;
+import com.github.slidekb.util.SettingsHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -104,7 +105,6 @@ public class MainBack implements Runnable {
         setupKeyHook();
         startIt();
         startRestServer();
-
         while (started) {
             try {
                 Run();
@@ -198,6 +198,7 @@ public class MainBack implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            
         }
         return started;
     }
@@ -228,7 +229,6 @@ public class MainBack implements Runnable {
     }
 
     // TODO rename Run() to something other than Run to avoid confusion
-    // TODO this is a cluster fuck
     /**
      * Starts the process of reading the active process and choosing which
      * process in the proci list to run
@@ -260,6 +260,7 @@ public class MainBack implements Runnable {
 
             for (SlideBarPlugin plugin : PM.getProci()) {
                 String pluginID = plugin.getClass().getCanonicalName();
+//                System.out.println(pluginID);
 
                 if (settings.getPlugins().containsKey(pluginID)) {
                     PluginSettings pluginSettings = settings.getPlugins().get(pluginID);
