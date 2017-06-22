@@ -1,27 +1,7 @@
 package com.github.slidekb.front;
 
 import java.awt.AWTException;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import com.github.slidekb.api.SlideBarPlugin;
-import com.github.slidekb.back.MainBack;
-import com.github.slidekb.back.settings.GlobalSettings;
-import com.github.slidekb.util.SettingsHelper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import javax.swing.JScrollPane;
-import javax.swing.JEditorPane;
-import javax.swing.JList;
-import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -33,17 +13,24 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Optional;
 
-import javax.swing.JCheckBox;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import com.github.slidekb.api.SlideBarPlugin;
+import com.github.slidekb.back.MainBack;
+import com.github.slidekb.back.settings.GlobalSettings;
+import com.github.slidekb.util.SettingsHelper;
 
 public class PluginConfiguration {
 
@@ -51,7 +38,9 @@ public class PluginConfiguration {
     private static JPanel contentPane;
     private static GlobalSettings settings;
     private static ArrayList<String> arrayProcess = new ArrayList<String>();
+    private static ArrayList<String> arrayHotkey = new ArrayList<String>();
     private static JList<String> processList = new JList<>();
+    private static JList<String> hotkeyList = new JList<>();
 
     /**
      * Create the frame.
@@ -85,20 +74,35 @@ public class PluginConfiguration {
                             ArrayList<SlideBarPlugin> temp = MainBack.PM.getProci();
 
                             arrayProcess.clear();
+                            arrayHotkey.clear();
+
                             for (SlideBarPlugin p : temp) {
                                 if (p.getLabelName().equals(element)) {
                                     System.out.println(p.getLabelName());
                                     System.out.println(p.getClass().getCanonicalName());
+
                                     try {
                                         for (String processName : SettingsHelper.listProcesses(p.getClass().getCanonicalName())) {
                                             arrayProcess.add(processName);
                                         }
+
+                                        String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
+                                        processList.setListData(proci);
                                     } catch (Exception e1) {
                                         System.out.println("somthing went wrong");
                                     }
 
-                                    String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
-                                    processList.setListData(proci);
+                                    try {
+                                        for (String processName : SettingsHelper.listHotkeys(p.getClass().getCanonicalName())) {
+                                            arrayHotkey.add(processName);
+                                        }
+
+                                        String hotkey[] = arrayHotkey.toArray(new String[arrayHotkey.size()]);
+                                        hotkeyList.setListData(hotkey);
+                                    } catch (Exception e1) {
+                                        System.out.println("somthing went wrong");
+                                    }
+
                                     frame.revalidate();
                                     frame.repaint();
                                 }
@@ -133,7 +137,6 @@ public class PluginConfiguration {
             processList.setBounds(333, 44, 425, 162);
             contentPane.add(processList);
 
-            JList<String> hotkeyList = new JList<>();
             hotkeyList.setBounds(333, 256, 425, 162);
             contentPane.add(hotkeyList);
 
