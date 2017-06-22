@@ -80,10 +80,11 @@ public class Arduino implements SerialPortEventListener {
 
     protected boolean isFakeArduino;
 
-	private boolean reversed;
+    private boolean reversed;
 
     /**
-     * sets up slider/arduino but does not connect. 
+     * sets up slider/arduino but does not connect.
+     * 
      * @param Port
      */
     public Arduino(String Port) {
@@ -98,6 +99,7 @@ public class Arduino implements SerialPortEventListener {
 
     /**
      * returns true if the slider/arduino is connected
+     * 
      * @return
      */
     protected boolean isConnectedAndSlider() {
@@ -106,6 +108,7 @@ public class Arduino implements SerialPortEventListener {
 
     /**
      * returns slider/arduino port currently connected to
+     * 
      * @return
      */
     public String getPortName() {
@@ -114,13 +117,14 @@ public class Arduino implements SerialPortEventListener {
 
     /**
      * returns slider/arduino ID
+     * 
      * @return
      */
     public String getID() {
         return ID;
     }
 
-    //TODO add Mac OS X support
+    // TODO add Mac OS X support
     /**
      * attempts to connect to slider/arduino
      */
@@ -130,7 +134,7 @@ public class Arduino implements SerialPortEventListener {
         try {
             serialPort.openPort();
             serialPort.setParams(SerialPort.BAUDRATE_115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-            
+
             ID = serialPort.readString(4, 5000);
 
             try {
@@ -148,23 +152,23 @@ public class Arduino implements SerialPortEventListener {
 
                 try {
                     String st = "";
-					st = serialPort.readString(serialPortEvent.getEventValue());
+                    st = serialPort.readString(serialPortEvent.getEventValue());
                     st = st.trim();
-                    if (st.length() != 0){
-	            		try {
-	                        reading = Integer.parseInt(st);
-	                        System.out.println(read());
-	                    } catch (Exception e) {
-	                    	//do nothing
-	                    }
+                    if (st.length() != 0) {
+                        try {
+                            reading = Integer.parseInt(st);
+                            System.out.println(read());
+                        } catch (Exception e) {
+                            // do nothing
+                        }
                     }
                 } catch (SerialPortException ex) {
-                	System.out.println("failed to readString()");
+                    System.out.println("failed to readString()");
                     ex.printStackTrace();
                 }
 
             });
-            
+
             this.serialPort = serialPort;
 
         } catch (SerialPortException ex) {
@@ -185,18 +189,20 @@ public class Arduino implements SerialPortEventListener {
 
     /**
      * returns slider position
+     * 
      * @return
      */
     public int read() {
-    	if (reversed){
-    		return 1022 - reading;
-    	}
+        if (reversed) {
+            return 1022 - reading;
+        }
         return reading;
-        
+
     }
 
     /**
      * sets the slider position internally in this class. (not physically)
+     * 
      * @param value
      */
     public void setReading(int value) {
@@ -228,23 +234,25 @@ public class Arduino implements SerialPortEventListener {
 
     /**
      * sets the slider to a position physically
+     * 
      * @param send
      */
     public void write(int send) {
-    	if (send >= 0 && send <= 1024 && reversed){
-    		send = 1024 - send;
-    	}
+        if (send >= 0 && send <= 1024 && reversed) {
+            send = 1024 - send;
+        }
         String toSend = send + "]";
         try {
             serialPort.writeString(toSend);
         } catch (SerialPortException e) {
-        	System.out.println("could not write(" + send +")");
+            System.out.println("could not write(" + send + ")");
             e.printStackTrace();
         }
     }
 
     /**
-     * writes to Arduino to a position and waits for completion. If the arduino is not connected, the method prints out the
+     * writes to Arduino to a position and waits for completion. If the arduino is not connected, the method prints out
+     * the
      * console likewise.
      * 
      * @param position
@@ -347,6 +355,7 @@ public class Arduino implements SerialPortEventListener {
 
     /**
      * vibrates the slider/arduino for cycle times
+     * 
      * @param cycles
      */
     public void vibrate(int cycles) {
@@ -380,10 +389,11 @@ public class Arduino implements SerialPortEventListener {
 
     /**
      * reversed the slider read and write positions
+     * 
      * @param reversed
      */
-	public void setReversed(boolean reversed) {
-		this.reversed = reversed;
-	}
+    public void setReversed(boolean reversed) {
+        this.reversed = reversed;
+    }
 
 }

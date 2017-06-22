@@ -45,123 +45,120 @@ import javax.swing.JButton;
 
 public class PluginConfiguration {
 
-	private static JFrame frame;
-	private static JPanel contentPane;
-	private static GlobalSettings settings;
-	private static ArrayList<String> arrayProcess = new ArrayList<String>();
-	private static JList<String> processList = new JList<>();
+    private static JFrame frame;
+    private static JPanel contentPane;
+    private static GlobalSettings settings;
+    private static ArrayList<String> arrayProcess = new ArrayList<String>();
+    private static JList<String> processList = new JList<>();
 
-	/**
-	 * Create the frame.
-	 */
-	public static void createAndShowGUI() {
+    /**
+     * Create the frame.
+     */
+    public static void createAndShowGUI() {
         if (frame == null) {
-	        frame = new JFrame();
-	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        frame.setBounds(100, 100, 839, 546);
-	        frame.setPreferredSize(new Dimension(839, 546));
-			frame.setMinimumSize(new Dimension(839, 546));
-			frame.setMaximumSize(new Dimension(839, 546));
-			contentPane = new JPanel();
-			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-			frame.setContentPane(contentPane);
-			contentPane.setLayout(null);
-			
-			ArrayList<String> arrayPlugins = new ArrayList<String>();
-	        for (SlideBarPlugin p : MainBack.PM.getProci()) {
-	        	arrayPlugins.add(p.getLabelName());
-	        }
-	        String plugins[] = arrayPlugins.toArray(new String[arrayPlugins.size()]);
-			JList<String> pluginList = new JList<>(plugins);
-			MouseListener mouseListener = new MouseAdapter() {
-			    public void mouseClicked(MouseEvent e) {
-			        if (e.getClickCount() == 1) {
-	                    int selected[] = pluginList.getSelectedIndices();
-	                    System.out.println("Selected Elements:  ");
-	                    for (int i = 0; i < selected.length; i++) {
-	                        String element = (String) pluginList.getModel().getElementAt(selected[i]);
-	                        ArrayList<SlideBarPlugin> temp = MainBack.PM.getProci();
+            frame = new JFrame();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setBounds(100, 100, 839, 546);
+            frame.setPreferredSize(new Dimension(839, 546));
+            frame.setMinimumSize(new Dimension(839, 546));
+            frame.setMaximumSize(new Dimension(839, 546));
+            contentPane = new JPanel();
+            contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+            frame.setContentPane(contentPane);
+            contentPane.setLayout(null);
 
-                        	arrayProcess.clear();
-	                        for (SlideBarPlugin p : temp) {
-	                            if (p.getLabelName().contentEquals(element)) {
-	                                System.out.println(p.getLabelName());
-	                                System.out.println(p.getClass().getCanonicalName());
-	                                try {
-	                                	for (String processName : settings.getPlugins().get(p.getClass().getCanonicalName()).getProcesses()) {
-		                    	        	arrayProcess.add(processName);
-		                    	        }
-	                                } catch (Exception e1){
-	                                	System.out.println("somthing went wrong");
-	                                }
-	                                
-	                    	        String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
-	                                processList.setListData(proci);
-	                                frame.revalidate();
-	                                frame.repaint();
-	                            }
-	                        }
-	                    }
-			        }
+            ArrayList<String> arrayPlugins = new ArrayList<String>();
+            for (SlideBarPlugin p : MainBack.PM.getProci()) {
+                arrayPlugins.add(p.getLabelName());
+            }
+            String plugins[] = arrayPlugins.toArray(new String[arrayPlugins.size()]);
+            JList<String> pluginList = new JList<>(plugins);
+            MouseListener mouseListener = new MouseAdapter() {
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getClickCount() == 1) {
+                        int selected[] = pluginList.getSelectedIndices();
+                        System.out.println("Selected Elements:  ");
+                        for (int i = 0; i < selected.length; i++) {
+                            String element = (String) pluginList.getModel().getElementAt(selected[i]);
+                            ArrayList<SlideBarPlugin> temp = MainBack.PM.getProci();
+
+                            arrayProcess.clear();
+                            for (SlideBarPlugin p : temp) {
+                                if (p.getLabelName().contentEquals(element)) {
+                                    System.out.println(p.getLabelName());
+                                    System.out.println(p.getClass().getCanonicalName());
+                                    try {
+                                        for (String processName : settings.getPlugins().get(p.getClass().getCanonicalName()).getProcesses()) {
+                                            arrayProcess.add(processName);
+                                        }
+                                    } catch (Exception e1) {
+                                        System.out.println("somthing went wrong");
+                                    }
+
+                                    String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
+                                    processList.setListData(proci);
+                                    frame.revalidate();
+                                    frame.repaint();
+                                }
+                            }
+                        }
+                    }
                 }
-			};
-			pluginList.addMouseListener(mouseListener);
-			pluginList.setBounds(10, 44, 313, 452);
-			contentPane.add(pluginList);
-			
-			JLabel lblPluginsLoaded = new JLabel("Plugins Loaded");
-			lblPluginsLoaded.setFont(new Font("Tahoma", Font.PLAIN, 18));
-			lblPluginsLoaded.setBounds(10, 11, 130, 22);
-			contentPane.add(lblPluginsLoaded);
-			
-			JLabel lblProcesses = new JLabel("Processes");
-			lblProcesses.setFont(new Font("Tahoma", Font.PLAIN, 18));
-			lblProcesses.setBounds(333, 11, 130, 22);
-			contentPane.add(lblProcesses);
-			
-			JLabel lblHotkeys = new JLabel("Hotkeys");
-			lblHotkeys.setFont(new Font("Tahoma", Font.PLAIN, 18));
-			lblHotkeys.setBounds(333, 223, 130, 22);
-			contentPane.add(lblHotkeys);
-			
-			JCheckBox chckbxAlwaysRun = new JCheckBox("Always Run");
-			chckbxAlwaysRun.setBounds(329, 425, 97, 23);
-			contentPane.add(chckbxAlwaysRun);
-			
-			
-	        
-			
-			processList.setBounds(333, 44, 425, 162);
-			contentPane.add(processList);
-			
-			JList hotkeyList = new JList();
-			hotkeyList.setBounds(333, 256, 425, 162);
-			contentPane.add(hotkeyList);
-			
-			JButton processAddButton = new JButton("+");
-			processAddButton.setBounds(768, 44, 45, 22);
-			contentPane.add(processAddButton);
-			
-			JButton processMinusButton = new JButton("-");
-			processMinusButton.setBounds(768, 77, 45, 22);
-			contentPane.add(processMinusButton);
-			
-			JButton hotkeyMinusButton = new JButton("-");
-			hotkeyMinusButton.setBounds(768, 289, 45, 22);
-			contentPane.add(hotkeyMinusButton);
-			
-			JButton hotkeyAddButton = new JButton("+");
-			hotkeyAddButton.setBounds(768, 256, 45, 22);
-			contentPane.add(hotkeyAddButton);
-		
-		}
-		// Display the window.
-		frame.pack();
-		
-		bringToFront();
-	}
-	
-	private static void bringToFront() {
+            };
+            pluginList.addMouseListener(mouseListener);
+            pluginList.setBounds(10, 44, 313, 452);
+            contentPane.add(pluginList);
+
+            JLabel lblPluginsLoaded = new JLabel("Plugins Loaded");
+            lblPluginsLoaded.setFont(new Font("Tahoma", Font.PLAIN, 18));
+            lblPluginsLoaded.setBounds(10, 11, 130, 22);
+            contentPane.add(lblPluginsLoaded);
+
+            JLabel lblProcesses = new JLabel("Processes");
+            lblProcesses.setFont(new Font("Tahoma", Font.PLAIN, 18));
+            lblProcesses.setBounds(333, 11, 130, 22);
+            contentPane.add(lblProcesses);
+
+            JLabel lblHotkeys = new JLabel("Hotkeys");
+            lblHotkeys.setFont(new Font("Tahoma", Font.PLAIN, 18));
+            lblHotkeys.setBounds(333, 223, 130, 22);
+            contentPane.add(lblHotkeys);
+
+            JCheckBox chckbxAlwaysRun = new JCheckBox("Always Run");
+            chckbxAlwaysRun.setBounds(329, 425, 97, 23);
+            contentPane.add(chckbxAlwaysRun);
+
+            processList.setBounds(333, 44, 425, 162);
+            contentPane.add(processList);
+
+            JList hotkeyList = new JList();
+            hotkeyList.setBounds(333, 256, 425, 162);
+            contentPane.add(hotkeyList);
+
+            JButton processAddButton = new JButton("+");
+            processAddButton.setBounds(768, 44, 45, 22);
+            contentPane.add(processAddButton);
+
+            JButton processMinusButton = new JButton("-");
+            processMinusButton.setBounds(768, 77, 45, 22);
+            contentPane.add(processMinusButton);
+
+            JButton hotkeyMinusButton = new JButton("-");
+            hotkeyMinusButton.setBounds(768, 289, 45, 22);
+            contentPane.add(hotkeyMinusButton);
+
+            JButton hotkeyAddButton = new JButton("+");
+            hotkeyAddButton.setBounds(768, 256, 45, 22);
+            contentPane.add(hotkeyAddButton);
+
+        }
+        // Display the window.
+        frame.pack();
+
+        bringToFront();
+    }
+
+    private static void bringToFront() {
         getInstance().setVisible(true);
         getInstance().setExtendedState(JFrame.NORMAL);
         getInstance().toFront();

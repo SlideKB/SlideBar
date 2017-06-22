@@ -32,91 +32,93 @@ import jssc.SerialPortList;
  */
 public class PortManager {
 
-	/**
-	 * Hash map of successfully connected SlideBars (technically they are
-	 * arduinos)
-	 */
-	Map<String, Arduino> arduinos = new HashMap<String, Arduino>();
+    /**
+     * Hash map of successfully connected SlideBars (technically they are
+     * arduinos)
+     */
+    Map<String, Arduino> arduinos = new HashMap<String, Arduino>();
 
-	public PortManager() {
+    public PortManager() {
 
-	}
+    }
 
-	/**
-	 * Attempts to connect to a SlideBar from given port. If successful, add the
-	 * SlideBar to the hash map.
-	 *
-	 * @param port
-	 * @return true is successful
-	 */
-	protected boolean addArduino(String port) {
-		Arduino currentArduino = new Arduino(port);
-		System.out.println("before initialize()");
-		currentArduino.initialize();
-		System.out.println("after initialize()");
+    /**
+     * Attempts to connect to a SlideBar from given port. If successful, add the
+     * SlideBar to the hash map.
+     *
+     * @param port
+     * @return true is successful
+     */
+    protected boolean addArduino(String port) {
+        Arduino currentArduino = new Arduino(port);
+        System.out.println("before initialize()");
+        currentArduino.initialize();
+        System.out.println("after initialize()");
 
-		// if PortManager has found a valid SlideBar (an arduino that returns an
-		// ID)
-		if (currentArduino.isConnectedAndSlider()) {
-			arduinos.put(currentArduino.getID(), currentArduino);
-		}
+        // if PortManager has found a valid SlideBar (an arduino that returns an
+        // ID)
+        if (currentArduino.isConnectedAndSlider()) {
+            arduinos.put(currentArduino.getID(), currentArduino);
+        }
 
-		return currentArduino.isConnectedAndSlider();
-	}
+        return currentArduino.isConnectedAndSlider();
+    }
 
-	/**
-	 * the Arduino that matches the ID
-	 * @Return the Arduino that matches the ID
-	 */
-	public Arduino getArduinoFromID(String ID) {
-		return arduinos.get(ID);
-	}
+    /**
+     * the Arduino that matches the ID
+     * 
+     * @Return the Arduino that matches the ID
+     */
+    public Arduino getArduinoFromID(String ID) {
+        return arduinos.get(ID);
+    }
 
-	/**
-	 * not sure what this does TODO pureSpider add doc please
-	 */
-	public String[] getAllArduinoID() {
-		return arduinos //
-				.values() // Get the Collection of all values of the Map
-				.stream() // Construct a stream from it
-				.map(entry -> entry.getID()) // Transform all the entries in the
-												// stream
-				.toArray(size -> new String[size]); // Collect the entries into
-													// an array
-	}
+    /**
+     * not sure what this does TODO pureSpider add doc please
+     */
+    public String[] getAllArduinoID() {
+        return arduinos //
+                .values() // Get the Collection of all values of the Map
+                .stream() // Construct a stream from it
+                .map(entry -> entry.getID()) // Transform all the entries in the
+                                             // stream
+                .toArray(size -> new String[size]); // Collect the entries into
+                                                    // an array
+    }
 
-	/**
-	 * returns the hash map of the connected arduinos
-	 * @return Hash map
-	 */
-	public Map<String, Arduino> getArduinos() {
-		return arduinos;
-	}
+    /**
+     * returns the hash map of the connected arduinos
+     * 
+     * @return Hash map
+     */
+    public Map<String, Arduino> getArduinos() {
+        return arduinos;
+    }
 
-	/**
-	 * For every serial device connected to the computer, attempt to connect to
-	 * it and add it to the hash map. If no sliders are connected, create a fake
-	 * arduino and add that instead.
-	 */
-	public void findAndConnect() {
-		// for each port that it finds, try and connect.
-		for (String s : getPortList(0)) {
-			addArduino(s);
-		}
+    /**
+     * For every serial device connected to the computer, attempt to connect to
+     * it and add it to the hash map. If no sliders are connected, create a fake
+     * arduino and add that instead.
+     */
+    public void findAndConnect() {
+        // for each port that it finds, try and connect.
+        for (String s : getPortList(0)) {
+            addArduino(s);
+        }
 
-		// If it still doesn't have a default, no physical Arduinos are
-		// connected then use a fake one
-		if (arduinos.isEmpty()) {
-			System.out.println("creating fake arduino");
-			arduinos.put("f1n1", new FakeArduino("f1n1", "COM69"));
-		}
-	}
+        // If it still doesn't have a default, no physical Arduinos are
+        // connected then use a fake one
+        if (arduinos.isEmpty()) {
+            System.out.println("creating fake arduino");
+            arduinos.put("f1n1", new FakeArduino("f1n1", "COM69"));
+        }
+    }
 
-	/**
-	 * returns the list of all connected serial devices
-	 */
-	public static String[] getPortList(int index) {
-		System.out.println("Getting port list");
-		return SerialPortList.getPortNames();
-	}
+    /**
+     * returns the list of all connected serial devices
+     */
+    public static String[] getPortList(int index) {
+        System.out.println("Getting port list");
+        return SerialPortList.getPortNames();
+    }
 }
