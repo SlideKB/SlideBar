@@ -14,6 +14,7 @@ import javax.swing.event.ChangeListener;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.MainBack;
 import com.github.slidekb.back.settings.GlobalSettings;
+import com.github.slidekb.util.SettingsHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -89,12 +90,9 @@ public class PluginConfiguration {
                                     System.out.println(p.getLabelName());
                                     System.out.println(p.getClass().getCanonicalName());
                                     try {
-                                        Optional.ofNullable(settings.getPlugins().get(p.getClass().getCanonicalName())) //
-                                                .ifPresent(pluginSettings -> {
-                                                    for (String processName : pluginSettings.getProcesses()) {
-                                                        arrayProcess.add(processName);
-                                                    }
-                                                });
+                                        for (String processName : SettingsHelper.listProcesses(p.getClass().getCanonicalName())) {
+                                            arrayProcess.add(processName);
+                                        }
                                     } catch (Exception e1) {
                                         System.out.println("somthing went wrong");
                                     }

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.github.slidekb.back.MainBack;
@@ -26,6 +28,17 @@ public class SettingsHelper {
         save();
     }
 
+    public static List<String> listProcesses(String pluginID) {
+        if (settings.getPlugins().containsKey(pluginID)) {
+            return settings.getPlugins().get(pluginID).getProcesses();
+        }
+
+        // TODO
+        // Is it good to return an empty list here?
+        // Maybe return null or throw an exception instead?
+        return new ArrayList<>();
+    }
+
     public static void addHotkey(String pluginID, String hotkey) {
         settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).getHotkeys().add(hotkey);
         save();
@@ -34,6 +47,17 @@ public class SettingsHelper {
     public static void removeHotkey(String pluginID, String hotkey) {
         Optional.ofNullable(settings.getPlugins().get(pluginID)).ifPresent(pluginSettings -> pluginSettings.getHotkeys().remove(hotkey));
         save();
+    }
+
+    public static List<String> listHotkeys(String pluginID) {
+        if (settings.getPlugins().containsKey(pluginID)) {
+            return settings.getPlugins().get(pluginID).getHotkeys();
+        }
+
+        // TODO
+        // Is it good to return an empty list here?
+        // Maybe return null or throw an exception instead?
+        return new ArrayList<>();
     }
 
     public static void setAlwaysRun(String pluginID, boolean alwaysRun) {
