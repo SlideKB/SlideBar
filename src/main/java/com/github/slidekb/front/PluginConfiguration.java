@@ -39,6 +39,7 @@ import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
@@ -88,9 +89,12 @@ public class PluginConfiguration {
                                     System.out.println(p.getLabelName());
                                     System.out.println(p.getClass().getCanonicalName());
                                     try {
-                                        for (String processName : settings.getPlugins().get(p.getClass().getCanonicalName()).getProcesses()) {
-                                            arrayProcess.add(processName);
-                                        }
+                                        Optional.ofNullable(settings.getPlugins().get(p.getClass().getCanonicalName())) //
+                                                .ifPresent(pluginSettings -> {
+                                                    for (String processName : pluginSettings.getProcesses()) {
+                                                        arrayProcess.add(processName);
+                                                    }
+                                                });
                                     } catch (Exception e1) {
                                         System.out.println("somthing went wrong");
                                     }
