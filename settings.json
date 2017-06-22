@@ -2,8 +2,8 @@
   "plugins": {
     "com.github.slidekb.plugins.Scroller": {
       "processes": [
-        "explorer.exe",
-      ],
+        "explorer.exe"
+			],
       "hotkeys": [
         "ctrl alt shift 3"
       ],
@@ -25,6 +25,16 @@
       ],
       "hotkeys": [
         "Alt"
+      ],
+      "alwaysRun": false
+    },
+		"com.github.slidekb.plugins.AltProcess": {
+      "processes": [
+      ],
+      "hotkeys": [
+				"[Alt]",
+				"[Alt, Tab]",
+				"[Alt, Shift, Tab]"
       ],
       "alwaysRun": false
     }
