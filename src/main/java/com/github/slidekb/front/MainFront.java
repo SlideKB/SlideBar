@@ -203,7 +203,7 @@ public class MainFront {
                         String element = (String) processList.getModel().getElementAt(selected[i]);
                         ArrayList<SlideBarPlugin> temp = MainBack.PM.getProci();
                         for (SlideBarPlugin p : temp) {
-                            if (p.getLabelName().contentEquals(element)) {
+                            if (p.getLabelName().equals(element)) {
                                 System.out.println(p.getLabelName());
                             }
                         }
@@ -227,7 +227,7 @@ public class MainFront {
                         String element = (String) processList.getModel().getElementAt(selected[i]);
                         ArrayList<SlideBarPlugin> temp = MainBack.PM.getProci();
                         for (SlideBarPlugin p : temp) {
-                            if (p.getLabelName().contentEquals(element)) {
+                            if (p.getLabelName().equals(element)) {
                                 System.out.println(p.getLabelName());
                             }
                         }

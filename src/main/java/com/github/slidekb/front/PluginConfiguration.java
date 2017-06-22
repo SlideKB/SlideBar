@@ -86,7 +86,7 @@ public class PluginConfiguration {
 
                             arrayProcess.clear();
                             for (SlideBarPlugin p : temp) {
-                                if (p.getLabelName().contentEquals(element)) {
+                                if (p.getLabelName().equals(element)) {
                                     System.out.println(p.getLabelName());
                                     System.out.println(p.getClass().getCanonicalName());
                                     try {
