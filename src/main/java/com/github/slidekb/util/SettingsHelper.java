@@ -36,6 +36,16 @@ public class SettingsHelper {
         save();
     }
 
+    public static void setAlwaysRun(String pluginID, boolean alwaysRun) {
+        settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).setAlwaysRun(alwaysRun);
+        save();
+    }
+
+    public static void setUsedSlider(String pluginID, String sliderID) {
+        settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).setUsedSlider(sliderID);
+        save();
+    }
+
     private static void save() {
         try {
             File settingsFile = new File("settings.json");
