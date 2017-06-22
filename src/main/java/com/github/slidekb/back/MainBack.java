@@ -198,7 +198,7 @@ public class MainBack implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            
+
         }
         return started;
     }
@@ -238,6 +238,8 @@ public class MainBack implements Runnable {
     public static void Run() throws Throwable {
         boolean changed = false;
         boolean runThisPlugin = false;
+        String previousActiveProcess = null;
+        String previousHotKeys = null;
 
         while (started && !PM.getProci().isEmpty()) {
             try {
@@ -248,9 +250,6 @@ public class MainBack implements Runnable {
             String activeProcess = ActiveProcess.getProcess();
             String hotKeys = Arrays.toString(KeyHook.getHotKeys());
 
-            String previousActiveProcess = null;
-            String previousHotKeys = null;
-
             if ((previousActiveProcess != activeProcess) || (previousHotKeys != hotKeys)) {
                 updatePrevList(activeProcess);
                 getSlideMan().sliders.forEach((String, Arduino) -> Arduino.removeParts());
@@ -260,7 +259,7 @@ public class MainBack implements Runnable {
 
             for (SlideBarPlugin plugin : PM.getProci()) {
                 String pluginID = plugin.getClass().getCanonicalName();
-//                System.out.println(pluginID);
+                // System.out.println(pluginID);
 
                 if (settings.getPlugins().containsKey(pluginID)) {
                     PluginSettings pluginSettings = settings.getPlugins().get(pluginID);
