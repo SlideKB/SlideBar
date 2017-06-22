@@ -237,18 +237,10 @@ public class PluginConfiguration {
     public static void main(String[] args) throws InterruptedException {
         Thread back = new Thread(new MainBack());
         back.start();
-        Gson gson = new GsonBuilder().create();
-        try {
-            File settingsFile = new File("settings.json");
-            settingsFile.createNewFile();
 
-            try (Reader reader = new FileReader(settingsFile)) {
-                settings = gson.fromJson(reader, GlobalSettings.class);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         MainBack.PM.waitUntilProcessesLoaded();
+        settings = MainBack.getSettings();
+
         createAndShowGUI();
         setupTray();
     }
