@@ -131,7 +131,7 @@ public class PluginConfiguration {
             processList.setBounds(333, 44, 425, 162);
             contentPane.add(processList);
 
-            JList hotkeyList = new JList();
+            JList<String> hotkeyList = new JList<>();
             hotkeyList.setBounds(333, 256, 425, 162);
             contentPane.add(hotkeyList);
 
