@@ -71,7 +71,7 @@ public class MainBack implements Runnable {
 
     static PortManager portMan = new PortManager();
 
-    private static SliderManagerImpl slideMan = new SliderManagerImpl();
+    private static SliderManager slideMan = new SliderManager();
 
     /**
      * For running without an Interface. creates a new thread and starts it
@@ -192,11 +192,11 @@ public class MainBack implements Runnable {
         return prev20List.toArray(new String[prev20List.size()]);
     }
 
-    public static SliderManagerImpl getSliderManager() {
+    public static SliderManager getSliderManager() {
         return slideMan;
     }
 
-    public static void setSlideMan(SliderManagerImpl slideMan) {
+    public static void setSlideMan(SliderManager slideMan) {
         MainBack.slideMan = slideMan;
     }
 

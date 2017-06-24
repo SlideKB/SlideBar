@@ -30,9 +30,9 @@ import com.github.slidekb.api.Slider;
  *         supported). The SliderManager also has a hash map with keys that are
  *         the SlideBar ID.
  */
-public class SliderManagerImpl {
+public class SliderManager {
 
-    public SliderManagerImpl() {
+    public SliderManager() {
 
     }
 
