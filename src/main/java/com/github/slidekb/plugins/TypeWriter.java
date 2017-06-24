@@ -23,6 +23,7 @@ public class TypeWriter implements SlideBarPlugin {
 
     @Override
     public void run() {
+    	slider.removeParts();
     	System.out.println("type writer is running");
     }
 
