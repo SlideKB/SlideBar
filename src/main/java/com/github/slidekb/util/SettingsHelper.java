@@ -60,9 +60,25 @@ public class SettingsHelper {
         return new ArrayList<>();
     }
 
+    public static boolean isAlwaysRun(String pluginID) {
+        if (settings.getPlugins().containsKey(pluginID)) {
+            return settings.getPlugins().get(pluginID).isAlwaysRun();
+        }
+
+        return false;
+    }
+
     public static void setAlwaysRun(String pluginID, boolean alwaysRun) {
         settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).setAlwaysRun(alwaysRun);
         save();
+    }
+
+    public static String getUsedSlider(String pluginID) {
+        if (settings.getPlugins().containsKey(pluginID)) {
+            return settings.getPlugins().get(pluginID).getUsedSlider();
+        }
+
+        return null;
     }
 
     public static void setUsedSlider(String pluginID, String sliderID) {
