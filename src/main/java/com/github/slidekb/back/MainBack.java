@@ -145,7 +145,7 @@ public class MainBack implements Runnable {
      * @param amount
      */
     public static void testVibrate(int amount) {
-        getSlideMan().sliders.forEach((String, Arduino) -> Arduino.vibrate(5));
+        getSliderManager().sliders.forEach((String, Arduino) -> Arduino.vibrate(5));
     }
 
     /**
@@ -172,7 +172,7 @@ public class MainBack implements Runnable {
             // find and connect to all the SlideBars
             portMan.findAndConnect();
             // Add the SlideBars to the Hash map.
-            getSlideMan().hashTheSlideBars();
+            getSliderManager().hashTheSlideBars();
             // TODO this should be moved to the portManager class
             System.out.println("Number of sliders connected: " + portMan.getArduinos().size());
             started = true;
@@ -192,7 +192,7 @@ public class MainBack implements Runnable {
         return prev20List.toArray(new String[prev20List.size()]);
     }
 
-    public static SliderManagerImpl getSlideMan() {
+    public static SliderManagerImpl getSliderManager() {
         return slideMan;
     }
 
@@ -228,7 +228,7 @@ public class MainBack implements Runnable {
 
             if ((!previousActiveProcess.equals(activeProcess)) || !(previousHotKeys.equals(hotKeys))) {
                 updatePrevList(activeProcess);
-                getSlideMan().sliders.forEach((String, Arduino) -> Arduino.removeParts());
+                getSliderManager().sliders.forEach((String, Arduino) -> Arduino.removeParts());
 
                 previousActiveProcess = activeProcess;
                 previousHotKeys = hotKeys;
@@ -312,7 +312,7 @@ public class MainBack implements Runnable {
      */
     public static Boolean stop() {
         System.out.println("stopping");
-        getSlideMan().closeAll();
+        getSliderManager().closeAll();
         // TODO decide if this needs to move to the Move this to the SliderManager class
         PM.removeProci(true);
         started = false;

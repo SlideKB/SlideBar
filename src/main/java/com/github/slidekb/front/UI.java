@@ -195,7 +195,7 @@ public class UI {
         layeredPane.setBounds(15, 61, 177, 203);
         frame.getContentPane().add(layeredPane);
 
-        if (MainBack.getSlideMan().getDefaultSlider() != null && MainBack.getSlideMan().getDefaultSlider().getID() != null) {
+        if (MainBack.getSliderManager().getDefaultSlider() != null && MainBack.getSliderManager().getDefaultSlider().getID() != null) {
             JLabel lblSlider = new JLabel("Default Slider 1");
             lblSlider.setBounds(15, 16, 147, 20);
             layeredPane.add(lblSlider);
@@ -206,12 +206,12 @@ public class UI {
                 @Override
                 public void itemStateChanged(ItemEvent e) {
                     if (e.getStateChange() == ItemEvent.SELECTED) {
-                        MainBack.getSlideMan().getDefaultSlider().setReversed(true);
+                        MainBack.getSliderManager().getDefaultSlider().setReversed(true);
                         System.out.println(cfg.SliderDefault1Reversed());
                         System.out.println("[UI] setting default slider 1 to reverse direction");
 
                     } else {
-                        MainBack.getSlideMan().getDefaultSlider().setReversed(false);
+                        MainBack.getSliderManager().getDefaultSlider().setReversed(false);
 
                         System.out.println("[UI] setting default slider 1 to standard direction");
                     }
@@ -222,7 +222,7 @@ public class UI {
             chckbxReversed.setSelected(cfg.SliderDefault1Reversed());
             layeredPane.add(chckbxReversed);
 
-            JLabel lblId = new JLabel("ID: " + MainBack.getSlideMan().getDefaultSlider().getID());
+            JLabel lblId = new JLabel("ID: " + MainBack.getSliderManager().getDefaultSlider().getID());
             lblId.setBounds(15, 52, 69, 20);
             layeredPane.add(lblId);
 
@@ -235,7 +235,7 @@ public class UI {
             layeredPane.add(lblPort);
         }
 
-        if (MainBack.getSlideMan().getDefaultSlider2() != null && MainBack.getSlideMan().getDefaultSlider2().getID() != null) {
+        if (MainBack.getSliderManager().getDefaultSlider2() != null && MainBack.getSliderManager().getDefaultSlider2().getID() != null) {
             JButton btnNewButton = new JButton(">");
             btnNewButton.setBounds(206, 127, 45, 29);
             frame.getContentPane().add(btnNewButton);
@@ -271,7 +271,7 @@ public class UI {
 
         }
 
-        if (MainBack.getSlideMan().getDefaultSlider3() != null && MainBack.getSlideMan().getDefaultSlider3().getID() != null) {
+        if (MainBack.getSliderManager().getDefaultSlider3() != null && MainBack.getSliderManager().getDefaultSlider3().getID() != null) {
             JButton button_1 = new JButton(">");
             button_1.setBounds(458, 127, 45, 29);
             frame.getContentPane().add(button_1);
@@ -305,7 +305,7 @@ public class UI {
             lblDefaultSlider_1.setBounds(15, 16, 147, 20);
             layeredPane_2.add(lblDefaultSlider_1);
         }
-        if (MainBack.getSlideMan().getDefaultSlider4() != null && MainBack.getSlideMan().getDefaultSlider4().getID() != null) {
+        if (MainBack.getSliderManager().getDefaultSlider4() != null && MainBack.getSliderManager().getDefaultSlider4().getID() != null) {
             JButton button_3 = new JButton(">");
             button_3.setBounds(710, 127, 45, 29);
             frame.getContentPane().add(button_3);

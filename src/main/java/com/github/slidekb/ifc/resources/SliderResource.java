@@ -16,7 +16,7 @@ public class SliderResource {
     public List<IfcSlider> getAllSliders() {
         List<IfcSlider> sliders = new ArrayList<>();
 
-        MainBack.getSlideMan().sliders.forEach((id, slider) -> {
+        MainBack.getSliderManager().sliders.forEach((id, slider) -> {
             sliders.add(new IfcSlider(slider.getID()));
         });
 
