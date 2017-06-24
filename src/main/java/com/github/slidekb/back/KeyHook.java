@@ -115,16 +115,14 @@ public class KeyHook implements NativeKeyListener {
     }
 
     public boolean isPressed(String key) {
-        for (String s : pressedAlphaKeys) {
-            if (key.equals(s)) {
-                return true;
-            }
+        if (pressedAlphaKeys.contains(key)) {
+            return true;
         }
-        for (String s : pressedHotKeys) {
-            if (key.equals(s)) {
-                return true;
-            }
+
+        if (pressedHotKeys.contains(key)) {
+            return true;
         }
+
         return false;
     }
 
