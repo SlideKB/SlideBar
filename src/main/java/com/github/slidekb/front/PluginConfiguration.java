@@ -34,228 +34,248 @@ import com.github.slidekb.util.SettingsHelper;
 
 public class PluginConfiguration {
 
-    private static JFrame frame;
-    private static JPanel contentPane;
-    private static GlobalSettings settings;
-    private static ArrayList<String> arrayProcess = new ArrayList<String>();
-    private static ArrayList<String> arrayHotkey = new ArrayList<String>();
-    private static JList<String> processList = new JList<>();
-    private static JList<String> hotkeyList = new JList<>();
+	private static JFrame frame;
+	private static JPanel contentPane;
+	private static GlobalSettings settings;
+	private static ArrayList<String> arrayProcess = new ArrayList<String>();
+	private static ArrayList<String> arrayHotkey = new ArrayList<String>();
+	private static JList<String> processList = new JList<>();
+	private static JList<String> hotkeyList = new JList<>();
+	private static JCheckBox chckbxAlwaysRun;
+	protected static String element;
+	protected static ArrayList<SlideBarPlugin> temp;
 
-    /**
-     * Create the frame.
-     */
-    public static void createAndShowGUI() {
-        if (frame == null) {
-            frame = new JFrame();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setBounds(100, 100, 839, 546);
-            frame.setPreferredSize(new Dimension(839, 546));
-            frame.setMinimumSize(new Dimension(839, 546));
-            frame.setMaximumSize(new Dimension(839, 546));
-            contentPane = new JPanel();
-            contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-            frame.setContentPane(contentPane);
-            contentPane.setLayout(null);
+	/**
+	 * Create the frame.
+	 */
+	public static void createAndShowGUI() {
+		if (frame == null) {
+			frame = new JFrame();
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.setBounds(100, 100, 839, 546);
+			frame.setPreferredSize(new Dimension(839, 546));
+			frame.setMinimumSize(new Dimension(839, 546));
+			frame.setMaximumSize(new Dimension(839, 546));
+			contentPane = new JPanel();
+			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			frame.setContentPane(contentPane);
+			contentPane.setLayout(null);
 
-            ArrayList<String> arrayPlugins = new ArrayList<String>();
-            for (SlideBarPlugin p : MainBack.PM.getProci()) {
-                arrayPlugins.add(p.getLabelName());
-            }
-            String plugins[] = arrayPlugins.toArray(new String[arrayPlugins.size()]);
-            JList<String> pluginList = new JList<>(plugins);
-            MouseListener mouseListener = new MouseAdapter() {
-                public void mouseClicked(MouseEvent e) {
-                    if (e.getClickCount() == 1) {
-                        int selected[] = pluginList.getSelectedIndices();
-                        System.out.println("Selected Elements:  ");
-                        for (int i = 0; i < selected.length; i++) {
-                            String element = (String) pluginList.getModel().getElementAt(selected[i]);
-                            ArrayList<SlideBarPlugin> temp = MainBack.PM.getProci();
+			ArrayList<String> arrayPlugins = new ArrayList<String>();
+			for (SlideBarPlugin p : MainBack.PM.getProci()) {
+				arrayPlugins.add(p.getLabelName());
+			}
+			String plugins[] = arrayPlugins.toArray(new String[arrayPlugins.size()]);
+			JList<String> pluginList = new JList<>(plugins);
+			MouseListener mouseListener = new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					if (e.getClickCount() == 1) {
+						int selected[] = pluginList.getSelectedIndices();
+						for (int i = 0; i < selected.length; i++) {
+							element = (String) pluginList.getModel().getElementAt(selected[i]);
+							temp = MainBack.PM.getProci();
 
-                            arrayProcess.clear();
-                            arrayHotkey.clear();
+							arrayProcess.clear();
+							arrayHotkey.clear();
 
-                            for (SlideBarPlugin p : temp) {
-                                if (p.getLabelName().equals(element)) {
-                                    System.out.println(p.getLabelName());
-                                    System.out.println(p.getClass().getCanonicalName());
+							for (SlideBarPlugin p : temp) {
+								if (p.getLabelName().equals(element)) {
+									System.out.println("Selected Elements:  " + p.getLabelName());
+									System.out.println("Selected Elements:  " + p.getClass().getCanonicalName());
+									try {
+										for (String processName : SettingsHelper
+												.listProcesses(p.getClass().getCanonicalName())) {
+											arrayProcess.add(processName);
+										}
 
-                                    try {
-                                        for (String processName : SettingsHelper.listProcesses(p.getClass().getCanonicalName())) {
-                                            arrayProcess.add(processName);
-                                        }
+										String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
+										processList.setListData(proci);
+									} catch (Exception e1) {
+										System.out.println("somthing went wrong");
+									}
 
-                                        String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
-                                        processList.setListData(proci);
-                                    } catch (Exception e1) {
-                                        System.out.println("somthing went wrong");
-                                    }
+									try {
+										for (String processName : SettingsHelper
+												.listHotkeys(p.getClass().getCanonicalName())) {
+											arrayHotkey.add(processName);
+										}
 
-                                    try {
-                                        for (String processName : SettingsHelper.listHotkeys(p.getClass().getCanonicalName())) {
-                                            arrayHotkey.add(processName);
-                                        }
+										String hotkey[] = arrayHotkey.toArray(new String[arrayHotkey.size()]);
+										hotkeyList.setListData(hotkey);
+									} catch (Exception e1) {
+										System.out.println("somthing went wrong");
+									}
+									try {
+										chckbxAlwaysRun.setSelected(
+												SettingsHelper.isAlwaysRun(p.getClass().getCanonicalName()));
+									} catch (Exception e2) {
+										System.out.println("something went wrong");
+									}
 
-                                        String hotkey[] = arrayHotkey.toArray(new String[arrayHotkey.size()]);
-                                        hotkeyList.setListData(hotkey);
-                                    } catch (Exception e1) {
-                                        System.out.println("somthing went wrong");
-                                    }
+									frame.revalidate();
+									frame.repaint();
+								}
+							}
+						}
+					}
+				}
+			};
+			pluginList.addMouseListener(mouseListener);
+			pluginList.setBounds(10, 44, 313, 452);
+			contentPane.add(pluginList);
 
-                                    frame.revalidate();
-                                    frame.repaint();
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            pluginList.addMouseListener(mouseListener);
-            pluginList.setBounds(10, 44, 313, 452);
-            contentPane.add(pluginList);
+			JLabel lblPluginsLoaded = new JLabel("Plugins Loaded");
+			lblPluginsLoaded.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			lblPluginsLoaded.setBounds(10, 11, 130, 22);
+			contentPane.add(lblPluginsLoaded);
 
-            JLabel lblPluginsLoaded = new JLabel("Plugins Loaded");
-            lblPluginsLoaded.setFont(new Font("Tahoma", Font.PLAIN, 18));
-            lblPluginsLoaded.setBounds(10, 11, 130, 22);
-            contentPane.add(lblPluginsLoaded);
+			JLabel lblProcesses = new JLabel("Processes");
+			lblProcesses.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			lblProcesses.setBounds(333, 11, 130, 22);
+			contentPane.add(lblProcesses);
 
-            JLabel lblProcesses = new JLabel("Processes");
-            lblProcesses.setFont(new Font("Tahoma", Font.PLAIN, 18));
-            lblProcesses.setBounds(333, 11, 130, 22);
-            contentPane.add(lblProcesses);
+			JLabel lblHotkeys = new JLabel("Hotkeys");
+			lblHotkeys.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			lblHotkeys.setBounds(333, 223, 130, 22);
+			contentPane.add(lblHotkeys);
 
-            JLabel lblHotkeys = new JLabel("Hotkeys");
-            lblHotkeys.setFont(new Font("Tahoma", Font.PLAIN, 18));
-            lblHotkeys.setBounds(333, 223, 130, 22);
-            contentPane.add(lblHotkeys);
+			chckbxAlwaysRun = new JCheckBox("Always Run");
+			chckbxAlwaysRun.setBounds(329, 425, 97, 23);
+			contentPane.add(chckbxAlwaysRun);
+			ActionListener actionListener = new ActionListener() {
+				public void actionPerformed(ActionEvent actionEvent) {
+					boolean selected = chckbxAlwaysRun.getModel().isSelected();
+					for (SlideBarPlugin p : temp) {
+						if (p.getLabelName().equals(element)) {
+							SettingsHelper.setAlwaysRun(p.getClass().getCanonicalName(), selected);
+						}
+					}
+				}
+			};
+			chckbxAlwaysRun.addActionListener(actionListener);
+			processList.setBounds(333, 44, 425, 162);
+			contentPane.add(processList);
 
-            JCheckBox chckbxAlwaysRun = new JCheckBox("Always Run");
-            chckbxAlwaysRun.setBounds(329, 425, 97, 23);
-            contentPane.add(chckbxAlwaysRun);
+			hotkeyList.setBounds(333, 256, 425, 162);
+			contentPane.add(hotkeyList);
 
-            processList.setBounds(333, 44, 425, 162);
-            contentPane.add(processList);
+			JButton processAddButton = new JButton("+");
+			processAddButton.setBounds(768, 44, 45, 22);
+			contentPane.add(processAddButton);
 
-            hotkeyList.setBounds(333, 256, 425, 162);
-            contentPane.add(hotkeyList);
+			JButton processMinusButton = new JButton("-");
+			processMinusButton.setBounds(768, 77, 45, 22);
+			contentPane.add(processMinusButton);
 
-            JButton processAddButton = new JButton("+");
-            processAddButton.setBounds(768, 44, 45, 22);
-            contentPane.add(processAddButton);
+			JButton hotkeyMinusButton = new JButton("-");
+			hotkeyMinusButton.setBounds(768, 289, 45, 22);
+			contentPane.add(hotkeyMinusButton);
 
-            JButton processMinusButton = new JButton("-");
-            processMinusButton.setBounds(768, 77, 45, 22);
-            contentPane.add(processMinusButton);
+			JButton hotkeyAddButton = new JButton("+");
+			hotkeyAddButton.setBounds(768, 256, 45, 22);
+			contentPane.add(hotkeyAddButton);
 
-            JButton hotkeyMinusButton = new JButton("-");
-            hotkeyMinusButton.setBounds(768, 289, 45, 22);
-            contentPane.add(hotkeyMinusButton);
+		}
+		// Display the window.
+		frame.pack();
 
-            JButton hotkeyAddButton = new JButton("+");
-            hotkeyAddButton.setBounds(768, 256, 45, 22);
-            contentPane.add(hotkeyAddButton);
+		bringToFront();
+	}
 
-        }
-        // Display the window.
-        frame.pack();
+	private static void bringToFront() {
+		getInstance().setVisible(true);
+		getInstance().setExtendedState(JFrame.NORMAL);
+		getInstance().toFront();
+		getInstance().repaint();
+	}
 
-        bringToFront();
-    }
+	private static JFrame getInstance() {
+		return frame;
+	}
 
-    private static void bringToFront() {
-        getInstance().setVisible(true);
-        getInstance().setExtendedState(JFrame.NORMAL);
-        getInstance().toFront();
-        getInstance().repaint();
-    }
+	/**
+	 * Popup Menu
+	 * 
+	 * @return
+	 */
+	protected static PopupMenu createPopupMenu() {
+		final PopupMenu popup = new PopupMenu();
+		MenuItem aboutItem = new MenuItem("Open Configuration");
+		aboutItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				createAndShowGUI();
+			}
+		});
+		MenuItem about = new MenuItem("About");
+		MenuItem website = new MenuItem("Website");
+		MenuItem reload = new MenuItem("Reload");
+		MenuItem exitItem = new MenuItem("Exit");
+		exitItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		// Add components to pop-up menu
+		popup.add(aboutItem);
+		popup.addSeparator();
+		popup.add(about);
+		popup.add(website);
+		popup.add(reload);
+		popup.addSeparator();
+		popup.add(exitItem);
+		return popup;
+	}
 
-    private static JFrame getInstance() {
-        return frame;
-    }
+	private static void setupTray() {
+		try {
+			// Check the SystemTray is supported
+			if (!SystemTray.isSupported()) {
+				System.out.println("SystemTray is not supported");
+				return;
+			}
+			final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit()
+					.getImage(new URL("http://home.comcast.net/~supportcd/Icons/Java_Required.jpg")), "Library Drop");
+			final SystemTray tray = SystemTray.getSystemTray();
 
-    /**
-     * Popup Menu
-     * 
-     * @return
-     */
-    protected static PopupMenu createPopupMenu() {
-        final PopupMenu popup = new PopupMenu();
-        MenuItem aboutItem = new MenuItem("Open Configuration");
-        aboutItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createAndShowGUI();
-            }
-        });
-        MenuItem about = new MenuItem("About");
-        MenuItem website = new MenuItem("Website");
-        MenuItem reload = new MenuItem("Reload");
-        MenuItem exitItem = new MenuItem("Exit");
-        exitItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        // Add components to pop-up menu
-        popup.add(aboutItem);
-        popup.addSeparator();
-        popup.add(about);
-        popup.add(website);
-        popup.add(reload);
-        popup.addSeparator();
-        popup.add(exitItem);
-        return popup;
-    }
+			// Create a pop-up menu components
+			final PopupMenu popup = createPopupMenu();
+			trayIcon.setPopupMenu(popup);
+			trayIcon.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (e.getButton() == MouseEvent.BUTTON1) {
+						createAndShowGUI();
+					}
+				}
+			});
 
-    private static void setupTray() {
-        try {
-            // Check the SystemTray is supported
-            if (!SystemTray.isSupported()) {
-                System.out.println("SystemTray is not supported");
-                return;
-            }
-            final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(new URL("http://home.comcast.net/~supportcd/Icons/Java_Required.jpg")), "Library Drop");
-            final SystemTray tray = SystemTray.getSystemTray();
+			tray.add(trayIcon);
+		} catch (AWTException e) {
+			System.out.println("TrayIcon could not be added.");
+		} catch (MalformedURLException e) {
+			System.out.println("Malformed Exception");
+		}
+	}
 
-            // Create a pop-up menu components
-            final PopupMenu popup = createPopupMenu();
-            trayIcon.setPopupMenu(popup);
-            trayIcon.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (e.getButton() == MouseEvent.BUTTON1) {
-                        createAndShowGUI();
-                    }
-                }
-            });
+	public static void main(String[] args) throws InterruptedException {
+		Thread back = new Thread(new MainBack());
+		back.start();
 
-            tray.add(trayIcon);
-        } catch (AWTException e) {
-            System.out.println("TrayIcon could not be added.");
-        } catch (MalformedURLException e) {
-            System.out.println("Malformed Exception");
-        }
-    }
+		MainBack.PM.waitUntilProcessesLoaded();
+		settings = MainBack.getSettings();
 
-    public static void main(String[] args) throws InterruptedException {
-        Thread back = new Thread(new MainBack());
-        back.start();
+		createAndShowGUI();
+		setupTray();
+	}
 
-        MainBack.PM.waitUntilProcessesLoaded();
-        settings = MainBack.getSettings();
+	static class SlideListener implements ChangeListener {
+		SlideListener() {
+		}
 
-        createAndShowGUI();
-        setupTray();
-    }
+		public synchronized void stateChanged(ChangeEvent e) {
 
-    static class SlideListener implements ChangeListener {
-        SlideListener() {
-        }
-
-        public synchronized void stateChanged(ChangeEvent e) {
-
-        }
-    }
+		}
+	}
 }
