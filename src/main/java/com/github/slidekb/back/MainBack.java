@@ -274,13 +274,14 @@ public class MainBack implements Runnable {
                     if (runThisPlugin) {
                         if (changed) {
                             plugin.runFirst();
-                            changed = false;
                         } else {
                             plugin.run();
                         }
                     }
                 }
             }
+
+            changed = false;
 
             previousActiveProcess = activeProcess;
             previousHotKeys = hotKeys;
