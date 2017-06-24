@@ -85,7 +85,6 @@ public class PluginConfiguration {
                                         for (String processName : SettingsHelper.listProcesses(p.getClass().getCanonicalName())) {
                                             arrayProcess.add(processName);
                                         }
-
                                         String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
                                         processList.setListData(proci);
                                     } catch (Exception e1) {
@@ -160,12 +159,15 @@ public class PluginConfiguration {
             contentPane.add(processAddButton);
             ActionListener actionListenerProcessAdd = new ActionListener() {
             	public void actionPerformed(ActionEvent actionEvent) {
-            		JFrame frame = new JFrame("InputDialog Example #1");
-                    String process = JOptionPane.showInputDialog(frame, "Enter a Process");
+            		JFrame frameDialog = new JFrame("Add a process");
+                    String process = JOptionPane.showInputDialog(frameDialog, "Enter a Process");
                     System.out.println("added " + process);
                     for (SlideBarPlugin p : temp) {
                         if (p.getLabelName().equals(element)) {
                             SettingsHelper.addProcess(p.getClass().getCanonicalName(), process);
+                            arrayProcess.add(process);
+                            String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
+                            processList.setListData(proci);
                             frame.revalidate();
                             frame.repaint();
                         }
@@ -185,7 +187,25 @@ public class PluginConfiguration {
             JButton hotkeyAddButton = new JButton("+");
             hotkeyAddButton.setBounds(768, 256, 45, 22);
             contentPane.add(hotkeyAddButton);
-
+            ActionListener actionListenerHotkeyAdd = new ActionListener() {
+            	public void actionPerformed(ActionEvent actionEvent) {
+            		JFrame frameDialog = new JFrame("Add a hotkey");
+                    String hotkey = JOptionPane.showInputDialog(frameDialog, "Enter a Hotkey");
+                    System.out.println("added " + hotkey);
+                    for (SlideBarPlugin p : temp) {
+                        if (p.getLabelName().equals(element)) {
+                            SettingsHelper.addHotkey(p.getClass().getCanonicalName(), hotkey);
+                            arrayHotkey.add(hotkey);
+                            String hotkeys[] = arrayHotkey.toArray(new String[arrayHotkey.size()]);
+                            hotkeyList.setListData(hotkeys);
+                            frame.revalidate();
+                            frame.repaint();
+                        }
+                    }
+                }
+            };
+            hotkeyAddButton.addActionListener(actionListenerHotkeyAdd);
+            
         }
         // Display the window.
         frame.pack();
