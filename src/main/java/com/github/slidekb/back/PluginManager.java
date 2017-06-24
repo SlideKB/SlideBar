@@ -83,7 +83,7 @@ public class PluginManager {
                 }
             }
 
-            currentImplementation.setSliderManager(usedSlider);
+            currentImplementation.setSlider(usedSlider);
             proci.add(currentImplementation);
         }
 

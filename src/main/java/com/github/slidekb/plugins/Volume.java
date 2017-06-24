@@ -163,7 +163,7 @@ public class Volume implements SlideBarPlugin {
     }
 
     @Override
-    public void setSliderManager(Slider slider) {
+    public void setSlider(Slider slider) {
         this.slider = slider;
     }
 }
