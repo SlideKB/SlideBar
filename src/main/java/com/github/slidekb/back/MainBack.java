@@ -225,7 +225,10 @@ public class MainBack implements Runnable {
             }
 
             String activeProcess = ActiveProcess.getProcess();
-            String hotKeys = Arrays.toString(KeyHook.getHotKeys());
+
+            String[] hotKeysArray = KeyHook.getHotKeys();
+            int numHotKeys = hotKeysArray.length;
+            String hotKeys = Arrays.toString(hotKeysArray);
 
             if (!previousActiveProcess.equals(activeProcess)) {
                 updatePrevList(activeProcess);
@@ -238,6 +241,8 @@ public class MainBack implements Runnable {
             if (!previousHotKeys.equals(hotKeys)) {
                 previousHotKeys = hotKeys;
                 hotKeysChanged = true;
+
+                System.out.println("HOTKEYS CHANGED, is now: " + hotKeys);
             }
 
             for (SlideBarPlugin plugin : PM.getProci()) {
@@ -248,11 +253,14 @@ public class MainBack implements Runnable {
                     processList = SettingsHelper.listProcesses(pluginID);
                     alwaysRun = SettingsHelper.isAlwaysRun(pluginID);
 
-                    runThisPlugin = alwaysRun || ((hotkeyList.isEmpty() || hotkeyList.contains(hotKeys)) && (processList.isEmpty() || processList.contains(activeProcess)));
-
-                    // If both lists are empty, only run when the "always run" flag is set
-                    if (!alwaysRun && hotkeyList.isEmpty() && processList.isEmpty()) {
+                    if (alwaysRun) {
+                        runThisPlugin = true;
+                    } else if (hotkeyList.isEmpty() && processList.isEmpty()) {
                         runThisPlugin = false;
+                    } else if (hotkeyList.isEmpty() && numHotKeys > 0) {
+                        runThisPlugin = false;
+                    } else if ((hotkeyList.isEmpty() || hotkeyList.contains(hotKeys)) && (processList.isEmpty() || processList.contains(activeProcess))) {
+                        runThisPlugin = true;
                     }
 
                     if (runThisPlugin) {
@@ -264,6 +272,8 @@ public class MainBack implements Runnable {
                             plugin.run();
                         }
                     }
+
+                    runThisPlugin = false;
                 }
             }
 
