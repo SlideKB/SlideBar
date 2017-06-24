@@ -208,7 +208,8 @@ public class MainBack implements Runnable {
      * @throws Throwable
      */
     public static void Run() throws Throwable {
-        boolean changed = false;
+        boolean activeProcessChanged = false;
+        boolean hotKeysChanged = false;
         boolean runThisPlugin = false;
         String previousActiveProcess = "";
         String previousHotKeys = "";
@@ -226,21 +227,21 @@ public class MainBack implements Runnable {
             String activeProcess = ActiveProcess.getProcess();
             String hotKeys = Arrays.toString(KeyHook.getHotKeys());
 
-            if ((!previousActiveProcess.equals(activeProcess)) || !(previousHotKeys.equals(hotKeys))) {
+            if (!previousActiveProcess.equals(activeProcess)) {
                 updatePrevList(activeProcess);
-                getSliderManager().sliders.forEach((String, Arduino) -> Arduino.removeParts());
-
                 previousActiveProcess = activeProcess;
-                previousHotKeys = hotKeys;
-
-                changed = true;
+                activeProcessChanged = true;
 
                 System.out.println("PROCESS CHANGED, is now: " + activeProcess);
             }
 
+            if (!previousHotKeys.equals(hotKeys)) {
+                previousHotKeys = hotKeys;
+                hotKeysChanged = true;
+            }
+
             for (SlideBarPlugin plugin : PM.getProci()) {
                 String pluginID = plugin.getClass().getCanonicalName();
-                // System.out.println(pluginID);
 
                 if (SettingsHelper.isPluginKnown(pluginID)) {
                     hotkeyList = SettingsHelper.listHotkeys(pluginID);
@@ -255,7 +256,9 @@ public class MainBack implements Runnable {
                     }
 
                     if (runThisPlugin) {
-                        if (changed) {
+                        if (activeProcessChanged && !processList.isEmpty()) {
+                            plugin.runFirst();
+                        } else if (hotKeysChanged && !hotkeyList.isEmpty()) {
                             plugin.runFirst();
                         } else {
                             plugin.run();
@@ -264,10 +267,8 @@ public class MainBack implements Runnable {
                 }
             }
 
-            changed = false;
-
-            previousActiveProcess = activeProcess;
-            previousHotKeys = hotKeys;
+            activeProcessChanged = false;
+            hotKeysChanged = false;
         }
     }
 
