@@ -23,10 +23,12 @@ public class TypeWriter implements SlideBarPlugin {
 
     @Override
     public void run() {
+    	System.out.println("type writer is running");
     }
 
     @Override
     public void runFirst() {
+    	slider.removeParts();
         slider.writeUntilComplete(1000);
         slider.writeUntilComplete(100);
     }

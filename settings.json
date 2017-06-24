@@ -21,10 +21,10 @@
     "com.github.slidekb.plugins.TypeWriter": {
       "processes": [
         "explorer.exe",
-        "firefox.exe"
+        "firefox.exe",
+        "notepad.exe"
       ],
       "hotkeys": [
-        "Alt"
       ],
       "alwaysRun": false
     },
