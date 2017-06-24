@@ -22,6 +22,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
@@ -157,7 +158,22 @@ public class PluginConfiguration {
             JButton processAddButton = new JButton("+");
             processAddButton.setBounds(768, 44, 45, 22);
             contentPane.add(processAddButton);
-
+            ActionListener actionListenerProcessAdd = new ActionListener() {
+            	public void actionPerformed(ActionEvent actionEvent) {
+            		JFrame frame = new JFrame("InputDialog Example #1");
+                    String process = JOptionPane.showInputDialog(frame, "Enter a Process");
+                    System.out.println("added " + process);
+                    for (SlideBarPlugin p : temp) {
+                        if (p.getLabelName().equals(element)) {
+                            SettingsHelper.addProcess(p.getClass().getCanonicalName(), process);
+                            frame.revalidate();
+                            frame.repaint();
+                        }
+                    }
+                }
+            };
+            processAddButton.addActionListener(actionListenerProcessAdd);
+            
             JButton processMinusButton = new JButton("-");
             processMinusButton.setBounds(768, 77, 45, 22);
             contentPane.add(processMinusButton);
