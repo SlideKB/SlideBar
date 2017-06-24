@@ -29,14 +29,12 @@ import javax.swing.event.ChangeListener;
 
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.MainBack;
-import com.github.slidekb.back.settings.GlobalSettings;
 import com.github.slidekb.util.SettingsHelper;
 
 public class PluginConfiguration {
 
     private static JFrame frame;
     private static JPanel contentPane;
-    private static GlobalSettings settings;
     private static ArrayList<String> arrayProcess = new ArrayList<String>();
     private static ArrayList<String> arrayHotkey = new ArrayList<String>();
     private static JList<String> processList = new JList<>();
@@ -244,7 +242,6 @@ public class PluginConfiguration {
         back.start();
 
         MainBack.PM.waitUntilProcessesLoaded();
-        settings = MainBack.getSettings();
 
         createAndShowGUI();
         setupTray();

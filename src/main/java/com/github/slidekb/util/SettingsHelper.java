@@ -1,22 +1,39 @@
 package com.github.slidekb.util;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.github.slidekb.back.MainBack;
 import com.github.slidekb.back.settings.GlobalSettings;
 import com.github.slidekb.back.settings.PluginSettings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class SettingsHelper {
-    private static GlobalSettings settings = MainBack.getSettings();
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static File settingsFile = new File("settings.json");
+    private static GlobalSettings settings = null;
+
+    static {
+        try {
+            settingsFile.createNewFile();
+
+            try (Reader reader = new FileReader(settingsFile)) {
+                settings = gson.fromJson(reader, GlobalSettings.class);
+            }
+        } catch (IOException e) {
+            // If the file cannot be parsed, crash the app
+            throw new RuntimeException(e);
+        }
+
+        System.out.println(gson == null);
+    }
 
     public static void addProcess(String pluginID, String processName) {
         settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).getProcesses().add(processName);
@@ -33,9 +50,6 @@ public class SettingsHelper {
             return settings.getPlugins().get(pluginID).getProcesses();
         }
 
-        // TODO
-        // Is it good to return an empty list here?
-        // Maybe return null or throw an exception instead?
         return new ArrayList<>();
     }
 
@@ -54,9 +68,6 @@ public class SettingsHelper {
             return settings.getPlugins().get(pluginID).getHotkeys();
         }
 
-        // TODO
-        // Is it good to return an empty list here?
-        // Maybe return null or throw an exception instead?
         return new ArrayList<>();
     }
 
@@ -86,11 +97,12 @@ public class SettingsHelper {
         save();
     }
 
+    public static boolean isPluginKnown(String pluginID) {
+        return settings.getPlugins().containsKey(pluginID);
+    }
+
     private static void save() {
         try {
-            File settingsFile = new File("settings.json");
-            settingsFile.createNewFile();
-
             try (Writer writer = new FileWriter(settingsFile)) {
                 gson.toJson(settings, writer);
             }

@@ -16,14 +16,11 @@
 
 package com.github.slidekb.back;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,12 +37,8 @@ import org.jnativehook.NativeHookException;
 import com.github.slidekb.api.AlphaKeyManager;
 import com.github.slidekb.api.HotKeyManager;
 import com.github.slidekb.api.SlideBarPlugin;
-import com.github.slidekb.back.settings.GlobalSettings;
-import com.github.slidekb.back.settings.PluginSettings;
 import com.github.slidekb.ifc.resources.RootResource;
 import com.github.slidekb.util.SettingsHelper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
@@ -79,8 +72,6 @@ public class MainBack implements Runnable {
     static PortManager portMan = new PortManager();
 
     private static SliderManagerImpl slideMan = new SliderManagerImpl();
-
-    private static GlobalSettings settings;
 
     /**
      * For running without an Interface. creates a new thread and starts it
@@ -186,19 +177,6 @@ public class MainBack implements Runnable {
             System.out.println("Number of sliders connected: " + portMan.getArduinos().size());
             started = true;
             PM.loadProcesses(1);
-
-            Gson gson = new GsonBuilder().create();
-            try {
-                File settingsFile = new File("settings.json");
-                settingsFile.createNewFile();
-
-                try (Reader reader = new FileReader(settingsFile)) {
-                    settings = gson.fromJson(reader, GlobalSettings.class);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
         }
         return started;
     }
@@ -218,10 +196,6 @@ public class MainBack implements Runnable {
         return slideMan;
     }
 
-    public static GlobalSettings getSettings() {
-        return settings;
-    }
-
     public static void setSlideMan(SliderManagerImpl slideMan) {
         MainBack.slideMan = slideMan;
     }
@@ -239,6 +213,10 @@ public class MainBack implements Runnable {
         String previousActiveProcess = "";
         String previousHotKeys = "";
 
+        List<String> hotkeyList = null;
+        List<String> processList = null;
+        boolean alwaysRun = false;
+
         while (started && !PM.getProci().isEmpty()) {
             try {
                 Thread.sleep(1);
@@ -251,23 +229,28 @@ public class MainBack implements Runnable {
             if ((!previousActiveProcess.equals(activeProcess)) || !(previousHotKeys.equals(hotKeys))) {
                 updatePrevList(activeProcess);
                 getSlideMan().sliders.forEach((String, Arduino) -> Arduino.removeParts());
-                changed = true;
-                System.out.println("PROCESS CHANGED");
+
                 previousActiveProcess = activeProcess;
                 previousHotKeys = hotKeys;
+
+                changed = true;
+
+                System.out.println("PROCESS CHANGED, is now: " + activeProcess);
             }
 
             for (SlideBarPlugin plugin : PM.getProci()) {
                 String pluginID = plugin.getClass().getCanonicalName();
                 // System.out.println(pluginID);
 
-                if (settings.getPlugins().containsKey(pluginID)) {
-                    PluginSettings pluginSettings = settings.getPlugins().get(pluginID);
+                if (SettingsHelper.isPluginKnown(pluginID)) {
+                    hotkeyList = SettingsHelper.listHotkeys(pluginID);
+                    processList = SettingsHelper.listProcesses(pluginID);
+                    alwaysRun = SettingsHelper.isAlwaysRun(pluginID);
 
-                    runThisPlugin = pluginSettings.isAlwaysRun() || ((pluginSettings.getHotkeys().isEmpty() || pluginSettings.getHotkeys().contains(hotKeys)) && (pluginSettings.getProcesses().isEmpty() || pluginSettings.getProcesses().contains(activeProcess)));
+                    runThisPlugin = alwaysRun || ((hotkeyList.isEmpty() || hotkeyList.contains(hotKeys)) && (processList.isEmpty() || processList.contains(activeProcess)));
 
                     // If both lists are empty, only run when the "always run" flag is set
-                    if (!pluginSettings.isAlwaysRun() && pluginSettings.getHotkeys().isEmpty() && pluginSettings.getProcesses().isEmpty()) {
+                    if (!alwaysRun && hotkeyList.isEmpty() && processList.isEmpty()) {
                         runThisPlugin = false;
                     }
 
