@@ -39,6 +39,9 @@ public class PluginConfiguration {
     private static ArrayList<String> arrayHotkey = new ArrayList<String>();
     private static JList<String> processList = new JList<>();
     private static JList<String> hotkeyList = new JList<>();
+	private static JCheckBox chckbxAlwaysRun;
+	protected static String element;
+	protected static ArrayList<SlideBarPlugin> temp;
 
     /**
      * Create the frame.
@@ -66,21 +69,20 @@ public class PluginConfiguration {
                 public void mouseClicked(MouseEvent e) {
                     if (e.getClickCount() == 1) {
                         int selected[] = pluginList.getSelectedIndices();
-                        System.out.println("Selected Elements:  ");
                         for (int i = 0; i < selected.length; i++) {
-                            String element = (String) pluginList.getModel().getElementAt(selected[i]);
-                            ArrayList<SlideBarPlugin> temp = MainBack.PM.getProci();
+							element = (String) pluginList.getModel().getElementAt(selected[i]);
+							temp = MainBack.PM.getProci();
 
                             arrayProcess.clear();
                             arrayHotkey.clear();
 
                             for (SlideBarPlugin p : temp) {
                                 if (p.getLabelName().equals(element)) {
-                                    System.out.println(p.getLabelName());
-                                    System.out.println(p.getClass().getCanonicalName());
-
+									System.out.println("Selected Elements:  " + p.getLabelName());
+									System.out.println("Selected Elements:  " + p.getClass().getCanonicalName());
                                     try {
-                                        for (String processName : SettingsHelper.listProcesses(p.getClass().getCanonicalName())) {
+										for (String processName : SettingsHelper
+												.listProcesses(p.getClass().getCanonicalName())) {
                                             arrayProcess.add(processName);
                                         }
 
@@ -91,7 +93,8 @@ public class PluginConfiguration {
                                     }
 
                                     try {
-                                        for (String processName : SettingsHelper.listHotkeys(p.getClass().getCanonicalName())) {
+										for (String processName : SettingsHelper
+												.listHotkeys(p.getClass().getCanonicalName())) {
                                             arrayHotkey.add(processName);
                                         }
 
@@ -100,6 +103,12 @@ public class PluginConfiguration {
                                     } catch (Exception e1) {
                                         System.out.println("somthing went wrong");
                                     }
+									try {
+										chckbxAlwaysRun.setSelected(
+												SettingsHelper.isAlwaysRun(p.getClass().getCanonicalName()));
+									} catch (Exception e2) {
+										System.out.println("something went wrong");
+									}
 
                                     frame.revalidate();
                                     frame.repaint();
@@ -128,10 +137,20 @@ public class PluginConfiguration {
             lblHotkeys.setBounds(333, 223, 130, 22);
             contentPane.add(lblHotkeys);
 
-            JCheckBox chckbxAlwaysRun = new JCheckBox("Always Run");
+			chckbxAlwaysRun = new JCheckBox("Always Run");
             chckbxAlwaysRun.setBounds(329, 425, 97, 23);
             contentPane.add(chckbxAlwaysRun);
-
+			ActionListener actionListener = new ActionListener() {
+				public void actionPerformed(ActionEvent actionEvent) {
+					boolean selected = chckbxAlwaysRun.getModel().isSelected();
+					for (SlideBarPlugin p : temp) {
+						if (p.getLabelName().equals(element)) {
+							SettingsHelper.setAlwaysRun(p.getClass().getCanonicalName(), selected);
+						}
+					}
+				}
+			};
+			chckbxAlwaysRun.addActionListener(actionListener);
             processList.setBounds(333, 44, 425, 162);
             contentPane.add(processList);
 
@@ -214,7 +233,8 @@ public class PluginConfiguration {
                 System.out.println("SystemTray is not supported");
                 return;
             }
-            final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(new URL("http://home.comcast.net/~supportcd/Icons/Java_Required.jpg")), "Library Drop");
+			final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit()
+					.getImage(new URL("http://home.comcast.net/~supportcd/Icons/Java_Required.jpg")), "Library Drop");
             final SystemTray tray = SystemTray.getSystemTray();
 
             // Create a pop-up menu components
@@ -242,6 +262,7 @@ public class PluginConfiguration {
         back.start();
 
         MainBack.PM.waitUntilProcessesLoaded();
+		settings = MainBack.getSettings();
 
         createAndShowGUI();
         setupTray();
