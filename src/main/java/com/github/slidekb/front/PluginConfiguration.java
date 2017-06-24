@@ -262,7 +262,6 @@ public class PluginConfiguration {
         back.start();
 
         MainBack.PM.waitUntilProcessesLoaded();
-		settings = MainBack.getSettings();
 
         createAndShowGUI();
         setupTray();
