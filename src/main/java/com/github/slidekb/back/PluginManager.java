@@ -23,8 +23,10 @@ import java.util.concurrent.CountDownLatch;
 import com.github.slidekb.api.PlatformSpecific;
 import com.github.slidekb.api.PluginVersion;
 import com.github.slidekb.api.SlideBarPlugin;
+import com.github.slidekb.api.Slider;
 import com.github.slidekb.util.CurrentWorkingDirectoryClassLoader;
 import com.github.slidekb.util.OsHelper;
+import com.github.slidekb.util.SettingsHelper;
 
 public class PluginManager {
 
@@ -55,21 +57,34 @@ public class PluginManager {
                 System.out.println("Found plugin " + currentImplementation.getClass().getCanonicalName() + " but its version " + currentVersion.value() + " doesn't match program version " + programVersion + "! Skipping.");
                 continue;
             } else {
-                PlatformSpecific currentAnnotation = currentImplementation.getClass().getAnnotation(PlatformSpecific.class);
+                PlatformSpecific currentOsAnnotation = currentImplementation.getClass().getAnnotation(PlatformSpecific.class);
 
-                if (currentAnnotation != null) { // Annotation present -> platform specific plugin
-                    if (currentAnnotation.value() == OsHelper.getOS()) {
+                if (currentOsAnnotation != null) { // Annotation present -> platform specific plugin
+                    if (currentOsAnnotation.value() == OsHelper.getOS()) {
                         System.out.println("Loading platform dependant plugin " + currentImplementation.getClass().getCanonicalName() + " for platform " + OsHelper.getOS());
-                        currentImplementation.setSliderManager(MainBack.getSlideMan());
-                        proci.add(currentImplementation);
+                    } else {
+                        continue;
                     }
                 } else { // No Annotation -> platform independent plugin
                     System.out.println("Loading platform independant plugin " + currentImplementation.getClass().getCanonicalName());
-                    currentImplementation.setSliderManager(MainBack.getSlideMan());
-
-                    proci.add(currentImplementation);
                 }
             }
+
+            String sliderID = SettingsHelper.getUsedSlider(currentImplementation.getClass().getCanonicalName());
+            Slider usedSlider;
+
+            if (sliderID == null) {
+                usedSlider = MainBack.getSliderManager().getDefaultSlider();
+            } else {
+                usedSlider = MainBack.getSliderManager().getSliderByID(sliderID);
+
+                if (usedSlider == null) {
+                    usedSlider = MainBack.getSliderManager().getDefaultSlider();
+                }
+            }
+
+            currentImplementation.setSliderManager(usedSlider);
+            proci.add(currentImplementation);
         }
 
         pluginsLoaded.countDown();

@@ -32,7 +32,6 @@ import org.aeonbits.owner.Mutable;
 import com.github.slidekb.api.PluginVersion;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.api.Slider;
-import com.github.slidekb.api.SliderManager;
 import com.google.auto.service.AutoService;
 
 /**
@@ -53,8 +52,6 @@ public class Volume implements SlideBarPlugin {
     private int virtualIndex = 1;
 
     ThisConfig cfg;
-
-    private SliderManager sliderManager;
 
     public Volume() {
         loadConfiguration();
@@ -166,8 +163,7 @@ public class Volume implements SlideBarPlugin {
     }
 
     @Override
-    public void setSliderManager(SliderManager sliderManager) {
-        this.sliderManager = sliderManager;
-        this.slider = this.sliderManager.getSliderByID("default");
+    public void setSliderManager(Slider slider) {
+        this.slider = slider;
     }
 }

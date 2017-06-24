@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.github.slidekb.api.Slider;
-import com.github.slidekb.api.SliderManager;
 
 /**
  * @author JackSB The purpose of SliderManager is to manage each instance of the
@@ -31,7 +30,7 @@ import com.github.slidekb.api.SliderManager;
  *         supported). The SliderManager also has a hash map with keys that are
  *         the SlideBar ID.
  */
-public class SliderManagerImpl implements SliderManager {
+public class SliderManagerImpl {
 
     public SliderManagerImpl() {
 
