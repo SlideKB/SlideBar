@@ -96,7 +96,6 @@ public class AltProcess implements SlideBarPlugin {
             rob.keyRelease(KeyEvent.VK_SHIFT);
             virtualIndex--;
         }
-//    	System.out.println("RUN");
     }
 
     @Override
@@ -111,7 +110,6 @@ public class AltProcess implements SlideBarPlugin {
         slider.goToPartComplete(cfg.StartingPart());
         slider.removeParts();
         slider.createParts(cfg.numberOfParts());
-//    	System.out.println("runFirst");
     }
 
     @Override
