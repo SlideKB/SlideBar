@@ -36,8 +36,10 @@ public class SettingsHelper {
     }
 
     public static void addProcess(String pluginID, String processName) {
-        settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).getProcesses().add(processName);
-        save();
+        if (processName != null && !processName.isEmpty()) {
+            settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).getProcesses().add(processName);
+            save();
+        }
     }
 
     public static void removeProcess(String pluginID, String processName) {
@@ -54,8 +56,10 @@ public class SettingsHelper {
     }
 
     public static void addHotkey(String pluginID, String hotkey) {
-        settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).getHotkeys().add(hotkey);
-        save();
+        if (hotkey != null && !hotkey.isEmpty()) {
+            settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).getHotkeys().add(hotkey);
+            save();
+        }
     }
 
     public static void removeHotkey(String pluginID, String hotkey) {
