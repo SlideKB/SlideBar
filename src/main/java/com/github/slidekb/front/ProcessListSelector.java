@@ -84,30 +84,22 @@ public class ProcessListSelector {
 
     public void addToRight(String given) {
         addToTempRight(given);
-        if (right.contains(given)) {
-            right.remove(given);
-        }
+        right.remove(given);
         right.add(given);
     }
 
     private void addToTempRight(String given) {
-        if (tempRight.contains(given)) {
-            tempRight.remove(given);
-        }
+        tempRight.remove(given);
         tempRight.add(given);
     }
 
     public void removeFromRight(String given) {
         removeFromTempRight(given);
-        if (right.contains(given)) {
-            right.remove(given);
-        }
+        right.remove(given);
     }
 
     private void removeFromTempRight(String given) {
-        if (tempRight.contains(given)) {
-            tempRight.remove(given);
-        }
+        tempRight.remove(given);
     }
 
     public JFrame createGUI() {

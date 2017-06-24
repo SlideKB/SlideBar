@@ -205,9 +205,7 @@ public class MainBack implements Runnable {
 
     // TODO can this be moved to a different class?
     private static void updatePrevList(String given) {
-        if (prev20List.contains(given)) {
-            prev20List.remove(given);
-        }
+        prev20List.remove(given);
         prev20List.add(given);
     }
 
