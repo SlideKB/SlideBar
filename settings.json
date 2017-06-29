@@ -24,16 +24,13 @@
         "firefox.exe",
         "notepad.exe"
       ],
-      "hotkeys": [
-      ],
+      "hotkeys": [],
       "alwaysRun": false
     },
     "com.github.slidekb.plugins.AltProcess": {
       "processes": [],
       "hotkeys": [
-        "[Alt]",
-        "[Alt, Tab]",
-        "[Alt, Shift, Tab]"
+        "[Alt]"
       ],
       "alwaysRun": false
     }

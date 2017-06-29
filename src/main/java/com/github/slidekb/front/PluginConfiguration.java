@@ -13,10 +13,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -55,6 +59,12 @@ public class PluginConfiguration {
             frame.setPreferredSize(new Dimension(839, 546));
             frame.setMinimumSize(new Dimension(839, 546));
             frame.setMaximumSize(new Dimension(839, 546));
+            try {
+				frame.setIconImage(ImageIO.read(new File("icon.png")));
+			} catch (IOException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			}
             contentPane = new JPanel();
             contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
             frame.setContentPane(contentPane);
@@ -179,10 +189,40 @@ public class PluginConfiguration {
             JButton processMinusButton = new JButton("-");
             processMinusButton.setBounds(768, 77, 45, 22);
             contentPane.add(processMinusButton);
+            ActionListener actionListenerProcessMinus = new ActionListener() {
+            	public void actionPerformed(ActionEvent actionEvent) {
+            		for (SlideBarPlugin p : temp) {
+                        if (p.getLabelName().equals(element)) {
+                        	arrayProcess.remove(processList.getSelectedValue());
+                    		SettingsHelper.removeProcess(p.getClass().getCanonicalName(), processList.getSelectedValue());
+                    		String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
+                            processList.setListData(proci);
+                            frame.revalidate();
+                            frame.repaint();
+                        }
+                    }
+        		}
+        	};
+        	processMinusButton.addActionListener(actionListenerProcessMinus);
 
             JButton hotkeyMinusButton = new JButton("-");
             hotkeyMinusButton.setBounds(768, 289, 45, 22);
             contentPane.add(hotkeyMinusButton);
+            ActionListener actionListenerHotkeyMinus = new ActionListener() {
+            	public void actionPerformed(ActionEvent actionEvent) {
+            		for (SlideBarPlugin p : temp) {
+                        if (p.getLabelName().equals(element)) {
+                        	arrayHotkey.remove(hotkeyList.getSelectedValue());
+                    		SettingsHelper.removeHotkey(p.getClass().getCanonicalName(), hotkeyList.getSelectedValue());
+                    		String hotkeys[] = arrayHotkey.toArray(new String[arrayHotkey.size()]);
+                            hotkeyList.setListData(hotkeys);
+                            frame.revalidate();
+                            frame.repaint();
+                        }
+                    }
+        		}
+        	};
+        	hotkeyMinusButton.addActionListener(actionListenerHotkeyMinus);
 
             JButton hotkeyAddButton = new JButton("+");
             hotkeyAddButton.setBounds(768, 256, 45, 22);
