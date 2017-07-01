@@ -17,6 +17,7 @@
 package com.github.slidekb.back;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ServiceLoader;
 import java.util.concurrent.CountDownLatch;
 
@@ -70,20 +71,25 @@ public class PluginManager {
                 }
             }
 
-            String sliderID = SettingsHelper.getUsedSlider(currentImplementation.getClass().getCanonicalName());
+            String sliderIDs[] = SettingsHelper.getSliderList(currentImplementation.getClass().getCanonicalName());
+            System.out.println(Arrays.toString(sliderIDs));
+            int totalSliders = currentImplementation.numberOfSlidersRequired();
             Slider usedSlider;
 
-            if (sliderID == null) {
-                usedSlider = MainBack.getSliderManager().getDefaultSlider();
-            } else {
-                usedSlider = MainBack.getSliderManager().getSliderByID(sliderID);
+            int index = 0;
+            for (int i = 0; i < totalSliders; i++){
+            	if (sliderIDs == null) {
+                    usedSlider = MainBack.getSliderManager().getSlider(index);
+                } else {
+                    usedSlider = MainBack.getSliderManager().getSliderByID(sliderIDs[i]);
 
-                if (usedSlider == null) {
-                    usedSlider = MainBack.getSliderManager().getDefaultSlider();
+                    if (usedSlider == null) {
+                        usedSlider = MainBack.getSliderManager().getDefaultSlider();
+                    }
                 }
-            }
 
-            currentImplementation.setSlider(usedSlider);
+                currentImplementation.setSlider(usedSlider, i);
+            }
             proci.add(currentImplementation);
         }
 

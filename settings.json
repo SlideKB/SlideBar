@@ -25,14 +25,21 @@
         "notepad.exe"
       ],
       "hotkeys": [],
-      "alwaysRun": false
+      "alwaysRun": false,
+      "sliderList": [
+        "m1n3",
+				"l1n1"
+      ]
     },
     "com.github.slidekb.plugins.AltProcess": {
       "processes": [],
       "hotkeys": [
         "[Alt]"
       ],
-      "alwaysRun": false
+      "alwaysRun": false,
+			 "sliderList": [
+        "m1n3"
+			]
     }
   }
 }

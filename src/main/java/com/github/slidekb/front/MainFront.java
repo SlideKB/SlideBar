@@ -17,6 +17,7 @@
 package com.github.slidekb.front;
 
 import java.awt.AWTException;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -29,10 +30,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -50,12 +54,11 @@ import javax.swing.event.ListSelectionListener;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.MainBack;
 import com.github.slidekb.back.PortManager;
+import com.github.slidekb.util.SettingsHelper;
 
 public class MainFront {
 
     private static JFrame frame;
-
-    private static JPanel contentPane;
 
     /**
      * The "About" Jframe
@@ -64,235 +67,64 @@ public class MainFront {
         if (frame == null) {
             frame = new JFrame();
             frame.setTitle("SlideBar Configuration");
-            frame.setBounds(100, 100, 816, 534);
-            contentPane = new JPanel();
-            contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-            frame.setContentPane(contentPane);
-            GridBagLayout gbl_contentPane = new GridBagLayout();
-            gbl_contentPane.columnWidths = new int[] { 0, 0, 0, 0, 130, 0, 208, 37, 0, 0 };
-            gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 160, 0, 0, 0, 0, 0, 0, 0, 0 };
-            gbl_contentPane.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-                    Double.MIN_VALUE };
-            gbl_contentPane.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                    0.0, 0.0, Double.MIN_VALUE };
-            contentPane.setLayout(gbl_contentPane);
-
-            JLabel lblStatus = new JLabel("Status");
-            GridBagConstraints gbc_lblStatus = new GridBagConstraints();
-            gbc_lblStatus.insets = new Insets(0, 0, 5, 5);
-            gbc_lblStatus.gridx = 2;
-            gbc_lblStatus.gridy = 1;
-            contentPane.add(lblStatus, gbc_lblStatus);
-
-            JLabel lblComPort = new JLabel("COM Port");
-            GridBagConstraints gbc_lblComPort = new GridBagConstraints();
-            gbc_lblComPort.insets = new Insets(0, 0, 5, 5);
-            gbc_lblComPort.gridx = 4;
-            gbc_lblComPort.gridy = 1;
-            contentPane.add(lblComPort, gbc_lblComPort);
-
+            frame.setBounds(100, 100, 818, 339);
+            frame.setPreferredSize(new Dimension(818, 339));
+            frame.setMinimumSize(new Dimension(818, 339));
+            frame.setMaximumSize(new Dimension(818, 339));
+            frame.getContentPane().setLayout(null);
+            frame.getContentPane().setLayout(null);
+            try {
+				frame.setIconImage(ImageIO.read(new File("icon.png")));
+			} catch (IOException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			}
+            
+            JList list = new JList();
+            list.setBounds(15, 52, 244, 167);
+            frame.getContentPane().add(list);
+            
+            JLabel lblSlidersConnected = new JLabel("Sliders Connected");
+            lblSlidersConnected.setBounds(15, 16, 146, 20);
+            frame.getContentPane().add(lblSlidersConnected);
+            
+            JButton btnNewButton = new JButton("Reconnect");
+            btnNewButton.setBounds(15, 235, 115, 29);
+            frame.getContentPane().add(btnNewButton);
+            
+            JButton sliderConfigure = new JButton("Configure");
+            sliderConfigure.setBounds(145, 235, 115, 29);
+            frame.getContentPane().add(sliderConfigure);
+            
+            JList list_1 = new JList();
+            list_1.setBounds(298, 52, 244, 167);
+            frame.getContentPane().add(list_1);
+            
             JLabel lblPluginsLoaded = new JLabel("Plugins Loaded");
-            GridBagConstraints gbc_lblPluginsLoaded = new GridBagConstraints();
-            gbc_lblPluginsLoaded.gridwidth = 2;
-            gbc_lblPluginsLoaded.insets = new Insets(0, 0, 5, 5);
-            gbc_lblPluginsLoaded.gridx = 6;
-            gbc_lblPluginsLoaded.gridy = 1;
-            contentPane.add(lblPluginsLoaded, gbc_lblPluginsLoaded);
-
-            // String temp = "Connected";
-            //
-            JLabel status = new JLabel(MainBack.isStarted() + "");
-            GridBagConstraints gbc_label = new GridBagConstraints();
-            gbc_label.insets = new Insets(0, 0, 5, 5);
-            gbc_label.gridx = 2;
-            gbc_label.gridy = 2;
-            contentPane.add(status, gbc_label);
-
-            JComboBox<String> comboBox = new JComboBox<>();
-            comboBox.addItem("Auto");
-            for (String s : PortManager.getPortList(0)) {
-                comboBox.addItem(s);
-            }
-
-            GridBagConstraints gbc_comboBox = new GridBagConstraints();
-            gbc_comboBox.insets = new Insets(0, 0, 5, 5);
-            gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-            gbc_comboBox.gridx = 4;
-            gbc_comboBox.gridy = 2;
-            contentPane.add(comboBox, gbc_comboBox);
-
-            ArrayList<String> arrayProcess = new ArrayList<String>();
-
-            for (SlideBarPlugin p : MainBack.PM.getProci()) {
-                arrayProcess.add(p.getLabelName());
-            }
-
-            String proci[] = arrayProcess.toArray(new String[arrayProcess.size()]);
-
-            JList<String> processList = new JList<>(proci);
-            JScrollPane pane = new JScrollPane(processList);
-            GridBagConstraints gbc_list = new GridBagConstraints();
-            gbc_list.gridwidth = 2;
-            gbc_list.gridheight = 10;
-            gbc_list.insets = new Insets(0, 0, 5, 5);
-            gbc_list.fill = GridBagConstraints.BOTH;
-            gbc_list.gridx = 6;
-            gbc_list.gridy = 2;
-            contentPane.add(pane, gbc_list);
-
-            JCheckBox chckbxRunOnStart = new JCheckBox("Run on Start");
-            GridBagConstraints gbc_chckbxRunOnStart = new GridBagConstraints();
-            gbc_chckbxRunOnStart.anchor = GridBagConstraints.WEST;
-            gbc_chckbxRunOnStart.gridwidth = 2;
-            gbc_chckbxRunOnStart.insets = new Insets(0, 0, 5, 5);
-            gbc_chckbxRunOnStart.gridx = 1;
-            gbc_chckbxRunOnStart.gridy = 4;
-            contentPane.add(chckbxRunOnStart, gbc_chckbxRunOnStart);
-
-            JCheckBox chckbxSwapEnds = new JCheckBox("Swap ends");
-            GridBagConstraints gbc_chckbxSwapEnds = new GridBagConstraints();
-            gbc_chckbxSwapEnds.anchor = GridBagConstraints.WEST;
-            gbc_chckbxSwapEnds.gridwidth = 2;
-            gbc_chckbxSwapEnds.insets = new Insets(0, 0, 5, 5);
-            gbc_chckbxSwapEnds.gridx = 1;
-            gbc_chckbxSwapEnds.gridy = 5;
-            contentPane.add(chckbxSwapEnds, gbc_chckbxSwapEnds);
-
-            JButton btnReload = new JButton("Reload");
-            btnReload.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    status.setText("Stopping");
-                    MainBack.stop();
-                    if (MainBack.startIt()) {
-                        status.setText("Connected");
-                    } else {
-                        status.setText("Not Connected");
-                    }
-                }
-            });
-            GridBagConstraints gbc_btnReload = new GridBagConstraints();
-            gbc_btnReload.fill = GridBagConstraints.HORIZONTAL;
-            gbc_btnReload.insets = new Insets(0, 0, 5, 5);
-            gbc_btnReload.gridx = 2;
-            gbc_btnReload.gridy = 13;
-            contentPane.add(btnReload, gbc_btnReload);
-
-            JButton btnTestSlider = new JButton("Test");
-            btnTestSlider.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("testing");
-                    MainBack.testVibrate(5);
-                }
-            });
-            GridBagConstraints gbc_btnTestSlider = new GridBagConstraints();
-            gbc_btnTestSlider.anchor = GridBagConstraints.WEST;
-            gbc_btnTestSlider.insets = new Insets(0, 0, 5, 5);
-            gbc_btnTestSlider.gridx = 4;
-            gbc_btnTestSlider.gridy = 13;
-            contentPane.add(btnTestSlider, gbc_btnTestSlider);
-
-            JButton btnProcessList = new JButton("Program List");
-            btnProcessList.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int selected[] = processList.getSelectedIndices();
-                    System.out.println("Selected Elements:  ");
-                    for (int i = 0; i < selected.length; i++) {
-                        String element = (String) processList.getModel().getElementAt(selected[i]);
-                        ArrayList<SlideBarPlugin> temp = MainBack.PM.getProci();
-                        for (SlideBarPlugin p : temp) {
-                            if (p.getLabelName().equals(element)) {
-                                System.out.println(p.getLabelName());
-                            }
-                        }
-                    }
-                }
-            });
-            GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-            gbc_btnNewButton.anchor = GridBagConstraints.EAST;
-            gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
-            gbc_btnNewButton.gridx = 6;
-            gbc_btnNewButton.gridy = 13;
-            contentPane.add(btnProcessList, gbc_btnNewButton);
-
-            JButton btnConfigure = new JButton("Configure");
-
-            class ConfigureListener implements ActionListener {
-                public void actionPerformed(ActionEvent e) {
-                    int selected[] = processList.getSelectedIndices();
-                    System.out.println("Selected Elements:  ");
-                    for (int i = 0; i < selected.length; i++) {
-                        String element = (String) processList.getModel().getElementAt(selected[i]);
-                        ArrayList<SlideBarPlugin> temp = MainBack.PM.getProci();
-                        for (SlideBarPlugin p : temp) {
-                            if (p.getLabelName().equals(element)) {
-                                System.out.println(p.getLabelName());
-                            }
-                        }
-                    }
-                }
-            }
-
-            processList.addListSelectionListener(new ListSelectionListener() {
-                public void valueChanged(ListSelectionEvent e) {
-
-                }
-            });
-            btnConfigure.addActionListener(new ConfigureListener());
-            GridBagConstraints gbc_btnConfigure = new GridBagConstraints();
-            gbc_btnConfigure.anchor = GridBagConstraints.EAST;
-            gbc_btnConfigure.insets = new Insets(0, 0, 5, 5);
-            gbc_btnConfigure.gridx = 7;
-            gbc_btnConfigure.gridy = 13;
-            contentPane.add(btnConfigure, gbc_btnConfigure);
-
-            // // Run/Stop button
-            // JButton stopButton = new JButton("Stop");
-            // stopButton.addActionListener(new ActionListener() {
-            // @Override
-            // public void actionPerformed(ActionEvent e) {
-            // MainBack.stop();
-            // }
-            // });
-            //
-            // // Run/Stop button
-            // JButton startButton = new JButton("Start");
-            // startButton.addActionListener(new ActionListener() {
-            // @Override
-            // public void actionPerformed(ActionEvent e) {
-            // MainBack.startIt();
-            // }
-            // });
-
-            // JButton configureButton = new JButton("Configure");
-            // configureButton.addActionListener(new ActionListener() {
-            // @Override
-            // public void actionPerformed(ActionEvent e) {
-            // ArrayList<Process> temp = MainBack.PM.getProci();
-            // for (Process p : temp){
-            // System.out.println(p.getLabelName());
-            // if (p.getLabelName().contentEquals("Alt+Slide")){
-            // System.out.println("found Alt+Slide!");
-            // p.getConfigWindow().pack();
-            // p.getConfigWindow().setVisible(true);
-            // }
-            // }
-            // }
-            // });
-
-            // frame.getContentPane().add(label);
-            // frame.getContentPane().add(status);
-            // frame.getContentPane().add(startup);
-            // frame.getContentPane().add(startButton);
-            // frame.getContentPane().add(stopButton);
-            // frame.getContentPane().add(configureButton);
-            if (MainBack.isStarted()) {
-                status.setText("Connected");
-            } else {
-                status.setText("Not Connected");
-            }
+            lblPluginsLoaded.setBounds(298, 16, 115, 20);
+            frame.getContentPane().add(lblPluginsLoaded);
+            
+            JButton pluginsReload = new JButton("Reload");
+            pluginsReload.setBounds(299, 235, 115, 29);
+            frame.getContentPane().add(pluginsReload);
+            
+            JButton pluginsConfigure = new JButton("Configure");
+            pluginsConfigure.setBounds(427, 235, 115, 29);
+            frame.getContentPane().add(pluginsConfigure);
+            ActionListener actionListenerPluginsConfigure = new ActionListener() {
+            	public void actionPerformed(ActionEvent actionEvent) {
+            		PluginConfiguration.createAndShowGUI();
+        		}
+        	};
+        	pluginsConfigure.addActionListener(actionListenerPluginsConfigure);
+            
+            JCheckBox chckbxOpenMinimized = new JCheckBox("Open Minimized");
+            chckbxOpenMinimized.setBounds(600, 49, 171, 29);
+            frame.getContentPane().add(chckbxOpenMinimized);
+            
+            JButton btnNewButton_2 = new JButton("Help");
+            btnNewButton_2.setBounds(705, 235, 76, 29);
+            frame.getContentPane().add(btnNewButton_2);
         }
         // Display the window.
         frame.pack();
@@ -392,5 +224,4 @@ public class MainFront {
 
         }
     }
-
 }

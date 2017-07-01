@@ -8,12 +8,21 @@ public class PluginSettings {
     List<String> processes;
     List<String> hotkeys;
     boolean alwaysRun;
+    String[] sliderList;
+    
+    public String[] getSliderList() {
+    	return sliderList;
+    }
+    
+    public void setSliderList(String[] list){
+    	this.sliderList = list;
+    }
 
     public String getUsedSlider() {
         return usedSlider;
     }
 
-    public void setUsedSlider(String usedSlider) {
+    public void setUsedSlider(String usedSlider, int position) {
         this.usedSlider = usedSlider;
     }
 

@@ -10,6 +10,7 @@ import com.google.auto.service.AutoService;
 public class TypeWriter implements SlideBarPlugin {
 
     private Slider slider;
+	private Slider secondSlider;
 
     @Override
     public int getPriority() {
@@ -31,12 +32,24 @@ public class TypeWriter implements SlideBarPlugin {
     	slider.removeParts();
         slider.writeUntilComplete(1000);
         slider.writeUntilComplete(100);
+        
+        secondSlider.removeParts();
+        secondSlider.writeUntilComplete(1000);
+        secondSlider.writeUntilComplete(100);
     }
 
     @Override
-    public void setSlider(Slider slider) {
-        this.slider = slider;
-
+    public void setSlider(Slider slider, int position) {
+    	if (position == 0){
+    		this.slider = slider;
+    	} else if (position == 1){
+    		this.secondSlider = slider;
+    	}
     }
+
+	@Override
+	public int numberOfSlidersRequired() {
+		return 2;
+	}
 
 }
