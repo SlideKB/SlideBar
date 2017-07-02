@@ -49,7 +49,7 @@ public class PluginSettings {
     private void validateSliderArray() {
         if (sliderList == null) {
             sliderList = new String[4];
-        } else {
+        } else if (sliderList.length != 4) {
             sliderList = Arrays.copyOfRange(sliderList, 0, 4);
         }
     }
