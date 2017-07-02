@@ -88,6 +88,14 @@ public class SettingsHelper {
         save();
     }
 
+    @Nullable
+    public static String getUsedSliderAtIndex(String pluginID, int index) {
+        if (settings.getPlugins().containsKey(pluginID)) {
+            return settings.getPlugins().get(pluginID).getSliderAtIndex(index);
+        }
+        return null;
+    }
+
     public static void setUsedSliderAtIndex(String pluginID, int index, String sliderID) {
         settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).setSliderAtIndex(index, sliderID);
         save();
@@ -105,13 +113,5 @@ public class SettingsHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Nullable
-    public static String getUsedSliderAtIndex(String pluginID, int index) {
-        if (settings.getPlugins().containsKey(pluginID)) {
-            return settings.getPlugins().get(pluginID).getSliderAtIndex(index);
-        }
-        return null;
     }
 }
