@@ -124,13 +124,13 @@ public class PluginConfiguration {
                                 }
 
                                 try {
-                                    textField.setText(SettingsHelper.getSliderList(p.getClass().getCanonicalName())[0]);
+                                    textField.setText(SettingsHelper.getSliderList(p.getClass().getCanonicalName()).get(0));
                                 } catch (Exception e3) {
                                     textField.setText("");
                                 }
 
                                 try {
-                                    textField_1.setText(SettingsHelper.getSliderList(p.getClass().getCanonicalName())[1]);
+                                    textField_1.setText(SettingsHelper.getSliderList(p.getClass().getCanonicalName()).get(1));
                                 } catch (Exception e3) {
                                     textField_1.setText("");
                                 }
