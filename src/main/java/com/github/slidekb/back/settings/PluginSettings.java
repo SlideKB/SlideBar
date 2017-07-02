@@ -11,6 +11,8 @@ public class PluginSettings {
     String[] sliderList;
 
     public String getSliderAtIndex(int index) {
+        validateSliderArray();
+
         return sliderList[index];
     }
 
