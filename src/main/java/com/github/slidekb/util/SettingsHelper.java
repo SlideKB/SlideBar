@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import com.github.slidekb.back.settings.GlobalSettings;
 import com.github.slidekb.back.settings.PluginSettings;
 import com.google.gson.Gson;
@@ -86,8 +88,8 @@ public class SettingsHelper {
         save();
     }
 
-    public static void setSliderList(String pluginID, List<String> list) {
-        settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).setSliderList(list);
+    public static void setUsedSliderAtIndex(String pluginID, int index, String sliderID) {
+        settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).setSliderAtIndex(index, sliderID);
         save();
     }
 
@@ -105,9 +107,10 @@ public class SettingsHelper {
         }
     }
 
-    public static List<String> getSliderList(String pluginID) {
+    @Nullable
+    public static String getUsedSliderAtIndex(String pluginID, int index) {
         if (settings.getPlugins().containsKey(pluginID)) {
-            return settings.getPlugins().get(pluginID).getSliderList();
+            return settings.getPlugins().get(pluginID).getSliderAtIndex(index);
         }
         return null;
     }
