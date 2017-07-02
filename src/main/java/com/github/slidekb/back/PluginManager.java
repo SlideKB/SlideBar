@@ -71,8 +71,8 @@ public class PluginManager {
                 }
             }
 
-            String sliderIDs[] = SettingsHelper.getSliderList(currentImplementation.getClass().getCanonicalName());
             System.out.println(Arrays.toString(sliderIDs));
+            List<String> sliderIDs = SettingsHelper.getSliderList(currentImplementation.getClass().getCanonicalName());
             int totalSliders = currentImplementation.numberOfSlidersRequired();
             Slider usedSlider;
 
@@ -81,7 +81,7 @@ public class PluginManager {
                 if (sliderIDs == null) {
                     usedSlider = MainBack.getSliderManager().getSlider(index);
                 } else {
-                    usedSlider = MainBack.getSliderManager().getSliderByID(sliderIDs[i]);
+                    usedSlider = MainBack.getSliderManager().getSliderByID(sliderIDs.get(i));
 
                     if (usedSlider == null) {
                         usedSlider = MainBack.getSliderManager().getDefaultSlider();
