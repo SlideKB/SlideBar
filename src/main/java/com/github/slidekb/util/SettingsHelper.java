@@ -101,7 +101,7 @@ public class SettingsHelper {
         save();
     }
 
-    public static void setSliderList(String pluginID, String[] list) {
+    public static void setSliderList(String pluginID, List<String> list) {
         settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).setSliderList(list);
         save();
     }
@@ -120,7 +120,7 @@ public class SettingsHelper {
         }
     }
 
-    public static String[] getSliderList(String pluginID) {
+    public static List<String> getSliderList(String pluginID) {
         if (settings.getPlugins().containsKey(pluginID)) {
             return settings.getPlugins().get(pluginID).getSliderList();
         }
