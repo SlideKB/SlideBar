@@ -175,17 +175,17 @@ public class SliderManager {
         return sliders.get("default4");
     }
 
-    public Slider getSlider(int i) {
-        if (i == 0) {
+    public Slider getDefaultSliderByIndex(int index) {
+        if (index == 0) {
             return getDefaultSlider();
         }
-        if (i == 1) {
+        if (index == 1) {
             return getDefaultSlider2();
         }
-        if (i == 2) {
+        if (index == 2) {
             return getDefaultSlider3();
         }
-        if (i == 4) {
+        if (index == 4) {
             return getDefaultSlider4();
         }
         return getDefaultSlider();
