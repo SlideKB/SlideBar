@@ -83,7 +83,7 @@ public class PluginManager {
                     usedSlider = MainBack.getSliderManager().getSliderByID(sliderIDs.get(i));
 
                     if (usedSlider == null) {
-                        usedSlider = MainBack.getSliderManager().getDefaultSlider();
+                        usedSlider = MainBack.getSliderManager().getDefaultSliderByIndex(i);
                     }
                 }
 
