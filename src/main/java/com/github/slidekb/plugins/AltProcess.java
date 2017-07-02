@@ -119,8 +119,8 @@ public class AltProcess implements SlideBarPlugin {
         this.slider = slider;
     }
 
-	@Override
-	public int numberOfSlidersRequired() {
-		return 1;
-	}
+    @Override
+    public int numberOfSlidersRequired() {
+        return 1;
+    }
 }

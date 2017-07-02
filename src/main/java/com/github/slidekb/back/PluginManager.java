@@ -77,8 +77,8 @@ public class PluginManager {
             Slider usedSlider;
 
             int index = 0;
-            for (int i = 0; i < totalSliders; i++){
-            	if (sliderIDs == null) {
+            for (int i = 0; i < totalSliders; i++) {
+                if (sliderIDs == null) {
                     usedSlider = MainBack.getSliderManager().getSlider(index);
                 } else {
                     usedSlider = MainBack.getSliderManager().getSliderByID(sliderIDs[i]);

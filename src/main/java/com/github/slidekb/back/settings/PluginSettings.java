@@ -9,13 +9,13 @@ public class PluginSettings {
     List<String> hotkeys;
     boolean alwaysRun;
     String[] sliderList;
-    
+
     public String[] getSliderList() {
-    	return sliderList;
+        return sliderList;
     }
-    
-    public void setSliderList(String[] list){
-    	this.sliderList = list;
+
+    public void setSliderList(String[] list) {
+        this.sliderList = list;
     }
 
     public String getUsedSlider() {

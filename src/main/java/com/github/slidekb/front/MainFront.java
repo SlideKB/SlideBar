@@ -74,54 +74,54 @@ public class MainFront {
             frame.getContentPane().setLayout(null);
             frame.getContentPane().setLayout(null);
             try {
-				frame.setIconImage(ImageIO.read(new File("icon.png")));
-			} catch (IOException e3) {
-				// TODO Auto-generated catch block
-				e3.printStackTrace();
-			}
-            
+                frame.setIconImage(ImageIO.read(new File("icon.png")));
+            } catch (IOException e3) {
+                // TODO Auto-generated catch block
+                e3.printStackTrace();
+            }
+
             JList list = new JList();
             list.setBounds(15, 52, 244, 167);
             frame.getContentPane().add(list);
-            
+
             JLabel lblSlidersConnected = new JLabel("Sliders Connected");
             lblSlidersConnected.setBounds(15, 16, 146, 20);
             frame.getContentPane().add(lblSlidersConnected);
-            
+
             JButton btnNewButton = new JButton("Reconnect");
             btnNewButton.setBounds(15, 235, 115, 29);
             frame.getContentPane().add(btnNewButton);
-            
+
             JButton sliderConfigure = new JButton("Configure");
             sliderConfigure.setBounds(145, 235, 115, 29);
             frame.getContentPane().add(sliderConfigure);
-            
+
             JList list_1 = new JList();
             list_1.setBounds(298, 52, 244, 167);
             frame.getContentPane().add(list_1);
-            
+
             JLabel lblPluginsLoaded = new JLabel("Plugins Loaded");
             lblPluginsLoaded.setBounds(298, 16, 115, 20);
             frame.getContentPane().add(lblPluginsLoaded);
-            
+
             JButton pluginsReload = new JButton("Reload");
             pluginsReload.setBounds(299, 235, 115, 29);
             frame.getContentPane().add(pluginsReload);
-            
+
             JButton pluginsConfigure = new JButton("Configure");
             pluginsConfigure.setBounds(427, 235, 115, 29);
             frame.getContentPane().add(pluginsConfigure);
             ActionListener actionListenerPluginsConfigure = new ActionListener() {
-            	public void actionPerformed(ActionEvent actionEvent) {
-            		PluginConfiguration.createAndShowGUI();
-        		}
-        	};
-        	pluginsConfigure.addActionListener(actionListenerPluginsConfigure);
-            
+                public void actionPerformed(ActionEvent actionEvent) {
+                    PluginConfiguration.createAndShowGUI();
+                }
+            };
+            pluginsConfigure.addActionListener(actionListenerPluginsConfigure);
+
             JCheckBox chckbxOpenMinimized = new JCheckBox("Open Minimized");
             chckbxOpenMinimized.setBounds(600, 49, 171, 29);
             frame.getContentPane().add(chckbxOpenMinimized);
-            
+
             JButton btnNewButton_2 = new JButton("Help");
             btnNewButton_2.setBounds(705, 235, 76, 29);
             frame.getContentPane().add(btnNewButton_2);

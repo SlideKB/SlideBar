@@ -171,7 +171,7 @@ public class MainBack implements Runnable {
             System.out.println("Discovering Arduinos");
             // find and connect to all the SlideBars
             portMan.findAndConnect();
-//            SettingsHelper.setSliderList("com.github.slidekb.plugins.TypeWriter", new String[] {"m1n3", "l1n1"});
+            // SettingsHelper.setSliderList("com.github.slidekb.plugins.TypeWriter", new String[] {"m1n3", "l1n1"});
             // Add the SlideBars to the Hash map.
             getSliderManager().hashTheSlideBars();
             // TODO this should be moved to the portManager class
@@ -226,7 +226,7 @@ public class MainBack implements Runnable {
             }
 
             String activeProcess = ActiveProcess.getProcess();
-            
+
             String[] hotKeysArray = KeyHook.getHotKeys();
             int numHotKeys = hotKeysArray.length;
             String hotKeys = Arrays.toString(hotKeysArray);
@@ -265,10 +265,10 @@ public class MainBack implements Runnable {
                     }
 
                     if (runThisPlugin) {
-                    	if (previousPlugin != plugin.getClass().getCanonicalName()) {
-                    		previousPlugin = plugin.getClass().getCanonicalName();
-                        	getSliderManager().sliders.forEach((String, Arduino) -> Arduino.removeParts());
-                    	}
+                        if (previousPlugin != plugin.getClass().getCanonicalName()) {
+                            previousPlugin = plugin.getClass().getCanonicalName();
+                            getSliderManager().sliders.forEach((String, Arduino) -> Arduino.removeParts());
+                        }
                         if (activeProcessChanged && !processList.isEmpty()) {
                             plugin.runFirst();
                         } else if (hotKeysChanged && !hotkeyList.isEmpty()) {

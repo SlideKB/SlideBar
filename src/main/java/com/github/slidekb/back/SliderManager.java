@@ -175,20 +175,20 @@ public class SliderManager {
         return sliders.get("default4");
     }
 
-	public Slider getSlider(int i) {
-		if (i == 0){
-			return getDefaultSlider();
-		}
-		if (i == 1){
-			return getDefaultSlider2();
-		}
-		if (i == 2){
-			return getDefaultSlider3();
-		}
-		if (i == 4){
-			return getDefaultSlider4();
-		}
-		return getDefaultSlider();
-	}
+    public Slider getSlider(int i) {
+        if (i == 0) {
+            return getDefaultSlider();
+        }
+        if (i == 1) {
+            return getDefaultSlider2();
+        }
+        if (i == 2) {
+            return getDefaultSlider3();
+        }
+        if (i == 4) {
+            return getDefaultSlider4();
+        }
+        return getDefaultSlider();
+    }
 
 }
