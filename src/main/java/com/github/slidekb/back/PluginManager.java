@@ -73,12 +73,12 @@ public class PluginManager {
 
             List<String> sliderIDs = SettingsHelper.getSliderList(currentImplementation.getClass().getCanonicalName());
             int totalSliders = currentImplementation.numberOfSlidersRequired();
+            boolean useDefaultSliders = (sliderIDs == null || sliderIDs.size() < totalSliders);
             Slider usedSlider;
 
-            int index = 0;
             for (int i = 0; i < totalSliders; i++) {
-                if (sliderIDs == null) {
-                    usedSlider = MainBack.getSliderManager().getDefaultSliderByIndex(index);
+                if (useDefaultSliders) {
+                    usedSlider = MainBack.getSliderManager().getDefaultSliderByIndex(i);
                 } else {
                     usedSlider = MainBack.getSliderManager().getSliderByID(sliderIDs.get(i));
 
