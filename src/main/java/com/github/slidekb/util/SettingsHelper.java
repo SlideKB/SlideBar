@@ -31,8 +31,6 @@ public class SettingsHelper {
             // If the file cannot be parsed, crash the app
             throw new RuntimeException(e);
         }
-
-        System.out.println(gson == null);
     }
 
     public static void addProcess(String pluginID, String processName) {
