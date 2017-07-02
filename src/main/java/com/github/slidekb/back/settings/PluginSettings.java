@@ -10,6 +10,10 @@ public class PluginSettings {
     List<String> sliderList;
 
     public List<String> getSliderList() {
+        if (sliderList == null) {
+            sliderList = new ArrayList<>();
+        }
+
         return sliderList;
     }
 
