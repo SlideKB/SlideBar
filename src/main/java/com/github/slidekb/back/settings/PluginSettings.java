@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PluginSettings {
-    String usedSlider;
     List<String> processes;
     List<String> hotkeys;
     boolean alwaysRun;
@@ -16,14 +15,6 @@ public class PluginSettings {
 
     public void setSliderList(List<String> list) {
         this.sliderList = list;
-    }
-
-    public String getUsedSlider() {
-        return usedSlider;
-    }
-
-    public void setUsedSlider(String usedSlider, int position) {
-        this.usedSlider = usedSlider;
     }
 
     public List<String> getProcesses() {
