@@ -73,15 +73,15 @@ public class MainBack implements Runnable {
 
     private static SliderManager slideMan = new SliderManager();
 
-    /**
-     * For running without an Interface. creates a new thread and starts it
-     * 
-     * @param args
-     */
-    public static void main(String[] args) {
-        Thread t = new Thread(new MainBack());
-        t.start();
-    }
+    // /**
+    // * For running without an Interface. creates a new thread and starts it
+    // *
+    // * @param args
+    // */
+    // public static void main(String[] args) {
+    // Thread t = new Thread(new MainBack());
+    // t.start();
+    // }
 
     @Override
     public void run() {
