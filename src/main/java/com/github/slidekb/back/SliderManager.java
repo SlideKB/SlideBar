@@ -147,8 +147,13 @@ public class SliderManager {
      * closes all connections, and TODO remove the sliders from the hashmap.
      */
     public void closeAll() {
-        MainBack.portMan.getArduinos().forEach((String, arduino) -> arduino.close());
-        // TODO remove all the sliders from the hashmap
+        try {
+        	MainBack.portMan.getArduinos().forEach((String, arduino) -> arduino.close());
+        } catch (Exception e) {
+        	
+        }
+        System.out.println("closing success");
+        sliders.forEach((String, Slider) -> sliders.remove(Slider));
     }
 
     public Slider getSliderByID(String ID) {
@@ -189,6 +194,24 @@ public class SliderManager {
             return getDefaultSlider4();
         }
         return getDefaultSlider();
+    }
+    
+    public String[] getSliderIDList() {
+    	ArrayList<String> temp = new ArrayList<String>();
+    	sliders.forEach((String, arduino) -> temp.add(String));
+    	if (temp.contains("default")) {
+    		temp.remove("default");
+    	}
+    	if (temp.contains("default2")) {
+    		temp.remove("default2");
+    	}
+    	if (temp.contains("default3")) {
+    		temp.remove("default3");
+    	}
+    	if (temp.contains("default4")) {
+    		temp.remove("default4");
+    	}
+    	return temp.toArray(new String[temp.size()]);
     }
 
 }
