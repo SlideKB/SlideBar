@@ -24,10 +24,14 @@ public class SettingsHelper {
 
     static {
         try {
-            settingsFile.createNewFile();
+            if (!settingsFile.createNewFile()) {
+                try (Reader reader = new FileReader(settingsFile)) {
+                    settings = gson.fromJson(reader, GlobalSettings.class);
+                }
+            }
 
-            try (Reader reader = new FileReader(settingsFile)) {
-                settings = gson.fromJson(reader, GlobalSettings.class);
+            if (settings == null) {
+                settings = new GlobalSettings();
             }
         } catch (IOException e) {
             // If the file cannot be parsed, crash the app
