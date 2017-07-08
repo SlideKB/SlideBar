@@ -1,5 +1,13 @@
 package com.github.slidekb.back.settings;
 
 public class SliderSettings {
-    boolean reverse;
+    private boolean reverse;
+
+    public void setReverse(boolean reverse) {
+        this.reverse = reverse;
+    }
+
+    public boolean isReverse() {
+        return reverse;
+    }
 }

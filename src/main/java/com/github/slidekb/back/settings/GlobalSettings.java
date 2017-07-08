@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GlobalSettings {
-    Map<String, SliderSettings> sliders;
-    Map<String, PluginSettings> plugins;
+    private Map<String, SliderSettings> sliders;
+    private Map<String, PluginSettings> plugins;
 
     public Map<String, SliderSettings> getSliders() {
         if (sliders == null) {

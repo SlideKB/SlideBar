@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PluginSettings {
-    List<String> processes;
-    List<String> hotkeys;
-    boolean alwaysRun;
-    String[] sliderList;
+    private List<String> processes;
+    private List<String> hotkeys;
+    private boolean alwaysRun;
+    private String[] sliderList;
 
     public String getSliderAtIndex(int index) {
         validateSliderArray();
