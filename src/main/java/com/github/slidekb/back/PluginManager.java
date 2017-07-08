@@ -88,6 +88,8 @@ public class PluginManager {
 
                 currentImplementation.setSlider(usedSlider, i);
             }
+
+            currentImplementation.setup();
             proci.add(currentImplementation);
         }
 
