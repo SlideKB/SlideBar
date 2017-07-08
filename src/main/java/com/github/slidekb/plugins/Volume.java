@@ -172,4 +172,8 @@ public class Volume implements SlideBarPlugin {
         // TODO Auto-generated method stub
         return 1;
     }
+
+    @Override
+    public void setup() {
+    }
 }

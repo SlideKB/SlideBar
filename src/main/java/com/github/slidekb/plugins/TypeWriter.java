@@ -52,4 +52,8 @@ public class TypeWriter implements SlideBarPlugin {
         return 2;
     }
 
+    @Override
+    public void setup() {
+    }
+
 }

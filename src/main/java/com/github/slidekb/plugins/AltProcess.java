@@ -123,4 +123,8 @@ public class AltProcess implements SlideBarPlugin {
     public int numberOfSlidersRequired() {
         return 1;
     }
+
+    @Override
+    public void setup() {
+    }
 }
