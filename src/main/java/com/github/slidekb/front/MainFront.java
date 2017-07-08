@@ -46,6 +46,7 @@ import com.github.slidekb.back.MainBack;
 public class MainFront {
 
     private static JFrame frame;
+	private static JList list;
 
     /**
      * The "About" Jframe
@@ -67,7 +68,8 @@ public class MainFront {
                 e3.printStackTrace();
             }
 
-            JList list = new JList();
+            list = new JList();
+            list.setListData(MainBack.getSliderManager().getSliderIDList());
             list.setBounds(15, 52, 244, 167);
             frame.getContentPane().add(list);
 
@@ -75,9 +77,10 @@ public class MainFront {
             lblSlidersConnected.setBounds(15, 16, 146, 20);
             frame.getContentPane().add(lblSlidersConnected);
 
-            JButton btnNewButton = new JButton("Reconnect");
-            btnNewButton.setBounds(15, 235, 115, 29);
-            frame.getContentPane().add(btnNewButton);
+            JButton sliderReconnect = new JButton("Reconnect");
+            sliderReconnect.setBounds(15, 235, 115, 29);
+            frame.getContentPane().add(sliderReconnect);
+            
 
             JButton sliderConfigure = new JButton("Configure");
             sliderConfigure.setBounds(145, 235, 115, 29);
@@ -94,6 +97,15 @@ public class MainFront {
             JButton pluginsReload = new JButton("Reload");
             pluginsReload.setBounds(299, 235, 115, 29);
             frame.getContentPane().add(pluginsReload);
+            ActionListener actionListenerReload = new ActionListener() {
+                public void actionPerformed(ActionEvent actionEvent) {
+                    MainBack.stop();
+                    MainBack.startIt();
+                    list.setListData(MainBack.getSliderManager().getSliderIDList());
+                }
+            };
+            pluginsReload.addActionListener(actionListenerReload);
+            sliderReconnect.addActionListener(actionListenerReload);
 
             JButton pluginsConfigure = new JButton("Configure");
             pluginsConfigure.setBounds(427, 235, 115, 29);
