@@ -40,7 +40,7 @@ public class TypeWriter implements SlideBarPlugin {
 		if (keys.length > 0) {
 			String key = keys[keys.length - 1];
 			if (!key.equals(previous)) {
-				if (!key.equals("Ctrl") && !key.equals("Backspace")) {
+				if (!key.equals("Enter") && !key.equals("Backspace")) {
 					slider.bumpLeft(10);
 					previous = key;
 				} else {
@@ -93,7 +93,7 @@ public class TypeWriter implements SlideBarPlugin {
 		System.out.println("[KeyHook setup]");
 
 		kh.addValidAlphaKey("Space");
-		kh.addValidAlphaKey("Ctrl");
+		kh.addValidAlphaKey("Enter");
 		kh.addValidAlphaKey("Backspace");
 	}
 
