@@ -44,6 +44,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.github.slidekb.back.MainBack;
+import com.github.slidekb.util.Misc;
 
 public class MainFront {
 
@@ -160,6 +161,12 @@ public class MainFront {
         });
         MenuItem about = new MenuItem("About");
         MenuItem website = new MenuItem("Website");
+        ActionListener launchWebsite = new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+               Misc.launchUrl("http://www.slidekb.com");
+            }
+        };
+        website.addActionListener(launchWebsite);
         MenuItem reload = new MenuItem("Reload");
         ActionListener actionListenerReload = new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
