@@ -253,8 +253,6 @@ public class MainBack implements Runnable {
                     processList = SettingsHelper.listProcesses(pluginID);
                     alwaysRun = SettingsHelper.isAlwaysRun(pluginID);
                     
-                    System.out.println(hotKeys);
-                    
                     for (String s : hotkeyList){
                     	if (s.equals(hotKeys)) {
                     		exe = false;
