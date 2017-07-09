@@ -58,9 +58,9 @@ public class MainFront {
             frame = new JFrame();
             frame.setTitle("SlideBar Configuration");
             frame.setBounds(100, 100, 818, 339);
-            frame.setPreferredSize(new Dimension(818, 339));
-            frame.setMinimumSize(new Dimension(818, 339));
-            frame.setMaximumSize(new Dimension(818, 339));
+            frame.setPreferredSize(new Dimension(600, 339));
+            frame.setMinimumSize(new Dimension(600, 339));
+            frame.setMaximumSize(new Dimension(600, 339));
             frame.getContentPane().setLayout(null);
             frame.getContentPane().setLayout(null);
             try {
@@ -119,13 +119,13 @@ public class MainFront {
             };
             pluginsConfigure.addActionListener(actionListenerPluginsConfigure);
 
-            JCheckBox chckbxOpenMinimized = new JCheckBox("Open Minimized");
-            chckbxOpenMinimized.setBounds(600, 49, 171, 29);
-            frame.getContentPane().add(chckbxOpenMinimized);
-
-            JButton btnNewButton_2 = new JButton("Help");
-            btnNewButton_2.setBounds(705, 235, 76, 29);
-            frame.getContentPane().add(btnNewButton_2);
+//            JCheckBox chckbxOpenMinimized = new JCheckBox("Open Minimized");
+//            chckbxOpenMinimized.setBounds(600, 49, 171, 29);
+//            frame.getContentPane().add(chckbxOpenMinimized);
+//
+//            JButton btnNewButton_2 = new JButton("Help");
+//            btnNewButton_2.setBounds(705, 235, 76, 29);
+//            frame.getContentPane().add(btnNewButton_2);
         }
         // Display the window.
         frame.pack();
@@ -161,6 +161,14 @@ public class MainFront {
         MenuItem about = new MenuItem("About");
         MenuItem website = new MenuItem("Website");
         MenuItem reload = new MenuItem("Reload");
+        ActionListener actionListenerReload = new ActionListener() {
+            public void actionPerformed(ActionEvent actionEvent) {
+                MainBack.stop();
+                MainBack.startIt();
+                list.setListData(MainBack.getSliderManager().getSliderIDList());
+            }
+        };
+        reload.addActionListener(actionListenerReload);
         MenuItem exitItem = new MenuItem("Exit");
         exitItem.addActionListener(new ActionListener() {
             @Override
@@ -186,7 +194,7 @@ public class MainFront {
                 System.out.println("SystemTray is not supported");
                 return;
             }
-            final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(new URL("http://home.comcast.net/~supportcd/Icons/Java_Required.jpg")), "Library Drop");
+            final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(new URL("http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png")), "SlideBar Configuration");
             final SystemTray tray = SystemTray.getSystemTray();
 
             // Create a pop-up menu components

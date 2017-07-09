@@ -1,47 +1,56 @@
 {
-	"plugins": {
-		"com.github.slidekb.plugins.Scroller": {
-			"processes": [
-				"explorer.exe"
-			],
-			"hotkeys": [
-				"ctrl alt shift 3"
-			],
-			"alwaysRun": false
-		},
-		"com.github.slidekb.plugins.Volume": {
-			"processes": [
-				"firefox.exe"
-			],
-			"hotkeys": [
-				"alt"
-			],
-			"alwaysRun": false
-		},
-		"com.github.slidekb.plugins.TypeWriter": {
-			"processes": [
-				"explorer.exe",
-				"firefox.exe",
-				"notepad.exe"
-			],
-			"hotkeys": [
-			],
-			"alwaysRun": false,
-			"sliderList": [
-				"m1n3",
-				"l1n1"
-			]
-		},
-		"com.github.slidekb.plugins.AltProcess": {
-			"processes": [
-			],
-			"hotkeys": [
-				"[Alt]"
-			],
-			"alwaysRun": false,
-			"sliderList": [
-				"m1n3"
-			]
-		}
-	}
+  "plugins": {
+    "com.github.slidekb.plugins.Scroller": {
+      "processes": [
+        "explorer.exe"
+      ],
+      "hotkeys": [
+        "ctrl alt shift 3"
+      ],
+      "alwaysRun": false
+    },
+    "com.github.slidekb.plugins.Volume": {
+      "processes": [
+        "firefox.exe"
+      ],
+      "hotkeys": [
+      ],
+      "alwaysRun": false,
+      "sliderList": [
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    "com.github.slidekb.plugins.TypeWriter": {
+      "processes": [
+        "explorer.exe",
+        "firefox.exe",
+        "notepad.exe",
+        "eclipse.exe"
+      ],
+      "hotkeys": [],
+      "alwaysRun": false,
+      "sliderList": [
+        "m1n3",
+        "l1n1",
+        null,
+        null
+      ]
+    },
+    "com.github.slidekb.plugins.AltProcess": {
+      "processes": [],
+      "hotkeys": [
+        "[Alt]"
+      ],
+      "alwaysRun": false,
+      "sliderList": [
+        "m1n3",
+        null,
+        null,
+        null
+      ]
+    }
+  }
 }

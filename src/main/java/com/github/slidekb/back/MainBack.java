@@ -71,6 +71,8 @@ public class MainBack implements Runnable {
 
     private static SliderManager slideMan = new SliderManager();
 
+	private static boolean exe;
+
     // /**
     // * For running without an Interface. creates a new thread and starts it
     // *
@@ -174,8 +176,8 @@ public class MainBack implements Runnable {
             getSliderManager().hashTheSlideBars();
             // TODO this should be moved to the portManager class
             System.out.println("Number of sliders connected: " + portMan.getArduinos().size());
-            started = true;
             PM.loadProcesses(1);
+            started = true;
         }
         return started;
     }
@@ -222,7 +224,7 @@ public class MainBack implements Runnable {
                 Thread.sleep(1);
             } catch (Exception e) {
             }
-
+            exe = true;
             String activeProcess = ActiveProcess.getProcess();
 
             String[] hotKeysArray = KeyHook.getHotKeys();
@@ -243,6 +245,25 @@ public class MainBack implements Runnable {
 
                 System.out.println("HOTKEYS CHANGED, is now: " + hotKeys);
             }
+            
+            for (SlideBarPlugin plugin : PM.getProci()) {
+                String pluginID = plugin.getClass().getCanonicalName();
+                if (SettingsHelper.isPluginKnown(pluginID)) {
+                    hotkeyList = SettingsHelper.listHotkeys(pluginID);
+                    processList = SettingsHelper.listProcesses(pluginID);
+                    alwaysRun = SettingsHelper.isAlwaysRun(pluginID);
+                    
+                    System.out.println(hotKeys);
+                    
+                    for (String s : hotkeyList){
+                    	if (s.equals(hotKeys)) {
+                    		exe = false;
+                    	}
+                    }
+                    
+                }
+            }
+            
 
             for (SlideBarPlugin plugin : PM.getProci()) {
                 String pluginID = plugin.getClass().getCanonicalName();
@@ -256,12 +277,11 @@ public class MainBack implements Runnable {
                         runThisPlugin = true;
                     } else if (hotkeyList.isEmpty() && processList.isEmpty()) {
                         runThisPlugin = false;
-                    } else if (hotkeyList.isEmpty() && numHotKeys > 0) {
+                    } else if (hotkeyList.isEmpty() && numHotKeys > 0 && !exe) {
                         runThisPlugin = false;
                     } else if ((hotkeyList.isEmpty() || hotkeyList.contains(hotKeys)) && (processList.isEmpty() || processList.contains(activeProcess))) {
                         runThisPlugin = true;
                     }
-
                     if (runThisPlugin) {
                         if (previousPlugin != plugin.getClass().getCanonicalName()) {
                             previousPlugin = plugin.getClass().getCanonicalName();
@@ -275,7 +295,6 @@ public class MainBack implements Runnable {
                             plugin.run();
                         }
                     }
-
                     runThisPlugin = false;
                 }
             }
