@@ -34,8 +34,6 @@ import org.glassfish.jersey.server.ServerProperties;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
-import com.github.slidekb.api.AlphaKeyManager;
-import com.github.slidekb.api.HotKeyManager;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.ifc.resources.RootResource;
 import com.github.slidekb.util.SettingsHelper;
@@ -65,9 +63,9 @@ public class MainBack implements Runnable {
      */
     private static boolean started = false;
 
-    static AlphaKeyManager alphaKeyManager = new AlphaKeyManagerImpl();
+    static AlphaKeyManager alphaKeyManager = new AlphaKeyManager();
 
-    static HotKeyManager hotKeyManager = new HotKeyManagerImpl();
+    static HotKeyManager hotKeyManager = new HotKeyManager();
 
     static PortManager portMan = new PortManager();
 
