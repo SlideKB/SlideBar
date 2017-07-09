@@ -13,11 +13,10 @@
       "processes": [
         "firefox.exe"
       ],
-      "hotkeys": [
-      ],
+      "hotkeys": [],
       "alwaysRun": false,
       "sliderList": [
-        null,
+        "",
         null,
         null,
         null
@@ -26,9 +25,7 @@
     "com.github.slidekb.plugins.TypeWriter": {
       "processes": [
         "explorer.exe",
-        "firefox.exe",
-        "notepad.exe",
-        "eclipse.exe"
+        "notepad.exe"
       ],
       "hotkeys": [],
       "alwaysRun": false,
@@ -47,7 +44,20 @@
       "alwaysRun": false,
       "sliderList": [
         "m1n3",
+        "",
         null,
+        null
+      ]
+    },
+    "com.github.slidekb.plugins.AdobePremiere": {
+      "processes": [
+        "Adobe Premiere Pro.exe"
+      ],
+      "hotkeys": [],
+      "alwaysRun": false,
+      "sliderList": [
+        "",
+        "",
         null,
         null
       ]

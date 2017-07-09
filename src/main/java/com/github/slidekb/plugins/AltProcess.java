@@ -97,11 +97,6 @@ public class AltProcess implements SlideBarPlugin {
 
     @Override
     public void runFirst() {
-        try {
-            rob = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
         virtualIndex = cfg.StartingPart();
         slider.createParts(cfg.numberOfParts());
         slider.goToPartComplete(cfg.StartingPart());
@@ -126,5 +121,10 @@ public class AltProcess implements SlideBarPlugin {
 
     @Override
     public void setup() {
+    	try {
+            rob = new Robot();
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
     }
 }
