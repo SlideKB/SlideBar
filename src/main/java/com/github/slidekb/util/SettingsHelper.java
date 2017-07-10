@@ -92,6 +92,19 @@ public class SettingsHelper {
         save();
     }
 
+    public static boolean isReversed(String pluginID) {
+        if (settings.getPlugins().containsKey(pluginID)) {
+            return settings.getPlugins().get(pluginID).isReversed();
+        }
+
+        return false;
+    }
+
+    public static void setReversed(String pluginID, boolean reversed) {
+        settings.getPlugins().computeIfAbsent(pluginID, key -> new PluginSettings()).setReversed(reversed);
+        save();
+    }
+
     @Nullable
     public static String getUsedSliderAtIndex(String pluginID, int index) {
         if (settings.getPlugins().containsKey(pluginID)) {

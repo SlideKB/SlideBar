@@ -9,6 +9,7 @@ public class PluginSettings {
     private List<String> hotkeys;
     private boolean alwaysRun;
     private String[] sliderList;
+    private boolean reversed;
 
     public String getSliderAtIndex(int index) {
         validateSliderArray();
@@ -52,5 +53,13 @@ public class PluginSettings {
         } else if (sliderList.length != 4) {
             sliderList = Arrays.copyOfRange(sliderList, 0, 4);
         }
+    }
+
+    public boolean isReversed() {
+        return reversed;
+    }
+
+    public void setReversed(boolean reversed) {
+        this.reversed = reversed;
     }
 }
