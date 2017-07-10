@@ -121,7 +121,7 @@ public class AltProcess implements SlideBarPlugin {
 
     @Override
     public void setup() {
-    	try {
+        try {
             rob = new Robot();
         } catch (AWTException e) {
             e.printStackTrace();

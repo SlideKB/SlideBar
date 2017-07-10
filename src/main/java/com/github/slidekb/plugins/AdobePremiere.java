@@ -19,19 +19,18 @@ import com.google.auto.service.AutoService;
 @PluginVersion(1)
 @AutoService(SlideBarPlugin.class)
 public class AdobePremiere implements SlideBarPlugin {
-	
-	private KeyHook HKM = new KeyHook();
-	private Robot robot;
-	private Slider slider;
-	
-	private int previousSliderIndex;
-	
-	private boolean playing = false;
-	private boolean toggle;
-	private int virtualIndex;
-	
-	
-	@Override
+
+    private KeyHook HKM = new KeyHook();
+    private Robot robot;
+    private Slider slider;
+
+    private int previousSliderIndex;
+
+    private boolean playing = false;
+    private boolean toggle;
+    private int virtualIndex;
+
+    @Override
     public int getPriority() {
         return 0;
     }
@@ -43,12 +42,12 @@ public class AdobePremiere implements SlideBarPlugin {
 
     @Override
     public void run() {
-    	String[] keys = HKM.getHotKeys();
+        String[] keys = HKM.getHotKeys();
         String key = "";
         if (keys.length > 0) {
             key = keys[keys.length - 1];
-            for (String k : keys){
-                if (k.equals("Shift")){
+            for (String k : keys) {
+                if (k.equals("Shift")) {
                     toggle = true;
                 }
             }
@@ -56,63 +55,63 @@ public class AdobePremiere implements SlideBarPlugin {
         } else {
             toggle = false;
         }
-    	int sliderIndex = slider.getVirtualPartIndex(100);
-    	if (virtualIndex < sliderIndex){
+        int sliderIndex = slider.getVirtualPartIndex(100);
+        if (virtualIndex < sliderIndex) {
             playing = false;
             System.out.println(Arrays.toString(keys));
-            if (toggle){
-            	
-//              lib.ahkExec(new WString("SendEvent {g}"));
+            if (toggle) {
+
+                // lib.ahkExec(new WString("SendEvent {g}"));
 
             } else {
-            	robot.keyPress(KeyEvent.VK_LEFT);
-            	robot.keyRelease(KeyEvent.VK_LEFT);
+                robot.keyPress(KeyEvent.VK_LEFT);
+                robot.keyRelease(KeyEvent.VK_LEFT);
             }
             virtualIndex++;
             System.out.println(sliderIndex);
         }
-        if (virtualIndex > sliderIndex){
+        if (virtualIndex > sliderIndex) {
             playing = false;
             System.out.println(Arrays.toString(keys));
-            if (toggle){
+            if (toggle) {
 
-//                lib.ahkExec(new WString("SendEvent {;}"));
+                // lib.ahkExec(new WString("SendEvent {;}"));
 
             } else {
-            	robot.keyPress(KeyEvent.VK_RIGHT);
-            	robot.keyRelease(KeyEvent.VK_RIGHT);
+                robot.keyPress(KeyEvent.VK_RIGHT);
+                robot.keyRelease(KeyEvent.VK_RIGHT);
             }
             virtualIndex--;
             System.out.println(sliderIndex);
         }
-        if (sliderIndex == 98 && !playing){
-        	playing = true;
+        if (sliderIndex == 98 && !playing) {
+            playing = true;
             robot.keyPress(KeyEvent.VK_J);
-        	robot.keyRelease(KeyEvent.VK_J);
+            robot.keyRelease(KeyEvent.VK_J);
         }
-        if (sliderIndex == 0 && !playing){
-        	playing = true;
+        if (sliderIndex == 0 && !playing) {
+            playing = true;
             robot.keyPress(KeyEvent.VK_L);
-        	robot.keyRelease(KeyEvent.VK_L);
+            robot.keyRelease(KeyEvent.VK_L);
         }
         if (key.equals("Space")) {
             playing = false;
             runFirst();
         }
-    	
+
     }
 
     @Override
     public void runFirst() {
-    	slider.writeUntilComplete(512);
-    	virtualIndex = slider.getVirtualPartIndex(100);
+        slider.writeUntilComplete(512);
+        virtualIndex = slider.getVirtualPartIndex(100);
     }
 
     @Override
     public void setSlider(Slider slider, int position) {
-    	if (position == 0) {
-    		this.slider = slider;
-    	}
+        if (position == 0) {
+            this.slider = slider;
+        }
     }
 
     @Override
@@ -122,21 +121,21 @@ public class AdobePremiere implements SlideBarPlugin {
 
     @Override
     public void setup() {
-    	// setup keyhook
-		try {
-			Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-			logger.setLevel(Level.OFF);
-			GlobalScreen.registerNativeHook();
-		} catch (NativeHookException ex) {
-			System.err.println("There was a problem registering the native hook.");
-			System.err.println(ex.getMessage());
-			System.exit(1);
-		}
-		HKM = new KeyHook();
-		HKM.addValidHotkey("Space");
-		GlobalScreen.addNativeKeyListener(HKM);
-		System.out.println("[KeyHook setup]");
-		try {
+        // setup keyhook
+        try {
+            Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+            logger.setLevel(Level.OFF);
+            GlobalScreen.registerNativeHook();
+        } catch (NativeHookException ex) {
+            System.err.println("There was a problem registering the native hook.");
+            System.err.println(ex.getMessage());
+            System.exit(1);
+        }
+        HKM = new KeyHook();
+        HKM.addValidHotkey("Space");
+        GlobalScreen.addNativeKeyListener(HKM);
+        System.out.println("[KeyHook setup]");
+        try {
             robot = new Robot();
         } catch (AWTException e) {
             System.out.println("Robot could not be created...");

@@ -71,7 +71,7 @@ public class MainBack implements Runnable {
 
     private static SliderManager slideMan = new SliderManager();
 
-	private static boolean exe;
+    private static boolean exe;
 
     // /**
     // * For running without an Interface. creates a new thread and starts it
@@ -245,23 +245,22 @@ public class MainBack implements Runnable {
 
                 System.out.println("HOTKEYS CHANGED, is now: " + hotKeys);
             }
-            
+
             for (SlideBarPlugin plugin : PM.getProci()) {
                 String pluginID = plugin.getClass().getCanonicalName();
                 if (SettingsHelper.isPluginKnown(pluginID)) {
                     hotkeyList = SettingsHelper.listHotkeys(pluginID);
                     processList = SettingsHelper.listProcesses(pluginID);
                     alwaysRun = SettingsHelper.isAlwaysRun(pluginID);
-                    
-                    for (String s : hotkeyList){
-                    	if (s.equals(hotKeys)) {
-                    		exe = false;
-                    	}
+
+                    for (String s : hotkeyList) {
+                        if (s.equals(hotKeys)) {
+                            exe = false;
+                        }
                     }
-                    
+
                 }
             }
-            
 
             for (SlideBarPlugin plugin : PM.getProci()) {
                 String pluginID = plugin.getClass().getCanonicalName();

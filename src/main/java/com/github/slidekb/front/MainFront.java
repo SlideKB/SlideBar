@@ -49,7 +49,7 @@ import com.github.slidekb.util.Misc;
 public class MainFront {
 
     private static JFrame frame;
-	private static JList list;
+    private static JList list;
 
     /**
      * The "About" Jframe
@@ -83,7 +83,6 @@ public class MainFront {
             JButton sliderReconnect = new JButton("Reconnect");
             sliderReconnect.setBounds(15, 235, 115, 29);
             frame.getContentPane().add(sliderReconnect);
-            
 
             JButton sliderConfigure = new JButton("Configure");
             sliderConfigure.setBounds(145, 235, 115, 29);
@@ -120,13 +119,13 @@ public class MainFront {
             };
             pluginsConfigure.addActionListener(actionListenerPluginsConfigure);
 
-//            JCheckBox chckbxOpenMinimized = new JCheckBox("Open Minimized");
-//            chckbxOpenMinimized.setBounds(600, 49, 171, 29);
-//            frame.getContentPane().add(chckbxOpenMinimized);
-//
-//            JButton btnNewButton_2 = new JButton("Help");
-//            btnNewButton_2.setBounds(705, 235, 76, 29);
-//            frame.getContentPane().add(btnNewButton_2);
+            // JCheckBox chckbxOpenMinimized = new JCheckBox("Open Minimized");
+            // chckbxOpenMinimized.setBounds(600, 49, 171, 29);
+            // frame.getContentPane().add(chckbxOpenMinimized);
+            //
+            // JButton btnNewButton_2 = new JButton("Help");
+            // btnNewButton_2.setBounds(705, 235, 76, 29);
+            // frame.getContentPane().add(btnNewButton_2);
         }
         // Display the window.
         frame.pack();
@@ -163,7 +162,7 @@ public class MainFront {
         MenuItem website = new MenuItem("Website");
         ActionListener launchWebsite = new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
-               Misc.launchUrl("http://www.slidekb.com");
+                Misc.launchUrl("http://www.slidekb.com");
             }
         };
         website.addActionListener(launchWebsite);
