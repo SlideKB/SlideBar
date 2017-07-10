@@ -31,7 +31,8 @@ import com.github.slidekb.util.SettingsHelper;
 public class PluginManager {
 
     private ArrayList<SlideBarPlugin> proci = new ArrayList<>();
-    private CountDownLatch pluginsLoaded = new CountDownLatch(1);
+    private CountDownLatch pluginsLoaded;
+    private ServiceLoader<SlideBarPlugin> loader;
 
     public PluginManager() {
 
@@ -44,8 +45,13 @@ public class PluginManager {
      */
     protected boolean loadProcesses(int programVersion) {
         proci.clear();
+        pluginsLoaded = new CountDownLatch(1);
 
-        ServiceLoader<SlideBarPlugin> loader = ServiceLoader.load(SlideBarPlugin.class, CurrentWorkingDirectoryClassLoader.getCurrentWorkingDirectoryClassLoader());
+        if (loader == null) {
+            loader = ServiceLoader.load(SlideBarPlugin.class, CurrentWorkingDirectoryClassLoader.getCurrentWorkingDirectoryClassLoader());
+        } else {
+            loader.reload();
+        }
 
         for (SlideBarPlugin currentImplementation : loader) {
             PluginVersion currentVersion = currentImplementation.getClass().getAnnotation(PluginVersion.class);
