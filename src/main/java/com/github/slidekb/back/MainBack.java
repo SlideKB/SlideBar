@@ -253,12 +253,10 @@ public class MainBack implements Runnable {
                 if (SettingsHelper.isPluginKnown(pluginID)) {
                     hotkeyList = SettingsHelper.listHotkeys(pluginID);
 
-                    for (String currHotkey : hotkeyList) {
-                        if (currHotkey.equals(hotKeys)) {
-                            hotkeysUsed = true;
-                        }
+                    if (hotkeyList.contains(hotKeys)) {
+                        hotkeysUsed = true;
+                        break;
                     }
-
                 }
             }
 
