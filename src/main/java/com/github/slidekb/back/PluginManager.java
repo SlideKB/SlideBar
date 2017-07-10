@@ -16,6 +16,8 @@
 
 package com.github.slidekb.back;
 
+import java.io.IOException;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.ServiceLoader;
 import java.util.concurrent.CountDownLatch;
@@ -33,6 +35,7 @@ public class PluginManager {
     private ArrayList<SlideBarPlugin> proci = new ArrayList<>();
     private CountDownLatch pluginsLoaded;
     private ServiceLoader<SlideBarPlugin> loader;
+    private URLClassLoader currentClassLoader;
 
     public PluginManager() {
 
@@ -46,7 +49,17 @@ public class PluginManager {
     protected boolean loadProcesses(int programVersion) {
         proci.clear();
         pluginsLoaded = new CountDownLatch(1);
-        loader = ServiceLoader.load(SlideBarPlugin.class, CurrentWorkingDirectoryClassLoader.getCurrentWorkingDirectoryClassLoader());
+
+        if (currentClassLoader != null) {
+            try {
+                currentClassLoader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        currentClassLoader = CurrentWorkingDirectoryClassLoader.getCurrentWorkingDirectoryClassLoader();
+        loader = ServiceLoader.load(SlideBarPlugin.class, currentClassLoader);
 
         for (SlideBarPlugin currentImplementation : loader) {
             PluginVersion currentVersion = currentImplementation.getClass().getAnnotation(PluginVersion.class);
