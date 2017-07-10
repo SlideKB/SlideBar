@@ -113,7 +113,7 @@ public class PluginManager {
 
     protected void removeProci(boolean RemoveAll) {
         if (RemoveAll) {
-            proci.removeAll(proci);
+            proci.clear();
         }
     }
 }
