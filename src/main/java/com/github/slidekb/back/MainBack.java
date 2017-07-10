@@ -71,8 +71,6 @@ public class MainBack implements Runnable {
 
     private static SliderManager slideMan = new SliderManager();
 
-    private static boolean exe;
-
     // /**
     // * For running without an Interface. creates a new thread and starts it
     // *
@@ -211,6 +209,7 @@ public class MainBack implements Runnable {
         boolean activeProcessChanged = false;
         boolean hotKeysChanged = false;
         boolean runThisPlugin = false;
+        boolean hotkeysUsed = false;
         String previousActiveProcess = "";
         String previousHotKeys = "";
         String previousPlugin = "";
@@ -224,7 +223,8 @@ public class MainBack implements Runnable {
                 Thread.sleep(1);
             } catch (Exception e) {
             }
-            exe = true;
+
+            hotkeysUsed = false;
             String activeProcess = ActiveProcess.getProcess();
 
             String[] hotKeysArray = KeyHook.getHotKeys();
@@ -246,16 +246,16 @@ public class MainBack implements Runnable {
                 System.out.println("HOTKEYS CHANGED, is now: " + hotKeys);
             }
 
+            // First, check if the current hotkeys are used in ANY plugin
             for (SlideBarPlugin plugin : PM.getProci()) {
                 String pluginID = plugin.getClass().getCanonicalName();
+
                 if (SettingsHelper.isPluginKnown(pluginID)) {
                     hotkeyList = SettingsHelper.listHotkeys(pluginID);
-                    processList = SettingsHelper.listProcesses(pluginID);
-                    alwaysRun = SettingsHelper.isAlwaysRun(pluginID);
 
-                    for (String s : hotkeyList) {
-                        if (s.equals(hotKeys)) {
-                            exe = false;
+                    for (String currHotkey : hotkeyList) {
+                        if (currHotkey.equals(hotKeys)) {
+                            hotkeysUsed = true;
                         }
                     }
 
@@ -274,11 +274,12 @@ public class MainBack implements Runnable {
                         runThisPlugin = true;
                     } else if (hotkeyList.isEmpty() && processList.isEmpty()) {
                         runThisPlugin = false;
-                    } else if (hotkeyList.isEmpty() && numHotKeys > 0 && !exe) {
+                    } else if (hotkeyList.isEmpty() && numHotKeys > 0 && hotkeysUsed) {
                         runThisPlugin = false;
                     } else if ((hotkeyList.isEmpty() || hotkeyList.contains(hotKeys)) && (processList.isEmpty() || processList.contains(activeProcess))) {
                         runThisPlugin = true;
                     }
+
                     if (runThisPlugin) {
                         if (previousPlugin != plugin.getClass().getCanonicalName()) {
                             previousPlugin = plugin.getClass().getCanonicalName();
@@ -292,6 +293,7 @@ public class MainBack implements Runnable {
                             plugin.run();
                         }
                     }
+
                     runThisPlugin = false;
                 }
             }
