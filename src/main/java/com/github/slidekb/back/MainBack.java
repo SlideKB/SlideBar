@@ -231,6 +231,9 @@ public class MainBack implements Runnable {
             int numHotKeys = hotKeysArray.length;
             String hotKeys = Arrays.toString(hotKeysArray);
 
+            // Use copy of the list to avoid ConcurrentModificationException on plugin reload
+            List<SlideBarPlugin> currentPlugins = new ArrayList<>(PM.getProci());
+
             if (!previousActiveProcess.equals(activeProcess)) {
                 updatePrevList(activeProcess);
                 previousActiveProcess = activeProcess;
@@ -247,7 +250,7 @@ public class MainBack implements Runnable {
             }
 
             // First, check if the current hotkeys are used in ANY plugin
-            for (SlideBarPlugin plugin : PM.getProci()) {
+            for (SlideBarPlugin plugin : currentPlugins) {
                 String pluginID = plugin.getClass().getCanonicalName();
 
                 if (SettingsHelper.isPluginKnown(pluginID)) {
@@ -260,7 +263,7 @@ public class MainBack implements Runnable {
                 }
             }
 
-            for (SlideBarPlugin plugin : PM.getProci()) {
+            for (SlideBarPlugin plugin : currentPlugins) {
                 String pluginID = plugin.getClass().getCanonicalName();
 
                 if (SettingsHelper.isPluginKnown(pluginID)) {
