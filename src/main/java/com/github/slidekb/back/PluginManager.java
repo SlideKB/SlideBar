@@ -46,12 +46,7 @@ public class PluginManager {
     protected boolean loadProcesses(int programVersion) {
         proci.clear();
         pluginsLoaded = new CountDownLatch(1);
-
-        if (loader == null) {
-            loader = ServiceLoader.load(SlideBarPlugin.class, CurrentWorkingDirectoryClassLoader.getCurrentWorkingDirectoryClassLoader());
-        } else {
-            loader.reload();
-        }
+        loader = ServiceLoader.load(SlideBarPlugin.class, CurrentWorkingDirectoryClassLoader.getCurrentWorkingDirectoryClassLoader());
 
         for (SlideBarPlugin currentImplementation : loader) {
             PluginVersion currentVersion = currentImplementation.getClass().getAnnotation(PluginVersion.class);
