@@ -65,7 +65,7 @@ public class MainFront {
             frame.getContentPane().setLayout(null);
             frame.getContentPane().setLayout(null);
             try {
-                frame.setIconImage(ImageIO.read(new File("icon.png")));
+                frame.setIconImage(ImageIO.read(MainFront.class.getResourceAsStream("/icon.png")));
             } catch (IOException e3) {
                 // TODO Auto-generated catch block
                 e3.printStackTrace();
