@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.ServiceLoader;
-import java.util.concurrent.CountDownLatch;
 
 import com.github.slidekb.api.PlatformSpecific;
 import com.github.slidekb.api.PluginVersion;
@@ -28,12 +27,13 @@ import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.api.Slider;
 import com.github.slidekb.util.CurrentWorkingDirectoryClassLoader;
 import com.github.slidekb.util.OsHelper;
+import com.github.slidekb.util.ResettableCountDownLatch;
 import com.github.slidekb.util.SettingsHelper;
 
 public class PluginManager {
 
     private ArrayList<SlideBarPlugin> proci = new ArrayList<>();
-    private CountDownLatch pluginsLoaded;
+    private ResettableCountDownLatch pluginsLoaded = new ResettableCountDownLatch(1);
     private ServiceLoader<SlideBarPlugin> loader;
     private URLClassLoader currentClassLoader;
 
@@ -47,8 +47,8 @@ public class PluginManager {
      * @return true if successful.
      */
     protected boolean loadProcesses(int programVersion) {
+        pluginsLoaded.reset();
         proci.clear();
-        pluginsLoaded = new CountDownLatch(1);
 
         if (currentClassLoader != null) {
             try {
