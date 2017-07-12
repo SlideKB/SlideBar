@@ -200,7 +200,8 @@ public class MainFront {
                 System.out.println("SystemTray is not supported");
                 return;
             }
-            final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(new URL("http://icons.iconarchive.com/icons/graphicloads/100-flat/256/home-icon.png")), "SlideBar Configuration");
+            final TrayIcon trayIcon = new TrayIcon(ImageIO.read(MainFront.class.getResourceAsStream("/icon.png")), "SlideBar Configuration");
+            trayIcon.setImageAutoSize(true);
             final SystemTray tray = SystemTray.getSystemTray();
 
             // Create a pop-up menu components
@@ -220,6 +221,9 @@ public class MainFront {
             System.out.println("TrayIcon could not be added.");
         } catch (MalformedURLException e) {
             System.out.println("Malformed Exception");
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
     }
 
