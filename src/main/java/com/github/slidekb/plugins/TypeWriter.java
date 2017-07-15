@@ -97,4 +97,10 @@ public class TypeWriter implements SlideBarPlugin {
         kh.addValidAlphaKey("Backspace");
     }
 
+    @Override
+    public void teardown() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

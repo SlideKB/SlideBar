@@ -141,4 +141,10 @@ public class AdobePremiere implements SlideBarPlugin {
             System.out.println("Robot could not be created...");
         }
     }
+
+    @Override
+    public void teardown() {
+        // TODO Auto-generated method stub
+
+    }
 }

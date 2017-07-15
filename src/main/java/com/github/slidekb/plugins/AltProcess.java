@@ -127,4 +127,10 @@ public class AltProcess implements SlideBarPlugin {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void teardown() {
+        // TODO Auto-generated method stub
+
+    }
 }
