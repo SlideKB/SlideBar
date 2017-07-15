@@ -48,7 +48,8 @@ public class PluginManager {
      */
     protected boolean loadProcesses(int programVersion) {
         pluginsLoaded.reset();
-        proci.clear();
+
+        unloadPlugins();
 
         if (currentClassLoader != null) {
             try {
@@ -117,6 +118,11 @@ public class PluginManager {
 
     public ArrayList<SlideBarPlugin> getProci() {
         return proci;
+    }
+
+    protected void unloadPlugins() {
+        proci.forEach(plugin -> plugin.teardown());
+        proci.clear();
     }
 
     protected void removeProci(boolean RemoveAll) {

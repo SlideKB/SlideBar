@@ -347,7 +347,7 @@ public class MainBack implements Runnable {
         System.out.println("stopping");
         getSliderManager().closeAll();
         // TODO decide if this needs to move to the Move this to the SliderManager class
-        PM.removeProci(true);
+        PM.unloadPlugins();
         started = false;
         return true;
     }
