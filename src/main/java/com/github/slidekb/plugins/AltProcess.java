@@ -130,7 +130,5 @@ public class AltProcess implements SlideBarPlugin {
 
     @Override
     public void teardown() {
-        // TODO Auto-generated method stub
-
     }
 }
