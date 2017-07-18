@@ -134,7 +134,7 @@ public class Arduino implements SerialPortEventListener {
             serialPort.openPort();
             serialPort.setParams(SerialPort.BAUDRATE_115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
-            ID = serialPort.readString(4, 5000);
+            ID = serialPort.readString(1, 5000);
 
             try {
                 Thread.sleep(1000);
@@ -145,7 +145,7 @@ public class Arduino implements SerialPortEventListener {
             serialPort.writeBytes("2424]".getBytes());
             ID = serialPort.readString();
             serialPort.writeBytes("6003]".getBytes());
-            ID = serialPort.readString(4, 5000);
+            ID = serialPort.readString(6, 5000);
 
             serialPort.addEventListener((SerialPortEvent serialPortEvent) -> {
 
