@@ -81,16 +81,18 @@ public class AltProcess implements SlideBarPlugin {
         // System.out.println(slideIndex);
 
         if (virtualIndex < slideIndex) {
-            rob.keyPress(KeyEvent.VK_TAB);
-            rob.keyRelease(KeyEvent.VK_TAB);
-            virtualIndex++;
-        }
-        if (virtualIndex > slideIndex) {
-            // System.out.println(virtualIndex + " - 1");
+            
             rob.keyPress(KeyEvent.VK_SHIFT);
             rob.keyPress(KeyEvent.VK_TAB);
             rob.keyRelease(KeyEvent.VK_TAB);
             rob.keyRelease(KeyEvent.VK_SHIFT);
+            virtualIndex++;
+        }
+        if (virtualIndex > slideIndex) {
+            // System.out.println(virtualIndex + " - 1");
+
+            rob.keyPress(KeyEvent.VK_TAB);
+            rob.keyRelease(KeyEvent.VK_TAB);
             virtualIndex--;
         }
     }

@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -43,6 +44,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.MainBack;
 import com.github.slidekb.util.Misc;
 
@@ -50,6 +52,7 @@ public class MainFront {
 
     private static JFrame frame;
     private static JList list;
+	private static JList pluginList;
 
     /**
      * The "About" Jframe
@@ -88,24 +91,34 @@ public class MainFront {
             sliderConfigure.setBounds(145, 235, 115, 29);
             frame.getContentPane().add(sliderConfigure);
 
-            JList list_1 = new JList();
-            list_1.setBounds(298, 52, 244, 167);
-            frame.getContentPane().add(list_1);
+            pluginList = new JList();
+            pluginList.setBounds(298, 52, 244, 167);
+            ArrayList<String> temp = new ArrayList<String>();
+            for (SlideBarPlugin p : MainBack.PM.getProci()){
+            	temp.add(p.getLabelName());
+            }
+            pluginList.setListData(temp.toArray(new String[temp.size()]));
+            frame.getContentPane().add(pluginList);
 
             JLabel lblPluginsLoaded = new JLabel("Plugins Loaded");
             lblPluginsLoaded.setBounds(298, 16, 115, 20);
             frame.getContentPane().add(lblPluginsLoaded);
-
-            JButton pluginsReload = new JButton("Reload");
-            pluginsReload.setBounds(299, 235, 115, 29);
-            frame.getContentPane().add(pluginsReload);
             ActionListener actionListenerReload = new ActionListener() {
                 public void actionPerformed(ActionEvent actionEvent) {
                     MainBack.stop();
                     MainBack.startIt();
                     list.setListData(MainBack.getSliderManager().getSliderIDList());
+                    ArrayList<String> temp = new ArrayList<String>();
+                    for (SlideBarPlugin p : MainBack.PM.getProci()){
+                    	temp.add(p.getLabelName());
+                    }
+                    pluginList.setListData(temp.toArray(new String[temp.size()]));
                 }
             };
+
+            JButton pluginsReload = new JButton("Reload");
+            pluginsReload.setBounds(299, 235, 115, 29);
+            frame.getContentPane().add(pluginsReload);
             pluginsReload.addActionListener(actionListenerReload);
             sliderReconnect.addActionListener(actionListenerReload);
 
