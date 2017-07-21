@@ -27,7 +27,7 @@ import jssc.SerialPortList;
  * a serial Port. The <code><b>findAndConnect()</b></code> method will find all
  * SlideBars and open their ports. The PortManager keeps a hash map of each
  * connected SlideBar using the SlideBar ID's for the keys. PortManager also
- * creates a fake SlideBar accessible with the key ID of "f1n1" if no SlideBars
+ * creates a fake SlideBar accessible with the key ID of "No Sliders Connected" if no SlideBars
  * are found.
  */
 public class PortManager {
@@ -110,7 +110,7 @@ public class PortManager {
         // connected then use a fake one
         if (arduinos.isEmpty()) {
             System.out.println("creating fake arduino");
-            arduinos.put("f1n1", new FakeArduino("f1n1", "COM69"));
+            arduinos.put("No Sliders Connected", new FakeArduino("No Sliders Connected", "COM69"));
         }
     }
 
