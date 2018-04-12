@@ -145,7 +145,7 @@ public class Arduino implements SerialPortEventListener {
             serialPort.writeBytes("2424]".getBytes());
             ID = serialPort.readString();
             serialPort.writeBytes("6003]".getBytes());
-            ID = serialPort.readString(6, 5000);
+            ID = serialPort.readString(6, 5000).trim();
 
             serialPort.addEventListener((SerialPortEvent serialPortEvent) -> {
 
@@ -162,7 +162,7 @@ public class Arduino implements SerialPortEventListener {
                         }
                     }
                 } catch (SerialPortException ex) {
-                    System.out.println("failed to readString()");
+                    System.out.println("Arduino->SerialPortEvent serialPortEvent->failed to readString()");
                     ex.printStackTrace();
                 }
 
@@ -176,12 +176,10 @@ public class Arduino implements SerialPortEventListener {
             System.out.println("SerialPortTimeoutException: " + ex.toString());
         }
         if (ID == null) {
-            System.out.println("[Not a slider at " + portName + "]");
+            System.out.println("Arduino->initialize()-> Not a slider at " + portName + "");
             connectedAndSlider = false;
         } else {
-            System.out.println("[Found a valid slider]");
-            System.out.println("Port: " + portName);
-            System.out.println("ID: " + ID);
+            System.out.println("Arduino->initialize()-> Found a valid slider with port " + portName + " and ID: " + ID);
             connectedAndSlider = true;
         }
     }
@@ -258,23 +256,23 @@ public class Arduino implements SerialPortEventListener {
      */
     public void writeUntilComplete(int position) {
         if (!(position > 0) && !(position < 1024)) {
-            System.out.println("Cannot wait for completion for a value that is not in the range 0 < value < 1024");
+            System.out.println("Arduino->writeUntilComplete()-> Cannot wait for completion for a value that is not in the range 0 < value < 1024");
         } else {
             complete = false;
             write(position);
             Instant start = Instant.now();
-            System.out.println(" - waiting for completion");
+            System.out.println("Arduino->writeUntilComplete()-> waiting for completion");
             do {
             } while (Math.abs(read() - position) > 30 && Duration.between(start, Instant.now()).toMillis() < 1000);
             read();
-            System.out.println(" - completed");
+            System.out.println("Arduino->writeUntilComplete()-> completed");
         }
     }
 
     // Methods for dealing with Parts
     protected void createParts(int numberOfParts) {
         if (numberOfParts > 102) {
-            System.out.println("Cannot create more than 50 parts.");
+            System.out.println("Arduino->createParts()-> Cannot create more than 50 parts.");
         }
         this.numberOfParts = numberOfParts;
         write((2000 + numberOfParts));
@@ -286,7 +284,7 @@ public class Arduino implements SerialPortEventListener {
 
     protected int getPartIndex(int numberOfParts) {
         if (numberOfParts > 102) {
-            System.out.println("Cannot have more than 102 parts.");
+            System.out.println("Arduino->getPartIndex()-> Cannot have more than 102 parts.");
         }
         if (numberOfParts != 0) {
             double partSize = (1040.0 / numberOfParts);
@@ -359,7 +357,7 @@ public class Arduino implements SerialPortEventListener {
      */
     public void vibrate(int cycles) {
         if (cycles > 999 || cycles < 0) {
-            throw new IllegalArgumentException("cycles should be between 0 and 999");
+            throw new IllegalArgumentException("Arduino->Vibrate()-> cycles should be between 0 and 999");
         }
         write(6000 + cycles);
     }
