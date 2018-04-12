@@ -144,6 +144,7 @@ public class MainBack implements Runnable {
      */
     public static void testVibrate(int amount) {
         getSliderManager().sliders.forEach((String, Arduino) -> Arduino.vibrate(5));
+        getSliderManager().sliders.forEach((String, Arduino) -> Arduino.writeUntilComplete(512));
     }
 
     /**

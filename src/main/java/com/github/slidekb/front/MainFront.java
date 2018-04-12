@@ -47,15 +47,22 @@ import javax.swing.event.ChangeListener;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.MainBack;
 import com.github.slidekb.util.Misc;
+import javax.swing.JProgressBar;
+import javax.swing.JSlider;
 
 public class MainFront {
 
     private static JFrame frame;
     private static JList list;
 	private static JList pluginList;
+	private static JProgressBar progressBar1 = new JProgressBar(0, 1022);
+	private static JProgressBar progressBar2 = new JProgressBar(0, 1022);
+	private static JProgressBar progressBar3 = new JProgressBar(0, 1022);
+	private static JProgressBar progressBar4 = new JProgressBar(0, 1022);
 
     /**
      * The "About" Jframe
+     * @wbp.parser.entryPoint
      */
     private static void createAndShowGUI() {
         if (frame == null) {
@@ -76,16 +83,16 @@ public class MainFront {
 
             list = new JList();
             list.setListData(MainBack.getSliderManager().getSliderIDList());
-            list.setBounds(15, 52, 244, 167);
+            list.setBounds(15, 52, 244, 67);
             frame.getContentPane().add(list);
 
             JLabel lblSlidersConnected = new JLabel("Sliders Connected");
             lblSlidersConnected.setBounds(15, 16, 146, 20);
             frame.getContentPane().add(lblSlidersConnected);
 
-            JButton sliderReconnect = new JButton("Reconnect");
-            sliderReconnect.setBounds(15, 235, 115, 29);
-            frame.getContentPane().add(sliderReconnect);
+            JButton slidersVibrate = new JButton("Vibrate Sliders");
+            slidersVibrate.setBounds(15, 235, 115, 29);
+            frame.getContentPane().add(slidersVibrate);
 
             JButton sliderConfigure = new JButton("Configure");
             sliderConfigure.setBounds(145, 235, 115, 29);
@@ -115,16 +122,58 @@ public class MainFront {
                     pluginList.setListData(temp.toArray(new String[temp.size()]));
                 }
             };
+            ActionListener actionListenerVibrate = new ActionListener() {
+                public void actionPerformed(ActionEvent actionEvent) {
+                    MainBack.testVibrate(5);
+                }
+            };
 
             JButton pluginsReload = new JButton("Reload");
             pluginsReload.setBounds(299, 235, 115, 29);
             frame.getContentPane().add(pluginsReload);
             pluginsReload.addActionListener(actionListenerReload);
-            sliderReconnect.addActionListener(actionListenerReload);
+            slidersVibrate.addActionListener(actionListenerVibrate);
 
             JButton pluginsConfigure = new JButton("Configure");
             pluginsConfigure.setBounds(427, 235, 115, 29);
             frame.getContentPane().add(pluginsConfigure);
+            
+            JLabel lblSlider1 = new JLabel("Slider 1");
+            lblSlider1.setBounds(15, 130, 46, 14);
+            JLabel lblSlider2 = new JLabel("Slider 2");
+            lblSlider2.setBounds(15, 150, 46, 14);
+            JLabel lblSlider3 = new JLabel("Slider 3");
+            lblSlider3.setBounds(15, 170, 46, 14);
+            JLabel lblSlider4 = new JLabel("Slider 4");
+            lblSlider4.setBounds(15, 190, 46, 14);
+            
+            
+            progressBar1.setBounds(56, 130, 203, 14);
+            if (MainBack.getSliderManager().getSliderIDList().length >= 1){
+            	frame.getContentPane().add(progressBar1);
+            	frame.getContentPane().add(lblSlider1);
+            }
+            progressBar2.setBounds(56, 150, 203, 14);
+            if (MainBack.getSliderManager().getSliderIDList().length >= 2){
+            	frame.getContentPane().add(progressBar2);
+            	frame.getContentPane().add(lblSlider2);
+            }
+            progressBar3.setBounds(56, 170, 203, 14);
+            if (MainBack.getSliderManager().getSliderIDList().length >= 3){
+            	frame.getContentPane().add(progressBar3);
+            	frame.getContentPane().add(lblSlider3);
+            }
+            progressBar4.setBounds(56, 190, 203, 14);
+            if (MainBack.getSliderManager().getSliderIDList().length == 4){
+            	frame.getContentPane().add(progressBar4);
+            	frame.getContentPane().add(lblSlider4);
+            }
+            
+            
+//            JSlider slider = new JSlider();
+//            slider.setBounds(56, 141, 203, 26);
+//            frame.getContentPane().add(slider);
+            
             ActionListener actionListenerPluginsConfigure = new ActionListener() {
                 public void actionPerformed(ActionEvent actionEvent) {
                     PluginConfiguration.createAndShowGUI();
@@ -140,10 +189,25 @@ public class MainFront {
             // btnNewButton_2.setBounds(705, 235, 76, 29);
             // frame.getContentPane().add(btnNewButton_2);
         }
-        // Display the window.
+//         Display the window.
         frame.pack();
 
         bringToFront();
+    }
+    
+    public static void updateSliderInfo(String ID, int value){
+    	if (MainBack.getSliderManager().getSliderIDList()[0].equals(ID)){
+    		progressBar1.setValue(1022 - value);
+    	}
+    	if (MainBack.getSliderManager().getSliderIDList()[1].equals(ID)){
+    		progressBar2.setValue(1022 - value);
+    	}
+    	if (MainBack.getSliderManager().getSliderIDList()[2].equals(ID)){
+    		progressBar3.setValue(1022 - value);
+    	}
+    	if (MainBack.getSliderManager().getSliderIDList()[3].equals(ID)){
+    		progressBar4.setValue(1022 - value);
+    	}
     }
 
     private static void bringToFront() {
@@ -240,6 +304,9 @@ public class MainFront {
         }
     }
 
+    /**
+     * @wbp.parser.entryPoint
+     */
     public static void main(String[] args) throws InterruptedException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 

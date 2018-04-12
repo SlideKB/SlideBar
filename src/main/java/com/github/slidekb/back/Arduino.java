@@ -29,6 +29,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import com.github.slidekb.front.MainFront;
+
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
@@ -156,7 +158,8 @@ public class Arduino implements SerialPortEventListener {
                     if (st.length() != 0) {
                         try {
                             reading = Integer.parseInt(st);
-                            System.out.println(read());
+                            System.out.println("Arduino->SerialEvent-> ID: " + ID + " Reading: " + read());
+                            MainFront.updateSliderInfo(ID, read());
                         } catch (Exception e) {
                             // do nothing
                         }
