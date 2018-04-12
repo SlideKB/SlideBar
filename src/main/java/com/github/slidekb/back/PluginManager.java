@@ -66,22 +66,22 @@ public class PluginManager {
             PluginVersion currentVersion = currentImplementation.getClass().getAnnotation(PluginVersion.class);
 
             if (currentVersion == null) {
-                System.out.println("Found plugin " + currentImplementation.getClass().getCanonicalName() + " but it has no version annotation! Skipping.");
+                System.out.println("PluginManager->loadProcesses()-> Found plugin " + currentImplementation.getClass().getCanonicalName() + " but it has no version annotation! Skipping.");
                 continue;
             } else if (currentVersion.value() != programVersion) {
-                System.out.println("Found plugin " + currentImplementation.getClass().getCanonicalName() + " but its version " + currentVersion.value() + " doesn't match program version " + programVersion + "! Skipping.");
+                System.out.println("PluginManager->loadProcesses()-> Found plugin " + currentImplementation.getClass().getCanonicalName() + " but its version " + currentVersion.value() + " doesn't match program version " + programVersion + "! Skipping.");
                 continue;
             } else {
                 PlatformSpecific currentOsAnnotation = currentImplementation.getClass().getAnnotation(PlatformSpecific.class);
 
                 if (currentOsAnnotation != null) { // Annotation present -> platform specific plugin
                     if (currentOsAnnotation.value() == OsHelper.getOS()) {
-                        System.out.println("Loading platform dependant plugin " + currentImplementation.getClass().getCanonicalName() + " for platform " + OsHelper.getOS());
+                        System.out.println("PluginManager->loadProcesses()-> Loading platform dependant plugin " + currentImplementation.getClass().getCanonicalName() + " for platform " + OsHelper.getOS());
                     } else {
                         continue;
                     }
                 } else { // No Annotation -> platform independent plugin
-                    System.out.println("Loading platform independant plugin " + currentImplementation.getClass().getCanonicalName());
+                    System.out.println("PluginManager->loadProcesses()-> Loading platform independant plugin " + currentImplementation.getClass().getCanonicalName());
                 }
             }
 

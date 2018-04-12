@@ -93,7 +93,7 @@ public class MainBack implements Runnable {
     public static void FirstLoad() {
         setupKeyHook();
         startIt();
-        startRestServer();
+//        startRestServer();
         while (true) {
             try {
                 Run();
@@ -166,14 +166,14 @@ public class MainBack implements Runnable {
     public static boolean startIt() {
         // connect and write to arduino
         if (started == false) {
-            System.out.println("Discovering Arduinos");
+            System.out.println("MainBack->startIt()-> Discovering Arduinos");
             // find and connect to all the SlideBars
             portMan.findAndConnect();
             // SettingsHelper.setSliderList("com.github.slidekb.plugins.TypeWriter", new String[] {"m1n3", "l1n1"});
             // Add the SlideBars to the Hash map.
             getSliderManager().hashTheSlideBars();
             // TODO this should be moved to the portManager class
-            System.out.println("Number of sliders connected: " + portMan.getArduinos().size());
+            System.out.println("MainBack->startIt()-> Number of sliders connected: " + portMan.getArduinos().size());
             pluginMan.loadProcesses(1);
             started = true;
         }
@@ -223,7 +223,7 @@ public class MainBack implements Runnable {
                 Thread.sleep(1);
             } catch (Exception e) {
 
-                System.out.println("Run(): error thrown run 1");
+                System.out.println("MainBack->Run()-> error thrown run 1");
             }
             
             hotkeysUsed = false;
@@ -240,15 +240,17 @@ public class MainBack implements Runnable {
                 updatePrevList(activeProcess);
                 previousActiveProcess = activeProcess;
                 activeProcessChanged = true;
-
-                System.out.println("PROCESS CHANGED, is now: " + activeProcess);
+                if(activeProcess.length() > 0){
+                    System.out.println("MainBack->Run()-> PROCESS CHANGED, is now: " + activeProcess);
+                }
             }
 
             if (!previousHotKeys.equals(hotKeys)) {
                 previousHotKeys = hotKeys;
                 hotKeysChanged = true;
-
-                System.out.println("HOTKEYS CHANGED, is now: " + hotKeys);
+                if(hotKeys.length() > 0){
+                	System.out.println("MainBack->Run()-> HOTKEYS CHANGED, is now: " + hotKeys);
+                }
             }
             if (currentPlugins.size() != 0){
             	// First, check if the current hotkeys are used in ANY plugin
@@ -304,7 +306,7 @@ public class MainBack implements Runnable {
                 activeProcessChanged = false;
                 hotKeysChanged = false;
             } else {
-            	System.out.println("Run(): No plugins are found to be loaded");
+            	System.out.println("MainBack->Run()-> No plugins are found to be loaded");
             }
             
         }
@@ -322,7 +324,7 @@ public class MainBack implements Runnable {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException ex) {
             System.err.println("There was a problem registering the native hook.");
-            System.err.println(ex.getMessage());
+//            System.err.println(ex.getMessage());
             System.exit(1);
         }
         x = new KeyHook();
@@ -351,7 +353,7 @@ public class MainBack implements Runnable {
      */
     public static Boolean stop() {
     	started=false;
-        System.out.println("stopping");
+        System.out.println("MainBack->stop()-> stopping");
         getSliderManager().closeAll();
         // TODO decide if this needs to move to the Move this to the SliderManager class
         pluginMan.unloadPlugins();

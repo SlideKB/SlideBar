@@ -85,13 +85,13 @@ public class KeyHook implements NativeKeyListener {
         if (validHotKeys.contains(temp)) {
             if (!pressedHotKeys.contains(temp)) {
                 pressedHotKeys.add(temp);
-                System.out.println(pressedHotKeys.toString());
+//                System.out.println(pressedHotKeys.toString());
             }
         }
         if (validAlphaKeys.contains(temp)) {
             if (!pressedAlphaKeys.contains(temp)) {
                 pressedAlphaKeys.add(temp);
-                System.out.println(pressedAlphaKeys.toString());
+//                System.out.println(pressedAlphaKeys.toString());
             }
         }
     }
@@ -105,12 +105,12 @@ public class KeyHook implements NativeKeyListener {
         String temp = NativeKeyEvent.getKeyText(e.getKeyCode());
         pressedHotKeys.remove(temp);
         if (pressedHotKeys.size() != 0) {
-            System.out.println(pressedHotKeys.toString());
+//            System.out.println(pressedHotKeys.toString());
         }
 
         pressedAlphaKeys.remove(temp);
         if (pressedAlphaKeys.size() != 0) {
-            System.out.println(pressedAlphaKeys.toString());
+//            System.out.println(pressedAlphaKeys.toString());
         }
     }
 
@@ -128,7 +128,7 @@ public class KeyHook implements NativeKeyListener {
 
     @Override
     public void nativeKeyTyped(NativeKeyEvent e) {
-        System.out.println(NativeKeyEvent.getKeyText(e.getKeyCode()));
+//        System.out.println(NativeKeyEvent.getKeyText(e.getKeyCode()));
 
     }
 

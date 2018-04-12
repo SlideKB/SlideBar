@@ -64,7 +64,7 @@ public class SliderManager {
             }
         }
         // print out the hash map keys for the sliders including default sliders
-        sliders.forEach((String, arduino) -> System.out.println(String));
+        sliders.forEach((String, arduino) -> System.out.println("SliderManager->hashTheSlideBars()-> Slider added to hash: " + String + " => " + arduino.getID()));
     }
 
     /**
