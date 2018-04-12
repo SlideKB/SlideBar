@@ -136,7 +136,7 @@ public class UI {
     public static void main(String[] args) throws InterruptedException {
         Thread back = new Thread(new MainBack());
         back.start();
-        MainBack.PM.waitUntilProcessesLoaded();
+        MainBack.pluginMan.waitUntilProcessesLoaded();
         cfg = ConfigFactory.create(ThisConfig.class);
         try {
             readFromConfig();
@@ -390,7 +390,7 @@ public class UI {
         // frame.getContentPane().add(list);
 
         ArrayList<String> arrayProcess = new ArrayList<String>();
-        for (SlideBarPlugin p : MainBack.PM.getProci()) {
+        for (SlideBarPlugin p : MainBack.pluginMan.getProci()) {
             arrayProcess.add(p.getLabelName());
             System.out.println("adding to list: " + p.getLabelName());
         }

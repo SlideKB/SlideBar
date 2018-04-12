@@ -52,8 +52,8 @@ public class MainBack implements Runnable {
      */
     public static ArrayList<String> prev20List = new ArrayList<String>();
 
-    public static PluginManager PM = new PluginManager();
-
+    public static PluginManager pluginMan = new PluginManager();
+    
     // TODO rename to a more meaningful name
     private static KeyHook x;
 
@@ -94,7 +94,7 @@ public class MainBack implements Runnable {
         setupKeyHook();
         startIt();
         startRestServer();
-        while (started) {
+        while (true) {
             try {
                 Run();
                 Thread.sleep(10);
@@ -174,7 +174,7 @@ public class MainBack implements Runnable {
             getSliderManager().hashTheSlideBars();
             // TODO this should be moved to the portManager class
             System.out.println("Number of sliders connected: " + portMan.getArduinos().size());
-            PM.loadProcesses(1);
+            pluginMan.loadProcesses(1);
             started = true;
         }
         return started;
@@ -218,12 +218,14 @@ public class MainBack implements Runnable {
         List<String> processList = null;
         boolean alwaysRun = false;
 
-        while (started && !PM.getProci().isEmpty()) {
+        while (started && !pluginMan.getProci().isEmpty()) {
             try {
                 Thread.sleep(1);
             } catch (Exception e) {
-            }
 
+                System.out.println("Run(): error thrown run 1");
+            }
+            
             hotkeysUsed = false;
             String activeProcess = ActiveProcess.getProcess();
 
@@ -232,7 +234,7 @@ public class MainBack implements Runnable {
             String hotKeys = Arrays.toString(hotKeysArray);
 
             // Use copy of the list to avoid ConcurrentModificationException on plugin reload
-            List<SlideBarPlugin> currentPlugins = new ArrayList<>(PM.getProci());
+            List<SlideBarPlugin> currentPlugins = new ArrayList<>(pluginMan.getProci());
 
             if (!previousActiveProcess.equals(activeProcess)) {
                 updatePrevList(activeProcess);
@@ -248,59 +250,63 @@ public class MainBack implements Runnable {
 
                 System.out.println("HOTKEYS CHANGED, is now: " + hotKeys);
             }
+            if (currentPlugins.size() != 0){
+            	// First, check if the current hotkeys are used in ANY plugin
+                for (SlideBarPlugin plugin : currentPlugins) {
+                    String pluginID = plugin.getClass().getCanonicalName();
 
-            // First, check if the current hotkeys are used in ANY plugin
-            for (SlideBarPlugin plugin : currentPlugins) {
-                String pluginID = plugin.getClass().getCanonicalName();
+                    if (SettingsHelper.isPluginKnown(pluginID)) {
+                        hotkeyList = SettingsHelper.listHotkeys(pluginID);
 
-                if (SettingsHelper.isPluginKnown(pluginID)) {
-                    hotkeyList = SettingsHelper.listHotkeys(pluginID);
-
-                    if (hotkeyList.contains(hotKeys)) {
-                        hotkeysUsed = true;
-                        break;
-                    }
-                }
-            }
-
-            for (SlideBarPlugin plugin : currentPlugins) {
-                String pluginID = plugin.getClass().getCanonicalName();
-
-                if (SettingsHelper.isPluginKnown(pluginID)) {
-                    hotkeyList = SettingsHelper.listHotkeys(pluginID);
-                    processList = SettingsHelper.listProcesses(pluginID);
-                    alwaysRun = SettingsHelper.isAlwaysRun(pluginID);
-
-                    if (alwaysRun) {
-                        runThisPlugin = true;
-                    } else if (hotkeyList.isEmpty() && processList.isEmpty()) {
-                        runThisPlugin = false;
-                    } else if (hotkeyList.isEmpty() && numHotKeys > 0 && hotkeysUsed) {
-                        runThisPlugin = false;
-                    } else if ((hotkeyList.isEmpty() || hotkeyList.contains(hotKeys)) && (processList.isEmpty() || processList.contains(activeProcess))) {
-                        runThisPlugin = true;
-                    }
-
-                    if (runThisPlugin) {
-                        if (previousPlugin != plugin.getClass().getCanonicalName()) {
-                            previousPlugin = plugin.getClass().getCanonicalName();
-                            getSliderManager().sliders.forEach((String, Arduino) -> Arduino.removeParts());
-                        }
-                        if (activeProcessChanged && !processList.isEmpty()) {
-                            plugin.runFirst();
-                        } else if (hotKeysChanged && !hotkeyList.isEmpty()) {
-                            plugin.runFirst();
-                        } else {
-                            plugin.run();
+                        if (hotkeyList.contains(hotKeys)) {
+                            hotkeysUsed = true;
+                            break;
                         }
                     }
-
-                    runThisPlugin = false;
                 }
-            }
 
-            activeProcessChanged = false;
-            hotKeysChanged = false;
+                for (SlideBarPlugin plugin : currentPlugins) {
+                    String pluginID = plugin.getClass().getCanonicalName();
+
+                    if (SettingsHelper.isPluginKnown(pluginID)) {
+                        hotkeyList = SettingsHelper.listHotkeys(pluginID);
+                        processList = SettingsHelper.listProcesses(pluginID);
+                        alwaysRun = SettingsHelper.isAlwaysRun(pluginID);
+
+                        if (alwaysRun) {
+                            runThisPlugin = true;
+                        } else if (hotkeyList.isEmpty() && processList.isEmpty()) {
+                            runThisPlugin = false;
+                        } else if (hotkeyList.isEmpty() && numHotKeys > 0 && hotkeysUsed) {
+                            runThisPlugin = false;
+                        } else if ((hotkeyList.isEmpty() || hotkeyList.contains(hotKeys)) && (processList.isEmpty() || processList.contains(activeProcess))) {
+                            runThisPlugin = true;
+                        }
+
+                        if (runThisPlugin) {
+                            if (previousPlugin != plugin.getClass().getCanonicalName()) {
+                                previousPlugin = plugin.getClass().getCanonicalName();
+                                getSliderManager().sliders.forEach((String, Arduino) -> Arduino.removeParts());
+                            }
+                            if (activeProcessChanged && !processList.isEmpty()) {
+                                plugin.runFirst();
+                            } else if (hotKeysChanged && !hotkeyList.isEmpty()) {
+                                plugin.runFirst();
+                            } else {
+                                plugin.run();
+                            }
+                        }
+
+                        runThisPlugin = false;
+                    }
+                }
+
+                activeProcessChanged = false;
+                hotKeysChanged = false;
+            } else {
+            	System.out.println("Run(): No plugins are found to be loaded");
+            }
+            
         }
     }
 
@@ -344,10 +350,11 @@ public class MainBack implements Runnable {
      * @return
      */
     public static Boolean stop() {
+    	started=false;
         System.out.println("stopping");
         getSliderManager().closeAll();
         // TODO decide if this needs to move to the Move this to the SliderManager class
-        PM.unloadPlugins();
+        pluginMan.unloadPlugins();
         started = false;
         return true;
     }

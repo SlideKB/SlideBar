@@ -94,7 +94,7 @@ public class MainFront {
             pluginList = new JList();
             pluginList.setBounds(298, 52, 244, 167);
             ArrayList<String> temp = new ArrayList<String>();
-            for (SlideBarPlugin p : MainBack.PM.getProci()){
+            for (SlideBarPlugin p : MainBack.pluginMan.getProci()){
             	temp.add(p.getLabelName());
             }
             pluginList.setListData(temp.toArray(new String[temp.size()]));
@@ -109,7 +109,7 @@ public class MainFront {
                     MainBack.startIt();
                     list.setListData(MainBack.getSliderManager().getSliderIDList());
                     ArrayList<String> temp = new ArrayList<String>();
-                    for (SlideBarPlugin p : MainBack.PM.getProci()){
+                    for (SlideBarPlugin p : MainBack.pluginMan.getProci()){
                     	temp.add(p.getLabelName());
                     }
                     pluginList.setListData(temp.toArray(new String[temp.size()]));
@@ -245,7 +245,7 @@ public class MainFront {
 
         Thread back = new Thread(new MainBack());
         back.start();
-        MainBack.PM.waitUntilProcessesLoaded();
+        MainBack.pluginMan.waitUntilProcessesLoaded();
         createAndShowGUI();
         setupTray();
     }

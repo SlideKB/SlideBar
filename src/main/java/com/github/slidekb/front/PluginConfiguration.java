@@ -69,7 +69,7 @@ public class PluginConfiguration {
         contentPane.setLayout(null);
 
         ArrayList<String> arrayPlugins = new ArrayList<String>();
-        for (SlideBarPlugin p : MainBack.PM.getProci()) {
+        for (SlideBarPlugin p : MainBack.pluginMan.getProci()) {
             arrayPlugins.add(p.getLabelName());
         }
         String plugins[] = arrayPlugins.toArray(new String[arrayPlugins.size()]);
@@ -80,7 +80,7 @@ public class PluginConfiguration {
                     int selected[] = pluginList.getSelectedIndices();
                     for (int i = 0; i < selected.length; i++) {
                         element = (String) pluginList.getModel().getElementAt(selected[i]);
-                        temp = MainBack.PM.getProci();
+                        temp = MainBack.pluginMan.getProci();
 
                         arrayProcess.clear();
                         arrayHotkey.clear();
