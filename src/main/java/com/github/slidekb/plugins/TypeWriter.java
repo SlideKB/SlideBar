@@ -90,7 +90,9 @@ public class TypeWriter implements SlideBarPlugin {
         }
         kh = new KeyHook();
         GlobalScreen.addNativeKeyListener(kh);
-        System.out.println("[KeyHook setup]");
+        GlobalScreen.addNativeMouseWheelListener(kh);
+        GlobalScreen.addNativeMouseListener(kh);
+        System.out.println("TypeWriter->setup()-> KeyHook setup");
 
         kh.addValidAlphaKey("Space");
         kh.addValidAlphaKey("Enter");

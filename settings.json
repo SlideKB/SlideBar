@@ -2,8 +2,9 @@
   "plugins": {
     "com.github.slidekb.plugins.Scroller": {
       "processes": [
-        "explorer.exe",
-        "chrome.exe"
+        "chrome.exe",
+        "firefox.exe",
+        "Discord.exe"
       ],
       "hotkeys": [],
       "alwaysRun": false,
@@ -17,7 +18,7 @@
     },
     "com.github.slidekb.plugins.Volume": {
       "processes": [
-        "firefox.exe"
+        "not working. do not configure"
       ],
       "hotkeys": [],
       "alwaysRun": false,
@@ -67,6 +68,20 @@
       "sliderList": [
         "",
         "",
+        null,
+        null
+      ],
+      "reversed": false
+    },
+    "com.github.slidekb.plugins.JoystickScroller": {
+      "processes": [
+        "experimental.exe"
+      ],
+      "hotkeys": [],
+      "alwaysRun": false,
+      "sliderList": [
+        null,
+        null,
         null,
         null
       ],

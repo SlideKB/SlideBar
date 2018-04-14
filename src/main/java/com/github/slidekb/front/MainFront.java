@@ -36,9 +36,11 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
@@ -47,6 +49,8 @@ import javax.swing.event.ChangeListener;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.back.MainBack;
 import com.github.slidekb.util.Misc;
+import com.github.slidekb.util.Update;
+
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 
@@ -310,6 +314,28 @@ public class MainFront {
     public static void main(String[] args) throws InterruptedException, ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
+        Update update = new Update();
+       
+        String version = update.isAndGetUpdate("1.1.2");
+        if (version != ""){
+        	Object[] options = {"Download",
+            "Ignore!"};
+			int response = JOptionPane.showOptionDialog(frame,
+			"New version (" + version + ") is available at http://www.slidekb.com/pages/software",
+			"Update Available",
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.QUESTION_MESSAGE,
+			null,
+			options,  
+			options[0]); 
+			if (response == JOptionPane.NO_OPTION) {
+		      System.out.println("MainFront->main()-> ignore button clicked");
+		    } else if (response == JOptionPane.YES_OPTION) {
+		    	Misc.launchUrl("http://www.slidekb.com/pages/software");
+		    } else if (response == JOptionPane.CLOSED_OPTION) {
+		      System.out.println("MainFront->main()-> JOptionPane closed");
+		    }
+        }
         Thread back = new Thread(new MainBack());
         back.start();
         MainBack.pluginMan.waitUntilProcessesLoaded();

@@ -158,7 +158,7 @@ public class Arduino implements SerialPortEventListener {
                     if (st.length() != 0) {
                         try {
                             reading = Integer.parseInt(st);
-                            System.out.println("Arduino->SerialEvent-> ID: " + ID + " Reading: " + read());
+//                            System.out.println("Arduino->SerialEvent-> ID: " + ID + " Reading: " + read());
                             MainFront.updateSliderInfo(ID, read());
                         } catch (Exception e) {
                             // do nothing

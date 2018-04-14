@@ -134,7 +134,7 @@ public class AdobePremiere implements SlideBarPlugin {
         HKM = new KeyHook();
         HKM.addValidHotkey("Space");
         GlobalScreen.addNativeKeyListener(HKM);
-        System.out.println("[KeyHook setup]");
+        System.out.println("AdobePremeire->setup()-> KeyHook setup");
         try {
             robot = new Robot();
         } catch (AWTException e) {
