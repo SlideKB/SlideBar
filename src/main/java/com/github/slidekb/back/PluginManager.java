@@ -26,6 +26,7 @@ import com.github.slidekb.api.PluginVersion;
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.api.Slider;
 import com.github.slidekb.util.CurrentWorkingDirectoryClassLoader;
+import com.github.slidekb.util.Log;
 import com.github.slidekb.util.OsHelper;
 import com.github.slidekb.util.ResettableCountDownLatch;
 import com.github.slidekb.util.SettingsHelper;
@@ -82,6 +83,7 @@ public class PluginManager {
                     }
                 } else { // No Annotation -> platform independent plugin
                     System.out.println("PluginManager->loadProcesses()-> Loading platform independant plugin " + currentImplementation.getClass().getCanonicalName());
+                    Log.logMessage("PluginManager->loadProcesses()-> Loading platform independant plugin " + currentImplementation.getClass().getCanonicalName());
                 }
             }
 

@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import com.github.slidekb.front.MainFront;
+import com.github.slidekb.util.Log;
 
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
@@ -183,6 +184,7 @@ public class Arduino implements SerialPortEventListener {
             connectedAndSlider = false;
         } else {
             System.out.println("Arduino->initialize()-> Found a valid slider with port " + portName + " and ID: " + ID);
+            Log.logMessage("Arduino->initialize()-> Found a valid slider with port " + portName + " and ID: " + ID);
             connectedAndSlider = true;
         }
     }

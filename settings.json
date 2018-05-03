@@ -33,7 +33,7 @@
     "com.github.slidekb.plugins.TypeWriter": {
       "processes": [
         "explorer.exe",
-        "notepad.exe"
+        "NOTEPAD.EXE"
       ],
       "hotkeys": [],
       "alwaysRun": false,

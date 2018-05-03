@@ -36,6 +36,7 @@ import org.jnativehook.NativeHookException;
 
 import com.github.slidekb.api.SlideBarPlugin;
 import com.github.slidekb.ifc.resources.RootResource;
+import com.github.slidekb.util.Log;
 import com.github.slidekb.util.SettingsHelper;
 
 import io.swagger.jaxrs.config.BeanConfig;
@@ -168,6 +169,7 @@ public class MainBack implements Runnable {
         // connect and write to arduino
         if (started == false) {
             System.out.println("MainBack->startIt()-> Discovering Arduinos");
+            Log.logMessage("MainBack->startIt()-> Discovering Arduinos");
             // find and connect to all the SlideBars
             portMan.findAndConnect();
             // SettingsHelper.setSliderList("com.github.slidekb.plugins.TypeWriter", new String[] {"m1n3", "l1n1"});
@@ -175,6 +177,7 @@ public class MainBack implements Runnable {
             getSliderManager().hashTheSlideBars();
             // TODO this should be moved to the portManager class
             System.out.println("MainBack->startIt()-> Number of sliders connected: " + portMan.getArduinos().size());
+            Log.logMessage("MainBack->startIt()-> Number of sliders connected: " + portMan.getArduinos().size());
             pluginMan.loadProcesses(1);
             started = true;
         }
@@ -225,10 +228,11 @@ public class MainBack implements Runnable {
             } catch (Exception e) {
 
                 System.out.println("MainBack->Run()-> error thrown run 1");
+                Log.logMessage("MainBack->Run()-> error thrown run 1");
             }
             
             hotkeysUsed = false;
-            String activeProcess = ActiveProcess.getProcess();
+            String activeProcess = ActiveProcess.getProcess().toLowerCase();
 
             String[] hotKeysArray = KeyHook.getHotKeys();
             int numHotKeys = hotKeysArray.length;
@@ -243,6 +247,7 @@ public class MainBack implements Runnable {
                 activeProcessChanged = true;
                 if(activeProcess.length() > 0){
                     System.out.println("MainBack->Run()-> PROCESS CHANGED, is now: " + activeProcess);
+                    Log.logMessage("MainBack->Run()-> PROCESS CHANGED, is now: " + activeProcess);
                 }
             }
 
@@ -251,6 +256,7 @@ public class MainBack implements Runnable {
                 hotKeysChanged = true;
                 if(hotKeys.length() > 0){
                 	System.out.println("MainBack->Run()-> HOTKEYS CHANGED, is now: " + hotKeys);
+                	Log.logMessage("MainBack->Run()-> HOTKEYS CHANGED, is now: " + hotKeys);
                 }
             }
             if (currentPlugins.size() != 0){
@@ -293,8 +299,12 @@ public class MainBack implements Runnable {
                             }
                             if (activeProcessChanged && !processList.isEmpty()) {
                                 plugin.runFirst();
+                                System.out.println("MainBack->Run()-> Running Plugin: " + plugin.getLabelName());
+                                Log.logMessage("MainBack->Run()-> Running Plugin: " + plugin.getLabelName());
                             } else if (hotKeysChanged && !hotkeyList.isEmpty()) {
                                 plugin.runFirst();
+                                System.out.println("MainBack->Run()-> Running Plugin: " + plugin.getLabelName());
+                                Log.logMessage("MainBack->Run()-> Running Plugin: " + plugin.getLabelName());
                             } else {
                                 plugin.run();
                             }
@@ -307,7 +317,8 @@ public class MainBack implements Runnable {
                 activeProcessChanged = false;
                 hotKeysChanged = false;
             } else {
-            	System.out.println("MainBack->Run()-> No plugins are found to be loaded");
+            	System.err.println("MainBack->Run()-> No plugins are found to be loaded");
+            	Log.logMessage("MainBack->Run()-> No plugins are found to be loaded");
             }
             
         }
@@ -355,6 +366,7 @@ public class MainBack implements Runnable {
     public static Boolean stop() {
     	started=false;
         System.out.println("MainBack->stop()-> stopping");
+        Log.logMessage("MainBack->stop()-> stopping");
         getSliderManager().closeAll();
         // TODO decide if this needs to move to the Move this to the SliderManager class
         pluginMan.unloadPlugins();
