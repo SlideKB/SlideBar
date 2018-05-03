@@ -316,7 +316,7 @@ public class MainFront {
 
         Update update = new Update();
        
-        String version = update.isAndGetUpdate("1.1.2");
+        String version = update.isAndGetUpdate("1.2.3");
         if (version != ""){
         	Object[] options = {"Download",
             "Ignore!"};
